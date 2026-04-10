@@ -112,6 +112,41 @@ tbody tr:hover td{background:#fafafa}
 .form-card:hover{border-color:#3db87a}
 .form-card.sel{border:2px solid #3db87a}
 </style>
+
+<script>
+var USERS={'admin@islarg.com.ar':{pass:'Admin2026',nombre:'Florencia Dropulich',rol:'Administrador',avatar:'FD',bg:'#dbeafe',tc:'#1e40af'},'test@islarg.com.ar':{pass:'Test2026',nombre:'Usuario Test',rol:'Administrador',avatar:'UT',bg:'#dcfce7',tc:'#166534'},'operador@islarg.com.ar':{pass:'Oper2026',nombre:'Operador ISL',rol:'Operador',avatar:'OP',bg:'#fef3c7',tc:'#92400e'}};
+var currentUser=null;
+function doLogin(){
+  var email=(document.getElementById('login-email').value||'').trim().toLowerCase();
+  var pass=document.getElementById('login-pass').value||'';
+  var errEl=document.getElementById('login-error');
+  var user=USERS[email];
+  if(!user||user.pass!==pass){errEl.textContent='Email o contrasena incorrectos.';errEl.style.display='block';return;}
+  errEl.style.display='none';
+  currentUser={email:email,nombre:user.nombre,rol:user.rol,avatar:user.avatar,bg:user.bg,tc:user.tc};
+  try{localStorage.setItem('isl_session',JSON.stringify(currentUser));}catch(e){}
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('main-app').style.display='flex';
+  var hu=document.getElementById('header-user');
+  if(hu)hu.innerHTML='<span class="wa" style="background:'+currentUser.bg+';color:'+currentUser.tc+'">'+currentUser.avatar+'</span><div><div style="font-size:13px;font-weight:600;color:#fff">'+currentUser.nombre+'</div><div style="font-size:11px;color:#94a3b8">'+currentUser.rol+'</div></div>';
+  if(typeof navTo==='function')navTo('inicio');
+}
+function doLogout(){
+  try{localStorage.removeItem('isl_session');}catch(e){}
+  currentUser=null;
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('main-app').style.display='none';
+  document.getElementById('login-email').value='';
+  document.getElementById('login-pass').value='';
+}
+// Check saved session on page load
+document.addEventListener('DOMContentLoaded',function(){
+  try{
+    var saved=localStorage.getItem('isl_session');
+    if(saved){currentUser=JSON.parse(saved);document.getElementById('login-screen').style.display='none';document.getElementById('main-app').style.display='flex';var hu=document.getElementById('header-user');if(hu)hu.innerHTML='<span class="wa" style="background:'+currentUser.bg+';color:'+currentUser.tc+'">'+currentUser.avatar+'</span><div><div style="font-size:13px;font-weight:600;color:#fff">'+currentUser.nombre+'</div><div style="font-size:11px;color:#94a3b8">'+currentUser.rol+'</div></div>';}
+  }catch(e){}
+});
+</script>
 </head>
 <body>
 <div id="login-screen" style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f172a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
@@ -152,20 +187,6 @@ tbody tr:hover td{background:#fafafa}
       Ingresar
     </button>
 
-    <!-- Test users hint -->
-    <div style="margin-top:24px;padding:14px;background:#0f172a;border-radius:8px;border:1px solid #1e3a5f">
-      <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Usuarios de prueba</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div onclick="setCredentials('admin@islarg.com.ar','Admin2026')" style="cursor:pointer;padding:8px 10px;border-radius:6px;background:#1e293b;border:1px solid #334155;hover:border-color:#3db87a">
-          <div style="font-size:12px;font-weight:600;color:#e2e8f0">admin@islarg.com.ar</div>
-          <div style="font-size:11px;color:#64748b">Admin2026 · Administrador (acceso total)</div>
-        </div>
-        <div onclick="setCredentials('test@islarg.com.ar','Test2026')" style="cursor:pointer;padding:8px 10px;border-radius:6px;background:#1e293b;border:1px solid #334155">
-          <div style="font-size:12px;font-weight:600;color:#e2e8f0">test@islarg.com.ar</div>
-          <div style="font-size:11px;color:#64748b">Test2026 · Administrador (perfil test)</div>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 <div class="app" id="main-app" style="display:none">
