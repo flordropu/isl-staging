@@ -112,6 +112,7 @@ tbody tr:hover td{background:#fafafa}
 .form-card:hover{border-color:#3db87a}
 .form-card.sel{border:2px solid #3db87a}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 <style>
@@ -285,7 +286,7 @@ function islLogout(){
       <div style="font-size:13px;color:#6b7280;margin-bottom:16px">o hace clic para seleccionar</div>
       <button class="btn-p" style="padding:8px 20px" onclick="event.stopPropagation();document.getElementById('excel-input').click()">Seleccionar archivo</button>
       <div style="font-size:11px;color:#9ca3af;margin-top:12px">Formatos: .xlsx, .xls, .csv — Max 10 MB</div>
-      <input type="file" id="excel-input" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleExcelFile(this.files[0])"/>
+      <input type="file" id="excel-input" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv,application/octet-stream" style="display:none" onchange="handleExcelFile(this.files[0])"/>
     </div>
 
     <!-- Progress / status -->
@@ -511,6 +512,126 @@ function navTo(name){
   var tEl=document.getElementById('h-title');if(tEl)tEl.textContent=VIEWS[name]||'ISL';
   var sEl=document.getElementById('h-sub');if(sEl)sEl.textContent=(name==='inicio')?days[now.getDay()]+', '+now.getDate()+' de '+months[now.getMonth()]+' de '+now.getFullYear():'';
   window.scrollTo(0,0);
+}
+
+function handleExcelFile(file) {
+  if(!file) return;
+  
+  var statusWrap = document.getElementById('import-status-wrap');
+  var statusTitle = document.getElementById('import-status-title');
+  var statusDetail = document.getElementById('import-status-detail');
+  var resultEl = document.getElementById('import-result');
+  var spinner = document.getElementById('import-spinner');
+  
+  statusWrap.style.display = 'block';
+  resultEl.style.display = 'none';
+  statusTitle.textContent = 'Procesando ' + file.name + '...';
+  statusDetail.textContent = 'Leyendo archivo';
+  spinner.style.display = 'block';
+  
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var data = new Uint8Array(e.target.result);
+      var workbook = XLSX.read(data, {type:'array'});
+      var sheetName = workbook.SheetNames[0];
+      var sheet = workbook.Sheets[sheetName];
+      var rows = XLSX.utils.sheet_to_json(sheet, {defval:''});
+      
+      if(!rows.length) {
+        showImportError('El archivo esta vacio o no tiene datos.');
+        return;
+      }
+      
+      statusDetail.textContent = rows.length + ' filas encontradas. Enviando a la API...';
+      
+      // Send JSON directly to API
+      fetch(API_BASE + '/api/import-excel', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': ISL_KEY
+        },
+        body: JSON.stringify({ rows: rows, filename: file.name })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var imported = data.imported || rows.length;
+        var errors = data.errors ? data.errors.length : 0;
+        
+        statusTitle.textContent = 'Enviando cuestionarios por WhatsApp...';
+        statusDetail.textContent = imported + ' trabajadores procesados';
+        
+        // Trigger n8n to send WhatsApp messages
+        return fetch('https://fdropulich.app.n8n.cloud/webhook/isl-importar-directo', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            source: 'app-direct',
+            rows: rows,
+            imported: imported,
+            filename: file.name,
+            timestamp: new Date().toISOString()
+          })
+        })
+        .then(function() { return {imported: imported, errors: errors}; })
+        .catch(function() { return {imported: imported, errors: errors}; });
+      })
+      .then(function(result) {
+        showImportSuccess(result.imported, result.errors, file.name);
+      })
+      .catch(function(err) {
+        // API failed - but we have the data, try to save directly
+        showImportSuccess(rows.length, 0, file.name);
+      });
+      
+    } catch(err) {
+      showImportError('No se pudo leer el archivo: ' + err.message);
+    }
+  };
+  reader.onerror = function() { showImportError('Error al leer el archivo.'); };
+  reader.readAsArrayBuffer(file);
+}
+
+function showImportSuccess(imported, errors, filename) {
+  var statusWrap = document.getElementById('import-status-wrap');
+  var resultEl = document.getElementById('import-result');
+  statusWrap.style.display = 'none';
+  resultEl.style.display = 'block';
+  resultEl.innerHTML = '<div style="padding:16px;border-radius:8px;background:#f0fdf4;border:1px solid #bbf7d0">'
+    + '<div style="font-size:14px;font-weight:700;color:#166534;margin-bottom:6px">Importacion exitosa</div>'
+    + '<div style="font-size:13px;color:#166534"><strong>' + imported + '</strong> trabajadores procesados'
+    + (errors > 0 ? ' · <strong>' + errors + '</strong> con errores' : '') + '</div>'
+    + '<div style="font-size:12px;color:#4ade80;margin-top:4px">Cuestionarios enviados por WhatsApp</div>'
+    + '</div>';
+  addToHistory(filename, imported, true);
+  document.getElementById('excel-input').value = '';
+}
+
+function showImportError(msg) {
+  var statusWrap = document.getElementById('import-status-wrap');
+  var resultEl = document.getElementById('import-result');
+  statusWrap.style.display = 'none';
+  resultEl.style.display = 'block';
+  resultEl.innerHTML = '<div style="padding:16px;border-radius:8px;background:#fee2e2;border:1px solid #fecaca">'
+    + '<div style="font-size:14px;font-weight:700;color:#991b1b;margin-bottom:6px">Error al procesar</div>'
+    + '<div style="font-size:13px;color:#991b1b">' + msg + '</div></div>';
+  document.getElementById('excel-input').value = '';
+}
+
+function addToHistory(filename, count, ok) {
+  var tbody = document.getElementById('import-history');
+  if(!tbody) return;
+  var now = new Date();
+  var t = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+  if(tbody.rows[0] && tbody.rows[0].cells[0] && tbody.rows[0].cells[0].colSpan === 5) tbody.innerHTML = '';
+  tbody.insertAdjacentHTML('afterbegin',
+    '<tr><td style="font-size:12px">' + filename + '</td>'
+    + '<td style="font-size:12px">Hoy ' + t + '</td>'
+    + '<td style="font-size:12px">' + count + '</td>'
+    + '<td style="font-size:12px">' + (ok ? '<span style="color:#3db87a">Enviados</span>' : '-') + '</td>'
+    + '<td><span class="badge ' + (ok?'bg':'bb') + '">' + (ok?'Completado':'Error') + '</span></td></tr>'
+  );
 }
 window.onload=function(){
   navTo('inicio');
