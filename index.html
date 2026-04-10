@@ -266,21 +266,70 @@ function islLogout(){
   </div>
 
   <div class="view" id="view-import">
-    <div class="panel" style="text-align:center;padding:52px">
-      <div style="width:56px;height:56px;border-radius:16px;background:#dcfce7;display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><svg viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2" style="width:28px;height:28px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="12" y2="12"/><line x1="15" y1="15" x2="12" y2="12"/></svg></div>
-      <div style="font-size:17px;font-weight:700;margin-bottom:8px">Importar Excel diario</div>
-      <div style="font-size:13px;color:#6b7280;margin-bottom:20px">Arrasta tu archivo Excel con los trabajadores del dia</div>
-      <button class="btn-p" style="padding:10px 24px">Seleccionar archivo</button>
-      <div style="font-size:11px;color:#9ca3af;margin-top:12px">Formatos: .xlsx, .xls, .csv - Max 10 MB</div>
+
+  <!-- Upload panel -->
+  <div class="panel" id="upload-panel" style="margin-bottom:18px">
+    <div style="font-size:20px;font-weight:700;margin-bottom:4px">Importar Excel</div>
+    <div style="font-size:13px;color:#6b7280;margin-bottom:20px">Subi el Excel con los trabajadores del dia para disparar el envio de cuestionarios por WhatsApp</div>
+
+    <!-- Drop zone -->
+    <div id="drop-zone" style="border:2px dashed #d1d5db;border-radius:12px;padding:40px;text-align:center;cursor:pointer;transition:all .2s;background:#fafafa" 
+      onclick="document.getElementById('excel-input').click()"
+      ondragover="event.preventDefault();this.style.borderColor='#3db87a';this.style.background='#f0fdf4'"
+      ondragleave="this.style.borderColor='#d1d5db';this.style.background='#fafafa'"
+      ondrop="event.preventDefault();this.style.borderColor='#d1d5db';this.style.background='#fafafa';handleExcelFile(event.dataTransfer.files[0])">
+      <div style="width:56px;height:56px;border-radius:16px;background:#dcfce7;display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2" style="width:28px;height:28px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="12" y2="12"/><line x1="15" y1="15" x2="12" y2="12"/></svg>
+      </div>
+      <div style="font-size:15px;font-weight:600;margin-bottom:6px">Arrastra el archivo aqui</div>
+      <div style="font-size:13px;color:#6b7280;margin-bottom:16px">o hace clic para seleccionar</div>
+      <button class="btn-p" style="padding:8px 20px" onclick="event.stopPropagation();document.getElementById('excel-input').click()">Seleccionar archivo</button>
+      <div style="font-size:11px;color:#9ca3af;margin-top:12px">Formatos: .xlsx, .xls, .csv — Max 10 MB</div>
+      <input type="file" id="excel-input" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleExcelFile(this.files[0])"/>
     </div>
-    <div class="panel"><div class="pt" style="margin-bottom:14px">Historial de importaciones</div>
-      <table><thead><tr><th>Archivo</th><th>Fecha</th><th>Trabajadores</th><th>Estado</th></tr></thead><tbody>
-        <tr><td>trabajadores_06-04-2026.xlsx</td><td>Hoy 08:00</td><td>12</td><td><span class="badge bg">Completado</span></td></tr>
-        <tr><td>listado_05-04-2026.xlsx</td><td>Ayer 08:15</td><td>8</td><td><span class="badge bg">Completado</span></td></tr>
-        <tr><td>siniestros_04-04-2026.xlsx</td><td>04/04/2026</td><td>5</td><td><span class="badge ba">Con advertencias</span></td></tr>
-      </tbody></table>
+
+    <!-- Progress / status -->
+    <div id="import-status-wrap" style="display:none;margin-top:16px">
+      <div style="display:flex;align-items:center;gap:12px;padding:14px;border-radius:8px;background:#f0fdf4;border:1px solid #bbf7d0">
+        <div id="import-spinner" style="width:20px;height:20px;border:3px solid #bbf7d0;border-top-color:#3db87a;border-radius:50%;animation:spin 1s linear infinite;flex-shrink:0"></div>
+        <div>
+          <div id="import-status-title" style="font-size:13px;font-weight:600;color:#166534">Procesando...</div>
+          <div id="import-status-detail" style="font-size:12px;color:#4ade80;margin-top:2px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div id="import-result" style="display:none;margin-top:16px"></div>
+
+    <!-- Format hint -->
+    <div style="margin-top:16px;padding:14px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0">
+      <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:8px">Columnas requeridas en el Excel:</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span style="font-size:11px;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:4px;font-family:monospace">nombre</span>
+        <span style="font-size:11px;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:4px;font-family:monospace">apellido</span>
+        <span style="font-size:11px;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:4px;font-family:monospace">telefono</span>
+        <span style="font-size:11px;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:4px;font-family:monospace">art</span>
+        <span style="font-size:11px;background:#f3f4f6;color:#6b7280;padding:2px 8px;border-radius:4px;font-family:monospace">siniestro_id (opcional)</span>
+      </div>
+      <div style="font-size:11px;color:#9ca3af;margin-top:8px">El telefono debe incluir codigo de pais: ej. <strong>5491155556677</strong></div>
     </div>
   </div>
+
+  <!-- History -->
+  <div class="panel">
+    <div class="pt" style="margin-bottom:14px">Historial de importaciones</div>
+    <table><thead><tr><th>Archivo</th><th>Fecha</th><th>Trabajadores</th><th>WhatsApp</th><th>Estado</th></tr></thead>
+    <tbody id="import-history">
+      <tr><td style="font-size:12px;color:#9ca3af;text-align:center" colspan="5">Aun no hay importaciones en esta sesion</td></tr>
+    </tbody></table>
+  </div>
+
+  <style>
+  @keyframes spin{to{transform:rotate(360deg)}}
+  #drop-zone:hover{border-color:#3db87a;background:#f0fdf4}
+  </style>
+</div>
 
   <div class="view" id="view-trab">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
