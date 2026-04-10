@@ -129,7 +129,18 @@ function doLogin(){
   document.getElementById('main-app').style.display='flex';
   var hu=document.getElementById('header-user');
   if(hu)hu.innerHTML='<span class="wa" style="background:'+currentUser.bg+';color:'+currentUser.tc+'">'+currentUser.avatar+'</span><div><div style="font-size:13px;font-weight:600;color:#fff">'+currentUser.nombre+'</div><div style="font-size:11px;color:#94a3b8">'+currentUser.rol+'</div></div>';
-  if(typeof navTo==='function')navTo('inicio');
+  if(typeof navTo==='function'){
+    navTo('inicio');
+    // Re-attach nav listeners in case window.onload hasn't run yet
+    if(!window._appReady) {
+      ['inicio','import','trab','rep','form','asist','fb','cfg','usr'].forEach(function(n){
+        var el=document.getElementById('nav-'+n);
+        if(el) {
+          el.onclick = function(){navTo(n);};
+        }
+      });
+    }
+  }
 }
 function doLogout(){
   try{localStorage.removeItem('isl_session');}catch(e){}
@@ -533,7 +544,9 @@ function navTo(name){
   window.scrollTo(0,0);
 }
 
+window._appReady=false;
 window.onload=function(){
+  window._appReady=true;
   navTo('inicio');
   var sEl=document.getElementById('h-sub');if(sEl)sEl.textContent=days[now.getDay()]+', '+now.getDate()+' de '+months[now.getMonth()]+' de '+now.getFullYear();
   ['inicio','import','trab','rep','form','asist','fb','cfg','usr'].forEach(function(n){
