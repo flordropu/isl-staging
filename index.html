@@ -112,95 +112,88 @@ tbody tr:hover td{background:#fafafa}
 .form-card:hover{border-color:#3db87a}
 .form-card.sel{border:2px solid #3db87a}
 </style>
-
-<script>
-var USERS={'admin@islarg.com.ar':{pass:'Admin2026',nombre:'Florencia Dropulich',rol:'Administrador',avatar:'FD',bg:'#dbeafe',tc:'#1e40af'},'test@islarg.com.ar':{pass:'Test2026',nombre:'Usuario Test',rol:'Administrador',avatar:'UT',bg:'#dcfce7',tc:'#166534'},'operador@islarg.com.ar':{pass:'Oper2026',nombre:'Operador ISL',rol:'Operador',avatar:'OP',bg:'#fef3c7',tc:'#92400e'}};
-var currentUser=null;
-function doLogin(){
-  var email=(document.getElementById('login-email').value||'').trim().toLowerCase();
-  var pass=document.getElementById('login-pass').value||'';
-  var errEl=document.getElementById('login-error');
-  var user=USERS[email];
-  if(!user||user.pass!==pass){errEl.textContent='Email o contrasena incorrectos.';errEl.style.display='block';return;}
-  errEl.style.display='none';
-  currentUser={email:email,nombre:user.nombre,rol:user.rol,avatar:user.avatar,bg:user.bg,tc:user.tc};
-  try{localStorage.setItem('isl_session',JSON.stringify(currentUser));}catch(e){}
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('main-app').style.display='flex';
-  var hu=document.getElementById('header-user');
-  if(hu)hu.innerHTML='<span class="wa" style="background:'+currentUser.bg+';color:'+currentUser.tc+'">'+currentUser.avatar+'</span><div><div style="font-size:13px;font-weight:600;color:#fff">'+currentUser.nombre+'</div><div style="font-size:11px;color:#94a3b8">'+currentUser.rol+'</div></div>';
-  if(typeof navTo==='function'){
-    navTo('inicio');
-    // Re-attach nav listeners in case window.onload hasn't run yet
-    if(!window._appReady) {
-      ['inicio','import','trab','rep','form','asist','fb','cfg','usr'].forEach(function(n){
-        var el=document.getElementById('nav-'+n);
-        if(el) {
-          el.onclick = function(){navTo(n);};
-        }
-      });
-    }
-  }
-}
-function doLogout(){
-  try{localStorage.removeItem('isl_session');}catch(e){}
-  currentUser=null;
-  document.getElementById('login-screen').style.display='flex';
-  document.getElementById('main-app').style.display='none';
-  document.getElementById('login-email').value='';
-  document.getElementById('login-pass').value='';
-}
-// Check saved session on page load
-document.addEventListener('DOMContentLoaded',function(){
-  try{
-    var saved=localStorage.getItem('isl_session');
-    if(saved){currentUser=JSON.parse(saved);document.getElementById('login-screen').style.display='none';document.getElementById('main-app').style.display='flex';var hu=document.getElementById('header-user');if(hu)hu.innerHTML='<span class="wa" style="background:'+currentUser.bg+';color:'+currentUser.tc+'">'+currentUser.avatar+'</span><div><div style="font-size:13px;font-weight:600;color:#fff">'+currentUser.nombre+'</div><div style="font-size:11px;color:#94a3b8">'+currentUser.rol+'</div></div>';}
-  }catch(e){}
-});
-</script>
 </head>
 <body>
-<div id="login-screen" style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0f172a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
-  <div style="background:#1e293b;border-radius:16px;padding:40px;width:100%;max-width:400px;box-shadow:0 25px 50px rgba(0,0,0,.5)">
-    <!-- Logo -->
+<style>
+#login-overlay{position:fixed;inset:0;background:#0f172a;z-index:9999;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+#login-overlay.hidden{display:none}
+.login-card{background:#1e293b;border-radius:16px;padding:40px;width:100%;max-width:400px;box-shadow:0 25px 50px rgba(0,0,0,.5)}
+.login-label{display:block;font-size:12px;font-weight:600;color:#94a3b8;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.login-input{width:100%;padding:11px 14px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:14px;outline:none;box-sizing:border-box;transition:border-color .2s}
+.login-input:focus{border-color:#3db87a}
+.login-btn{width:100%;padding:12px;border-radius:8px;border:none;background:#3db87a;color:#fff;font-size:15px;font-weight:600;cursor:pointer;margin-top:8px;transition:background .2s}
+.login-btn:hover{background:#2ea065}
+#login-error{display:none;background:#fee2e2;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;font-size:13px;color:#ef4444;margin-bottom:16px}
+</style>
+
+<div id="login-overlay">
+  <div class="login-card">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:32px;justify-content:center">
       <div style="position:relative;width:36px;height:24px">
         <div style="width:22px;height:22px;border-radius:50%;background:#4a90d9;position:absolute;left:0;top:1px"></div>
         <div style="width:22px;height:22px;border-radius:50%;background:#3db87a;position:absolute;left:12px;top:1px"></div>
       </div>
       <div>
-        <div style="font-size:18px;font-weight:700;color:#fff">ISL Medicina Empresarial</div>
+        <div style="font-size:17px;font-weight:700;color:#fff">ISL Medicina Empresarial</div>
         <div style="font-size:11px;color:#3db87a;letter-spacing:.5px">SISTEMA DE CUESTIONARIOS · STAGING</div>
       </div>
     </div>
-
-    <div style="font-size:22px;font-weight:700;color:#fff;margin-bottom:6px">Iniciar sesión</div>
-    <div style="font-size:13px;color:#94a3b8;margin-bottom:28px">Ingresá con tu cuenta ISL</div>
-
-    <div id="login-error" style="display:none;background:#fee2e2;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;font-size:13px;color:#ef4444;margin-bottom:16px"></div>
-
+    <div style="font-size:22px;font-weight:700;color:#fff;margin-bottom:6px">Iniciar sesion</div>
+    <div style="font-size:13px;color:#94a3b8;margin-bottom:28px">Ingresa con tu cuenta ISL</div>
+    <div id="login-error"></div>
     <div style="margin-bottom:16px">
-      <label style="display:block;font-size:12px;font-weight:600;color:#94a3b8;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Email</label>
-      <input id="login-email" type="email" placeholder="usuario@islarg.com.ar" 
-        style="width:100%;padding:11px 14px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:14px;outline:none;box-sizing:border-box"
-        onfocus="this.style.borderColor='#3db87a'" onblur="this.style.borderColor='#334155'"/>
+      <label class="login-label">Email</label>
+      <input id="li-email" type="email" class="login-input" placeholder="usuario@islarg.com.ar" onkeydown="if(event.key==='Enter')islLogin()"/>
     </div>
-    <div style="margin-bottom:24px">
-      <label style="display:block;font-size:12px;font-weight:600;color:#94a3b8;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Contraseña</label>
-      <input id="login-pass" type="password" placeholder="••••••••" 
-        style="width:100%;padding:11px 14px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:14px;outline:none;box-sizing:border-box"
-        onfocus="this.style.borderColor='#3db87a'" onblur="this.style.borderColor='#334155'"
-        onkeydown="if(event.key==='Enter')doLogin()"/>
+    <div style="margin-bottom:8px">
+      <label class="login-label">Contrasena</label>
+      <input id="li-pass" type="password" class="login-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')islLogin()"/>
     </div>
-    <button onclick="doLogin()" 
-      style="width:100%;padding:12px;border-radius:8px;border:none;background:#3db87a;color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s"
-      onmouseover="this.style.background='#2ea065'" onmouseout="this.style.background='#3db87a'">
-      Ingresar
-    </button>
-
+    <button class="login-btn" onclick="islLogin()">Ingresar</button>
+    <button onclick="islLogout()" style="display:none" id="logout-hint">logout</button>
   </div>
 </div>
-<div class="app" id="main-app" style="display:none">
+
+<script>
+var ISL_USERS={
+  'admin@islarg.com.ar':'Admin2026',
+  'test@islarg.com.ar':'Test2026',
+  'operador@islarg.com.ar':'Oper2026'
+};
+
+function islLogin(){
+  var email=(document.getElementById('li-email').value||'').trim().toLowerCase();
+  var pass=document.getElementById('li-pass').value||'';
+  var err=document.getElementById('login-error');
+  if(!ISL_USERS[email]||ISL_USERS[email]!==pass){
+    err.textContent='Email o contrasena incorrectos.';
+    err.style.display='block';
+    return;
+  }
+  err.style.display='none';
+  try{sessionStorage.setItem('isl_auth',email);}catch(e){}
+  document.getElementById('login-overlay').classList.add('hidden');
+}
+
+function islLogout(){
+  try{sessionStorage.removeItem('isl_auth');}catch(e){}
+  document.getElementById('li-email').value='';
+  document.getElementById('li-pass').value='';
+  document.getElementById('login-overlay').classList.remove('hidden');
+}
+
+// Check existing session
+(function(){
+  try{
+    var auth=sessionStorage.getItem('isl_auth');
+    if(auth&&ISL_USERS[auth]){
+      document.getElementById('login-overlay').classList.add('hidden');
+    }
+  }catch(e){}
+})();
+</script>
+
+<div class="app">
 <div class="sb">
   <div class="sb-logo">
     <div class="lc"><div class="lc1"></div><div class="lc2"></div></div>
@@ -277,11 +270,11 @@ document.addEventListener('DOMContentLoaded',function(){
       <div style="width:56px;height:56px;border-radius:16px;background:#dcfce7;display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><svg viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2" style="width:28px;height:28px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="12" y2="12"/><line x1="15" y1="15" x2="12" y2="12"/></svg></div>
       <div style="font-size:17px;font-weight:700;margin-bottom:8px">Importar Excel diario</div>
       <div style="font-size:13px;color:#6b7280;margin-bottom:20px">Arrasta tu archivo Excel con los trabajadores del dia</div>
-      <label class="btn-p" style="padding:10px 24px;cursor:pointer">Seleccionar archivo<input type="file" id="excel-file-input" accept=".xlsx,.xls,.csv" style="display:none"/></label>
-      <div style="font-size:11px;color:#9ca3af;margin-top:12px">Formatos: .xlsx, .xls, .csv - Max 10 MB</div><div id="import-status" style="margin-top:10px;font-size:13px;font-weight:600"></div>
+      <button class="btn-p" style="padding:10px 24px">Seleccionar archivo</button>
+      <div style="font-size:11px;color:#9ca3af;margin-top:12px">Formatos: .xlsx, .xls, .csv - Max 10 MB</div>
     </div>
     <div class="panel"><div class="pt" style="margin-bottom:14px">Historial de importaciones</div>
-      <table><thead><tr><th>Archivo</th><th>Fecha</th><th>Trabajadores</th><th>Estado</th></tr></thead><tbody id="import-history">
+      <table><thead><tr><th>Archivo</th><th>Fecha</th><th>Trabajadores</th><th>Estado</th></tr></thead><tbody>
         <tr><td>trabajadores_06-04-2026.xlsx</td><td>Hoy 08:00</td><td>12</td><td><span class="badge bg">Completado</span></td></tr>
         <tr><td>listado_05-04-2026.xlsx</td><td>Ayer 08:15</td><td>8</td><td><span class="badge bg">Completado</span></td></tr>
         <tr><td>siniestros_04-04-2026.xlsx</td><td>04/04/2026</td><td>5</td><td><span class="badge ba">Con advertencias</span></td></tr>
@@ -294,7 +287,7 @@ document.addEventListener('DOMContentLoaded',function(){
       <div><div style="font-size:20px;font-weight:700">Trabajadores</div><div style="font-size:13px;color:#6b7280;margin-top:2px">Seguimiento de cuestionarios</div></div>
       <div style="display:flex;gap:8px"><button class="btn-s btn-sm" id="btn-ir-import">Importar Excel</button><button class="btn-p btn-sm">+ Agregar</button></div>
     </div>
-    <div class="panel"><table><thead><tr><th>Trabajador</th><th>Siniestro</th><th>Cliente (ART)</th><th>Enviado</th><th>Estado</th><th>Via</th></tr></thead><tbody id="trab-tbody">
+    <div class="panel"><table><thead><tr><th>Trabajador</th><th>Siniestro</th><th>Cliente (ART)</th><th>Enviado</th><th>Estado</th><th>Via</th></tr></thead><tbody>
       <tr><td><span class="wa" style="background:#dbeafe;color:#1e40af">JG</span>Juan Garcia</td><td>SIN-2026-0042</td><td>Provincia ART</td><td>06/04/2026</td><td><span class="badge bg">Efectivo</span></td><td>WhatsApp</td></tr>
       <tr><td><span class="wa" style="background:#dcfce7;color:#166534">ML</span>Maria Lopez</td><td>SIN-2026-0043</td><td>Provincia ART</td><td>06/04/2026</td><td><span class="badge bg">Efectivo</span></td><td>WhatsApp</td></tr>
       <tr><td><span class="wa" style="background:#fef3c7;color:#92400e">CR</span>Carlos Rodriguez</td><td>SIN-2026-0044</td><td>Galeno ART</td><td>05/04/2026</td><td><span class="badge bb">Refuerzo 1</span></td><td>WhatsApp</td></tr>
@@ -453,87 +446,14 @@ document.addEventListener('DOMContentLoaded',function(){
   </div>
 </div>
 
-  <div style="padding:12px 16px;border-top:1px solid rgba(255,255,255,.06)">
-    <button onclick="doLogout()" style="width:100%;padding:8px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#8892a4;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" onmouseover="this.style.background='rgba(239,68,68,.1)';this.style.color='#ef4444'" onmouseout="this.style.background='transparent';this.style.color='#8892a4'">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-      Cerrar sesi&#243;n
-    </button>
-  </div>
-
 </div>
 </div>
 </div>
 <script>
-
-// === USUARIOS Y LOGIN ===
-var USERS = {
-  'admin@islarg.com.ar':    {pass:'Admin2026',  nombre:'Florencia Dropulich', rol:'Administrador', avatar:'FD', bg:'#dbeafe', tc:'#1e40af'},
-  'test@islarg.com.ar':     {pass:'Test2026',   nombre:'Usuario Test',        rol:'Administrador', avatar:'UT', bg:'#dcfce7', tc:'#166534'},
-  'operador@islarg.com.ar': {pass:'Oper2026',   nombre:'Operador ISL',        rol:'Operador',      avatar:'OP', bg:'#fef3c7', tc:'#92400e'}
-};
-var currentUser = null;
-
-function setCredentials(email, pass) {
-  document.getElementById('login-email').value = email;
-  document.getElementById('login-pass').value = pass;
-  document.getElementById('login-email').dispatchEvent(new Event('input',{bubbles:true}));
-  document.getElementById('login-pass').dispatchEvent(new Event('input',{bubbles:true}));
-}
-
-function doLogin() {
-  var email = document.getElementById('login-email').value.trim().toLowerCase();
-  var pass = document.getElementById('login-pass').value;
-  var errEl = document.getElementById('login-error');
-  var user = USERS[email];
-  if(!user || user.pass !== pass) {
-    errEl.textContent = 'Email o contraseña incorrectos. Verificá tus datos.';
-    errEl.style.display = 'block';
-    return;
-  }
-  errEl.style.display = 'none';
-  currentUser = {email: email, ...user};
-  localStorage.setItem('isl_session', JSON.stringify(currentUser));
-  showApp();
-}
-
-function doLogout() {
-  localStorage.removeItem('isl_session');
-  currentUser = null;
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('main-app').style.display = 'none';
-  document.getElementById('login-email').value = '';
-  document.getElementById('login-pass').value = '';
-}
-
-function showApp() {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('main-app').style.display = 'flex';
-  // Update header with user info
-  var headerUser = document.getElementById('header-user');
-  if(headerUser && currentUser) {
-    headerUser.innerHTML = '<span class="wa" style="background:'+currentUser.bg+';color:'+currentUser.tc+'">'+currentUser.avatar+'</span><div><div style="font-size:13px;font-weight:600;color:#fff">'+currentUser.nombre+'</div><div style="font-size:11px;color:#94a3b8">'+currentUser.rol+'</div></div>';
-  }
-  navTo('inicio');
-}
-
-// Check existing session on load
-(function checkSession() {
-  var saved = localStorage.getItem('isl_session');
-  if(saved) {
-    try {
-      currentUser = JSON.parse(saved);
-      showApp();
-    } catch(e) { localStorage.removeItem('isl_session'); }
-  }
-})();
-
 var VIEWS={inicio:'Hola, Florencia',import:'Importar Excel diario',trab:'Trabajadores',rep:'Reportes',form:'Formularios',asist:'Asistente ISL',fb:'Feedback',cfg:'Configuracion',usr:'Usuarios'};
-var API_BASE='https://isl-cuestionarios-git-main-flordropus-projects.vercel.app';
-var ISL_KEY='isl-2026-florencia-secreta';
 var now=new Date();
 var days=['domingo','lunes','martes','miercoles','jueves','viernes','sabado'];
 var months=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-
 function navTo(name){
   document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active');});
   document.querySelectorAll('.nav').forEach(function(n){n.classList.remove('active');});
@@ -543,73 +463,15 @@ function navTo(name){
   var sEl=document.getElementById('h-sub');if(sEl)sEl.textContent=(name==='inicio')?days[now.getDay()]+', '+now.getDate()+' de '+months[now.getMonth()]+' de '+now.getFullYear():'';
   window.scrollTo(0,0);
 }
-
-window._appReady=false;
 window.onload=function(){
-  window._appReady=true;
   navTo('inicio');
   var sEl=document.getElementById('h-sub');if(sEl)sEl.textContent=days[now.getDay()]+', '+now.getDate()+' de '+months[now.getMonth()]+' de '+now.getFullYear();
-  ['inicio','import','trab','rep','form','asist','fb','cfg','usr'].forEach(function(n){
-    var el=document.getElementById('nav-'+n);if(el)el.addEventListener('click',function(){navTo(n);});
-  });
+  ['inicio','import','trab','rep','form','asist','fb','cfg','usr'].forEach(function(n){var el=document.getElementById('nav-'+n);if(el)el.addEventListener('click',function(){navTo(n);});});
   var bih=document.getElementById('btn-import-hero');if(bih)bih.addEventListener('click',function(){navTo('import');});
   var bvt=document.getElementById('btn-ver-todos');if(bvt)bvt.addEventListener('click',function(){navTo('trab');});
   var bii=document.getElementById('btn-ir-import');if(bii)bii.addEventListener('click',function(){navTo('import');});
   var ble=document.getElementById('link-efectivos');if(ble)ble.addEventListener('click',function(){navTo('trab');});
   document.querySelectorAll('.toggle').forEach(function(t){t.addEventListener('click',function(){this.classList.toggle('on');});});
-
-  // === IMPORT EXCEL ===
-  var excelInput=document.getElementById('excel-file-input');
-  if(excelInput) excelInput.addEventListener('change',function(){
-    var file=this.files[0];
-    if(!file) return;
-    var statusEl=document.getElementById('import-status');
-    if(statusEl){statusEl.textContent='Subiendo '+file.name+'...';statusEl.style.color='#d97706';}
-    var formData=new FormData();
-    formData.append('file',file);
-    fetch(API_BASE+'/api/import-excel',{
-      method:'POST',
-      headers:{'x-api-key':ISL_KEY},
-      body:formData
-    }).then(function(r){return r.json();})
-    .then(function(d){
-      if(statusEl){statusEl.textContent='Importado: '+(d.imported||0)+' trabajadores de '+file.name;statusEl.style.color='#166534';}
-      // Add to history table
-      var tbody=document.querySelector('#import-history tbody');
-      if(tbody){
-        var tr=document.createElement('tr');
-        tr.innerHTML='<td>'+file.name+'</td><td>Hoy '+new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})+'</td><td>'+(d.imported||0)+'</td><td><span class="badge bg">Completado</span></td>';
-        tbody.insertBefore(tr,tbody.firstChild);
-      }
-    }).catch(function(){
-      if(statusEl){statusEl.textContent='Error al subir. Verificar conexion con la API.';statusEl.style.color='#ef4444';}
-    });
-  });
-
-  // === FORMULARIOS ===
-  var nuevoFormBtn=document.querySelector('#view-form .btn-p.btn-sm');
-  if(nuevoFormBtn) nuevoFormBtn.addEventListener('click',function(){
-    var nombre=prompt('Nombre del formulario:');
-    if(!nombre) return;
-    var arte=prompt('Cliente ART:');
-    var grid=document.querySelector('#view-form .form-card').parentElement;
-    var newCard=document.createElement('div');
-    newCard.className='form-card';
-    newCard.innerHTML='<div style="font-size:14px;font-weight:700">'+nombre+'</div><div style="font-size:12px;color:#6b7280;margin-top:3px">'+(arte||'Sin ART')+'</div><div style="font-size:12px;color:#9ca3af;margin-top:8px">0 preguntas</div>';
-    // Insert before the "+" card
-    var addCard=grid.querySelector('[style*="dashed"]');
-    if(addCard) grid.insertBefore(newCard,addCard);
-    alert('Formulario "'+nombre+'" creado.');
-  });
-  // Form card selection
-  document.querySelectorAll('.form-card:not([style*="dashed"])').forEach(function(card){
-    card.addEventListener('click',function(){
-      document.querySelectorAll('.form-card').forEach(function(c){c.classList.remove('sel');});
-      this.classList.add('sel');
-    });
-  });
-
-  // === FEEDBACK ===
   var fbBtn=document.getElementById('btn-nuevo-fb');
   if(fbBtn)fbBtn.addEventListener('click',function(){var w=document.getElementById('fb-form-wrap');w.style.display=w.style.display==='none'?'block':'none';});
   var cancelFb=document.getElementById('btn-cancel-fb');if(cancelFb)cancelFb.addEventListener('click',function(){document.getElementById('fb-form-wrap').style.display='none';});
@@ -623,7 +485,7 @@ window.onload=function(){
     var code=codes[tipo]+'-'+Math.random().toString(36).substring(2,7).toUpperCase();
     var card='<div class="panel fb-card" data-tipo="'+tipo+'" style="margin-bottom:12px;border-left:4px solid '+colors[tipo]+'">';
     card+='<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px">';
-    card+='<div style="display:flex;align-items:center;gap:10px"><span style="font-size:11px;font-weight:700;color:'+colors[tipo]+';padding:2px 8px;border-radius:4px;border:1px solid '+colors[tipo]+'40">'+labels[tipo]+'</span>';
+    card+='<div style="display:flex;align-items:center;gap:10px"><span style="font-size:11px;font-weight:700;color:'+colors[tipo]+';padding:2px 8px;border-radius:4px">'+labels[tipo]+'</span>';
     card+='<span style="font-size:11px;font-family:monospace">'+code+'</span>';
     card+='<span style="font-size:11px;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:999px">Pendiente</span></div>';
     card+='<span style="font-size:11px;color:#9ca3af">'+new Date().toLocaleDateString('es-AR')+'</span></div>';
@@ -641,78 +503,15 @@ window.onload=function(){
       document.querySelectorAll('.fb-card').forEach(function(card){card.style.display=(filter==='all'||card.getAttribute('data-tipo')===filter)?'block':'none';});
     });
   });
-  ['tab-sistema','tab-ia','tab-todos-fb'].forEach(function(tid){
-    var el=document.getElementById(tid);
-    if(el)el.addEventListener('click',function(){document.querySelectorAll('#view-fb .tab').forEach(function(t){t.classList.remove('active');});this.classList.add('active');});
-  });
-
-  // === USUARIOS ===
+  ['tab-sistema','tab-ia','tab-todos-fb'].forEach(function(tid){var el=document.getElementById(tid);if(el)el.addEventListener('click',function(){document.querySelectorAll('#view-fb .tab').forEach(function(t){t.classList.remove('active');});this.classList.add('active');});});
   var usrBtn=document.getElementById('btn-nuevo-usr');if(usrBtn)usrBtn.addEventListener('click',function(){var w=document.getElementById('usr-form-wrap');w.style.display=w.style.display==='none'?'block':'none';});
   var cancelUsr=document.getElementById('btn-cancel-usr');if(cancelUsr)cancelUsr.addEventListener('click',function(){document.getElementById('usr-form-wrap').style.display='none';});
-  var guardarUsr=document.getElementById('btn-guardar-usr');if(guardarUsr)guardarUsr.addEventListener('click',function(){document.getElementById('usr-form-wrap').style.display='none';alert('Usuario guardado correctamente');});
-
-  // === ASISTENTE ===
-  var sugs={sug1:'Quienes estan en Refuerzo 2 hoy?',sug2:'Como funcionan los plazos y refuerzos?',sug3:'Como agrego un formulario nuevo para un cliente ART?',sug4:'Como exporto el reporte de hoy?',sug5:'Que pasa si un trabajador no responde?'};
+  var guardarUsr=document.getElementById('btn-guardar-usr');if(guardarUsr)guardarUsr.addEventListener('click',function(){document.getElementById('usr-form-wrap').style.display='none';alert('Usuario guardado');});
+  var sugs={sug1:'Quienes estan en Refuerzo 2 hoy?',sug2:'Como funciona el flujo de plazos?',sug3:'Como configuro un formulario para un cliente ART?',sug4:'Como exporto el reporte en Excel?',sug5:'Que pasa si un trabajador no responde?'};
   for(var id in sugs){(function(sid,msg){var el=document.getElementById(sid);if(el)el.addEventListener('click',function(){sendMsg(msg);});})(id,sugs[id]);}
   var inp=document.getElementById('asist-in');if(inp)inp.addEventListener('keydown',function(e){if(e.key==='Enter')sendMsg(this.value);});
   var sndBtn=document.getElementById('bot-send-btn');if(sndBtn)sndBtn.addEventListener('click',function(){sendMsg(document.getElementById('asist-in').value);});
-
-  // === REPORTES - cargar desde API ===
-  loadReportes();
-  loadTrabajadores();
 };
-
-function loadTrabajadores(){
-  fetch(API_BASE+'/api/cases?limit=20',{headers:{'x-api-key':ISL_KEY}})
-  .then(function(r){return r.json();})
-  .then(function(data){
-    var cases=data.cases||data||[];
-    if(!cases.length) return;
-    // Update stats
-    var efectivos=cases.filter(function(c){return c.estado==='Efectivo';}).length;
-    var pendientes=cases.filter(function(c){return c.estado==='Pendiente';}).length;
-    var ref1=cases.filter(function(c){return c.estado==='Refuerzo 1';}).length;
-    var ref2=cases.filter(function(c){return c.estado==='Refuerzo 2';}).length;
-    var noResp=cases.filter(function(c){return c.estado==='No respondio';}).length;
-    // Update stat cards on inicio
-    var statEls=document.querySelectorAll('.stat-num');
-    if(statEls[0]) statEls[0].textContent=cases.length;
-    if(statEls[1]) statEls[1].textContent=efectivos;
-    if(statEls[2]) statEls[2].textContent=ref1+ref2;
-    if(statEls[3]) statEls[3].textContent=noResp;
-    // Update trabajadores table
-    var tbody=document.querySelector('#trab-tbody');
-    if(!tbody) return;
-    tbody.innerHTML='';
-    cases.forEach(function(c){
-      var tr=document.createElement('tr');
-      var badgeClass=c.estado==='Efectivo'?'bg':c.estado==='No respondio'?'ba':c.estado==='Pendiente'?'bb':'bc';
-      tr.innerHTML='<td><strong>'+c.nombre+' '+c.apellido+'</strong><div style="font-size:11px;color:#9ca3af">'+c.siniestro_id+'</div></td>'
-        +'<td>'+c.art+'</td>'
-        +'<td><span class="badge '+badgeClass+'">'+c.estado+'</span></td>'
-        +'<td style="font-size:12px;color:#6b7280">'+(c.created_at?c.created_at.substring(0,10):'—')+'</td>'
-        +'<td><button class="btn-s" style="font-size:11px;padding:3px 10px" onclick="verCaso(''+c.id+'')">Ver</button></td>';
-      tbody.appendChild(tr);
-    });
-  }).catch(function(){console.log('API no disponible, mostrando datos demo');});
-}
-
-function loadReportes(){
-  fetch(API_BASE+'/api/reports/daily',{headers:{'x-api-key':ISL_KEY}})
-  .then(function(r){return r.json();})
-  .then(function(data){
-    var el=document.getElementById('rep-resumen');
-    if(el&&data.total!==undefined){
-      el.innerHTML='<strong>Total hoy:</strong> '+data.total+' casos &nbsp;|&nbsp; <strong>Efectivos:</strong> '+data.efectivos+' &nbsp;|&nbsp; <strong>Pendientes:</strong> '+data.pendientes;
-    }
-  }).catch(function(){});
-}
-
-function verCaso(id){
-  alert('Caso ID: '+id+'
-Funcionalidad de detalle proxima en la version siguiente.');
-}
-
 function sendMsg(msg){
   msg=msg.trim();if(!msg)return;
   var msgs=document.getElementById('asist-msgs');
@@ -721,36 +520,29 @@ function sendMsg(msg){
   var typing=document.getElementById('asist-typing');
   msgs.innerHTML+='<div class="msg-u">'+msg+'</div>';
   inp.value='';sugs.style.display='none';msgs.scrollTop=msgs.scrollHeight;typing.style.display='block';
-  fetch(API_BASE+'/api/assistant',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','x-api-key':ISL_KEY},
-    body:JSON.stringify({message:msg})
+  fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,
+      system:'Sos el asistente del sistema ISL de Medicina Empresarial. Responde en espanol rioplatense, breve y practico.',
+      messages:[{role:'user',content:msg}]})
   }).then(function(r){return r.json();})
   .then(function(data){
     typing.style.display='none';
-    var reply=data.reply||data.message||'No pude procesar tu consulta.';
+    var reply=(data.content&&data.content[0])?data.content[0].text:'No pude procesar tu consulta.';
     msgs.innerHTML+='<div class="msg-bot">'+reply+'</div>';
     msgs.scrollTop=msgs.scrollHeight;
   }).catch(function(){
-    // Fallback directo a Anthropic
-    fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,
-        system:'Sos el asistente del sistema ISL de Medicina Empresarial para gestionar cuestionarios a trabajadores siniestrados de ART en Argentina. Responde en espanol rioplatense, breve y practico.',
-        messages:[{role:'user',content:msg}]})
-    }).then(function(r){return r.json();})
-    .then(function(d){
-      typing.style.display='none';
-      var reply=(d.content&&d.content[0])?d.content[0].text:'Servicio no disponible.';
-      msgs.innerHTML+='<div class="msg-bot">'+reply+'</div>';
-      msgs.scrollTop=msgs.scrollHeight;
-    }).catch(function(){
-      typing.style.display='none';
-      msgs.innerHTML+='<div class="msg-bot">Error al conectar con el asistente.</div>';
-      msgs.scrollTop=msgs.scrollHeight;
-    });
+    typing.style.display='none';
+    msgs.innerHTML+='<div class="msg-bot">Error al conectar.</div>';
+    msgs.scrollTop=msgs.scrollHeight;
   });
 }
 </script></script>
+
+<div style="position:fixed;bottom:0;left:0;width:230px;padding:10px 16px;background:#141824;border-top:1px solid rgba(255,255,255,.06);z-index:100">
+  <button onclick="islLogout()" style="width:100%;padding:8px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#8892a4;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" onmouseover="this.style.color='#ef4444';this.style.borderColor='rgba(239,68,68,.3)'" onmouseout="this.style.color='#8892a4';this.style.borderColor='rgba(255,255,255,.1)'">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    Cerrar sesion
+  </button>
+</div>
 </body>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </html>
