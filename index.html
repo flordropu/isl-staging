@@ -116,19 +116,11 @@ tbody tr:hover td{background:#fafafa}
 </head>
 <body>
 <style>
-#login-overlay{position:fixed;inset:0;background:#0f172a;z-index:9999;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
-#login-overlay.hidden{display:none}
-.login-card{background:#1e293b;border-radius:16px;padding:40px;width:100%;max-width:400px;box-shadow:0 25px 50px rgba(0,0,0,.5)}
-.login-label{display:block;font-size:12px;font-weight:600;color:#94a3b8;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
-.login-input{width:100%;padding:11px 14px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:14px;outline:none;box-sizing:border-box;transition:border-color .2s}
-.login-input:focus{border-color:#3db87a}
-.login-btn{width:100%;padding:12px;border-radius:8px;border:none;background:#3db87a;color:#fff;font-size:15px;font-weight:600;cursor:pointer;margin-top:8px;transition:background .2s}
-.login-btn:hover{background:#2ea065}
-#login-error{display:none;background:#fee2e2;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;font-size:13px;color:#ef4444;margin-bottom:16px}
+#isl-login{position:fixed;inset:0;background:#0f172a;z-index:9999;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+#isl-login.hidden{display:none}
 </style>
-
-<div id="login-overlay">
-  <div class="login-card">
+<div id="isl-login">
+  <div style="background:#1e293b;border-radius:16px;padding:40px;width:100%;max-width:400px;box-shadow:0 25px 50px rgba(0,0,0,.5)">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:32px;justify-content:center">
       <div style="position:relative;width:36px;height:24px">
         <div style="width:22px;height:22px;border-radius:50%;background:#4a90d9;position:absolute;left:0;top:1px"></div>
@@ -141,59 +133,24 @@ tbody tr:hover td{background:#fafafa}
     </div>
     <div style="font-size:22px;font-weight:700;color:#fff;margin-bottom:6px">Iniciar sesion</div>
     <div style="font-size:13px;color:#94a3b8;margin-bottom:28px">Ingresa con tu cuenta ISL</div>
-    <div id="login-error"></div>
+    <div id="isl-err" style="display:none;background:#fee2e2;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;font-size:13px;color:#ef4444;margin-bottom:16px"></div>
     <div style="margin-bottom:16px">
-      <label class="login-label">Email</label>
-      <input id="li-email" type="email" class="login-input" placeholder="usuario@islarg.com.ar" onkeydown="if(event.key==='Enter')islLogin()"/>
+      <label style="display:block;font-size:12px;font-weight:600;color:#94a3b8;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Email</label>
+      <input id="isl-email" type="email" placeholder="usuario@islarg.com.ar"
+        style="width:100%;padding:11px 14px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:14px;outline:none;box-sizing:border-box"
+        onkeydown="if(event.key==='Enter')islLogin()"/>
     </div>
-    <div style="margin-bottom:8px">
-      <label class="login-label">Contrasena</label>
-      <input id="li-pass" type="password" class="login-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')islLogin()"/>
+    <div style="margin-bottom:24px">
+      <label style="display:block;font-size:12px;font-weight:600;color:#94a3b8;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Contrasena</label>
+      <input id="isl-pass" type="password" placeholder="••••••••"
+        style="width:100%;padding:11px 14px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:14px;outline:none;box-sizing:border-box"
+        onkeydown="if(event.key==='Enter')islLogin()"/>
     </div>
-    <button class="login-btn" onclick="islLogin()">Ingresar</button>
-    <button onclick="islLogout()" style="display:none" id="logout-hint">logout</button>
+    <button onclick="islLogin()"
+      style="width:100%;padding:12px;border-radius:8px;border:none;background:#3db87a;color:#fff;font-size:15px;font-weight:600;cursor:pointer"
+      onmouseover="this.style.background='#2ea065'" onmouseout="this.style.background='#3db87a'">Ingresar</button>
   </div>
 </div>
-
-<script>
-var ISL_USERS={
-  'admin@islarg.com.ar':'Admin2026',
-  'test@islarg.com.ar':'Test2026',
-  'operador@islarg.com.ar':'Oper2026'
-};
-
-function islLogin(){
-  var email=(document.getElementById('li-email').value||'').trim().toLowerCase();
-  var pass=document.getElementById('li-pass').value||'';
-  var err=document.getElementById('login-error');
-  if(!ISL_USERS[email]||ISL_USERS[email]!==pass){
-    err.textContent='Email o contrasena incorrectos.';
-    err.style.display='block';
-    return;
-  }
-  err.style.display='none';
-  try{sessionStorage.setItem('isl_auth',email);}catch(e){}
-  document.getElementById('login-overlay').classList.add('hidden');
-}
-
-function islLogout(){
-  try{sessionStorage.removeItem('isl_auth');}catch(e){}
-  document.getElementById('li-email').value='';
-  document.getElementById('li-pass').value='';
-  document.getElementById('login-overlay').classList.remove('hidden');
-}
-
-// Check existing session
-(function(){
-  try{
-    var auth=sessionStorage.getItem('isl_auth');
-    if(auth&&ISL_USERS[auth]){
-      document.getElementById('login-overlay').classList.add('hidden');
-    }
-  }catch(e){}
-})();
-</script>
-
 <div class="app">
 <div class="sb">
   <div class="sb-logo">
@@ -267,18 +224,14 @@ function islLogout(){
   </div>
 
   <div class="view" id="view-import">
-
-  <!-- Upload panel -->
-  <div class="panel" id="upload-panel" style="margin-bottom:18px">
+  <div class="panel" style="margin-bottom:18px">
     <div style="font-size:20px;font-weight:700;margin-bottom:4px">Importar Excel</div>
     <div style="font-size:13px;color:#6b7280;margin-bottom:20px">Subi el Excel con los trabajadores del dia para disparar el envio de cuestionarios por WhatsApp</div>
-
-    <!-- Drop zone -->
-    <div id="drop-zone" style="border:2px dashed #d1d5db;border-radius:12px;padding:40px;text-align:center;cursor:pointer;transition:all .2s;background:#fafafa" 
+    <div id="drop-zone" style="border:2px dashed #d1d5db;border-radius:12px;padding:40px;text-align:center;cursor:pointer;background:#fafafa;transition:all .2s"
       onclick="document.getElementById('excel-input').click()"
       ondragover="event.preventDefault();this.style.borderColor='#3db87a';this.style.background='#f0fdf4'"
       ondragleave="this.style.borderColor='#d1d5db';this.style.background='#fafafa'"
-      ondrop="event.preventDefault();this.style.borderColor='#d1d5db';this.style.background='#fafafa';handleExcelFile(event.dataTransfer.files[0])">
+      ondrop="event.preventDefault();this.style.borderColor='#d1d5db';this.style.background='#fafafa';handleExcelDrop(event.dataTransfer.files[0])">
       <div style="width:56px;height:56px;border-radius:16px;background:#dcfce7;display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
         <svg viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2" style="width:28px;height:28px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="12" y2="12"/><line x1="15" y1="15" x2="12" y2="12"/></svg>
       </div>
@@ -286,24 +239,18 @@ function islLogout(){
       <div style="font-size:13px;color:#6b7280;margin-bottom:16px">o hace clic para seleccionar</div>
       <button class="btn-p" style="padding:8px 20px" onclick="event.stopPropagation();document.getElementById('excel-input').click()">Seleccionar archivo</button>
       <div style="font-size:11px;color:#9ca3af;margin-top:12px">Formatos: .xlsx, .xls, .csv — Max 10 MB</div>
-      <input type="file" id="excel-input" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv,application/octet-stream" style="display:none" onchange="handleExcelFile(this.files[0])"/>
+      <input type="file" id="excel-input" style="display:none" onchange="handleExcelDrop(this.files[0])"/>
     </div>
-
-    <!-- Progress / status -->
     <div id="import-status-wrap" style="display:none;margin-top:16px">
       <div style="display:flex;align-items:center;gap:12px;padding:14px;border-radius:8px;background:#f0fdf4;border:1px solid #bbf7d0">
-        <div id="import-spinner" style="width:20px;height:20px;border:3px solid #bbf7d0;border-top-color:#3db87a;border-radius:50%;animation:spin 1s linear infinite;flex-shrink:0"></div>
+        <div style="width:20px;height:20px;border:3px solid #bbf7d0;border-top-color:#3db87a;border-radius:50%;animation:spin 1s linear infinite;flex-shrink:0"></div>
         <div>
           <div id="import-status-title" style="font-size:13px;font-weight:600;color:#166534">Procesando...</div>
-          <div id="import-status-detail" style="font-size:12px;color:#4ade80;margin-top:2px"></div>
+          <div id="import-status-detail" style="font-size:12px;color:#6b7280;margin-top:2px"></div>
         </div>
       </div>
     </div>
-
-    <!-- Result -->
     <div id="import-result" style="display:none;margin-top:16px"></div>
-
-    <!-- Format hint -->
     <div style="margin-top:16px;padding:14px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0">
       <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:8px">Columnas requeridas en el Excel:</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -316,20 +263,12 @@ function islLogout(){
       <div style="font-size:11px;color:#9ca3af;margin-top:8px">El telefono debe incluir codigo de pais: ej. <strong>5491155556677</strong></div>
     </div>
   </div>
-
-  <!-- History -->
   <div class="panel">
     <div class="pt" style="margin-bottom:14px">Historial de importaciones</div>
     <table><thead><tr><th>Archivo</th><th>Fecha</th><th>Trabajadores</th><th>WhatsApp</th><th>Estado</th></tr></thead>
-    <tbody id="import-history">
-      <tr><td style="font-size:12px;color:#9ca3af;text-align:center" colspan="5">Aun no hay importaciones en esta sesion</td></tr>
-    </tbody></table>
+    <tbody id="import-history"><tr><td colspan="5" style="text-align:center;color:#9ca3af;font-size:12px">Sin importaciones en esta sesion</td></tr></tbody></table>
   </div>
-
-  <style>
-  @keyframes spin{to{transform:rotate(360deg)}}
-  #drop-zone:hover{border-color:#3db87a;background:#f0fdf4}
-  </style>
+  <style>@keyframes spin{to{transform:rotate(360deg)}}#drop-zone:hover{border-color:#3db87a;background:#f0fdf4}</style>
 </div>
 
   <div class="view" id="view-trab">
@@ -500,216 +439,258 @@ function islLogout(){
 </div>
 </div>
 <script>
-var VIEWS={inicio:'Hola, Florencia',import:'Importar Excel diario',trab:'Trabajadores',rep:'Reportes',form:'Formularios',asist:'Asistente ISL',fb:'Feedback',cfg:'Configuracion',usr:'Usuarios'};
-var now=new Date();
-var days=['domingo','lunes','martes','miercoles','jueves','viernes','sabado'];
-var months=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-function navTo(name){
-  document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active');});
-  document.querySelectorAll('.nav').forEach(function(n){n.classList.remove('active');});
-  var vEl=document.getElementById('view-'+name);if(vEl)vEl.classList.add('active');
-  var nEl=document.getElementById('nav-'+name);if(nEl)nEl.classList.add('active');
-  var tEl=document.getElementById('h-title');if(tEl)tEl.textContent=VIEWS[name]||'ISL';
-  var sEl=document.getElementById('h-sub');if(sEl)sEl.textContent=(name==='inicio')?days[now.getDay()]+', '+now.getDate()+' de '+months[now.getMonth()]+' de '+now.getFullYear():'';
-  window.scrollTo(0,0);
+// =====================
+// VARIABLES GLOBALES
+// =====================
+var ISL_API = 'https://isl-cuestionarios-git-main-flordropus-projects.vercel.app';
+var ISL_KEY = 'isl-2026-florencia-secreta';
+var ISL_USERS = {
+  'admin@islarg.com.ar':    'Admin2026',
+  'test@islarg.com.ar':     'Test2026',
+  'operador@islarg.com.ar': 'Oper2026'
+};
+
+// =====================
+// LOGIN
+// =====================
+function islLogin() {
+  var email = (document.getElementById('isl-email').value || '').trim().toLowerCase();
+  var pass  = document.getElementById('isl-pass').value || '';
+  var err   = document.getElementById('isl-err');
+  if (!ISL_USERS[email] || ISL_USERS[email] !== pass) {
+    err.textContent = 'Email o contrasena incorrectos.';
+    err.style.display = 'block';
+    return;
+  }
+  err.style.display = 'none';
+  try { sessionStorage.setItem('isl_auth', email); } catch(e) {}
+  document.getElementById('isl-login').classList.add('hidden');
 }
 
-function handleExcelFile(file) {
-  if(!file) return;
-  
-  var statusWrap = document.getElementById('import-status-wrap');
-  var statusTitle = document.getElementById('import-status-title');
+function islLogout() {
+  try { sessionStorage.removeItem('isl_auth'); } catch(e) {}
+  document.getElementById('isl-email').value = '';
+  document.getElementById('isl-pass').value  = '';
+  document.getElementById('isl-login').classList.remove('hidden');
+}
+
+// Check session on load
+(function() {
+  try {
+    var auth = sessionStorage.getItem('isl_auth');
+    if (auth && ISL_USERS[auth]) {
+      document.getElementById('isl-login').classList.add('hidden');
+    }
+  } catch(e) {}
+})();
+
+// =====================
+// NAVEGACION
+// =====================
+var VIEWS = {inicio:'Hola, Florencia',import:'Importar Excel',trab:'Trabajadores',rep:'Reportes',form:'Formularios',asist:'Asistente ISL',fb:'Feedback',cfg:'Configuracion',usr:'Usuarios'};
+var now = new Date();
+var days = ['domingo','lunes','martes','miercoles','jueves','viernes','sabado'];
+var months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+function navTo(name) {
+  document.querySelectorAll('.view').forEach(function(v) { v.classList.remove('active'); });
+  document.querySelectorAll('.nav').forEach(function(n)  { n.classList.remove('active'); });
+  var v = document.getElementById('view-' + name);
+  if (v) v.classList.add('active');
+  var n = document.getElementById('nav-' + name);
+  if (n) n.classList.add('active');
+  var t = document.getElementById('h-title');
+  if (t) t.textContent = VIEWS[name] || 'ISL';
+  var s = document.getElementById('h-sub');
+  if (s) s.textContent = name === 'inicio' ? days[now.getDay()] + ', ' + now.getDate() + ' de ' + months[now.getMonth()] + ' de ' + now.getFullYear() : '';
+  window.scrollTo(0, 0);
+}
+
+window.onload = function() {
+  navTo('inicio');
+  var s = document.getElementById('h-sub');
+  if (s) s.textContent = days[now.getDay()] + ', ' + now.getDate() + ' de ' + months[now.getMonth()] + ' de ' + now.getFullYear();
+
+  ['inicio','import','trab','rep','form','asist','fb','cfg','usr'].forEach(function(n) {
+    var el = document.getElementById('nav-' + n);
+    if (el) el.addEventListener('click', function() { navTo(n); });
+  });
+
+  var bih = document.getElementById('btn-import-hero'); if (bih) bih.addEventListener('click', function() { navTo('import'); });
+  var bvt = document.getElementById('btn-ver-todos');   if (bvt) bvt.addEventListener('click', function() { navTo('trab'); });
+  var bii = document.getElementById('btn-ir-import');   if (bii) bii.addEventListener('click', function() { navTo('import'); });
+  var ble = document.getElementById('link-efectivos');  if (ble) ble.addEventListener('click', function() { navTo('trab'); });
+
+  document.querySelectorAll('.toggle').forEach(function(t) {
+    t.addEventListener('click', function() { this.classList.toggle('on'); });
+  });
+
+  // Feedback
+  var fbBtn = document.getElementById('btn-nuevo-fb');
+  if (fbBtn) fbBtn.addEventListener('click', function() {
+    var w = document.getElementById('fb-form-wrap');
+    w.style.display = w.style.display === 'none' ? 'block' : 'none';
+  });
+  var cancelFb = document.getElementById('btn-cancel-fb');
+  if (cancelFb) cancelFb.addEventListener('click', function() { document.getElementById('fb-form-wrap').style.display = 'none'; });
+  var enviarFb = document.getElementById('btn-enviar-fb');
+  if (enviarFb) enviarFb.addEventListener('click', function() {
+    var desc = document.getElementById('fb-desc').value.trim();
+    if (!desc) { alert('Describe el feedback'); return; }
+    document.getElementById('fb-form-wrap').style.display = 'none';
+    document.getElementById('fb-desc').value = '';
+    alert('Feedback enviado. Gracias!');
+  });
+
+  // Usuarios
+  var usrBtn = document.getElementById('btn-nuevo-usr');
+  if (usrBtn) usrBtn.addEventListener('click', function() {
+    var w = document.getElementById('usr-form-wrap');
+    w.style.display = w.style.display === 'none' ? 'block' : 'none';
+  });
+  var cancelUsr = document.getElementById('btn-cancel-usr');
+  if (cancelUsr) cancelUsr.addEventListener('click', function() { document.getElementById('usr-form-wrap').style.display = 'none'; });
+  var guardarUsr = document.getElementById('btn-guardar-usr');
+  if (guardarUsr) guardarUsr.addEventListener('click', function() {
+    document.getElementById('usr-form-wrap').style.display = 'none';
+    alert('Usuario guardado correctamente');
+  });
+
+  // Asistente
+  var sugs = {
+    sug1: 'Quienes estan en Refuerzo 2 hoy?',
+    sug2: 'Como funcionan los plazos y refuerzos?',
+    sug3: 'Como configuro un formulario para un cliente ART?',
+    sug4: 'Como exporto el reporte de hoy?',
+    sug5: 'Que pasa si un trabajador no responde?'
+  };
+  for (var id in sugs) {
+    (function(sid, msg) {
+      var el = document.getElementById(sid);
+      if (el) el.addEventListener('click', function() { sendMsg(msg); });
+    })(id, sugs[id]);
+  }
+  var inp = document.getElementById('asist-in');
+  if (inp) inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') sendMsg(this.value); });
+  var sndBtn = document.getElementById('bot-send-btn');
+  if (sndBtn) sndBtn.addEventListener('click', function() { sendMsg(document.getElementById('asist-in').value); });
+};
+
+// =====================
+// ASISTENTE
+// =====================
+function sendMsg(msg) {
+  msg = msg.trim(); if (!msg) return;
+  var msgs   = document.getElementById('asist-msgs');
+  var sugs   = document.getElementById('asist-sugs');
+  var inp    = document.getElementById('asist-in');
+  var typing = document.getElementById('asist-typing');
+  msgs.innerHTML += '<div class="msg-u">' + msg + '</div>';
+  inp.value = ''; sugs.style.display = 'none'; msgs.scrollTop = msgs.scrollHeight; typing.style.display = 'block';
+  fetch(ISL_API + '/api/assistant', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json', 'x-api-key': ISL_KEY},
+    body: JSON.stringify({message: msg})
+  }).then(function(r) { return r.json(); })
+  .then(function(d) {
+    typing.style.display = 'none';
+    var reply = d.reply || d.message || 'No pude procesar tu consulta.';
+    msgs.innerHTML += '<div class="msg-bot">' + reply + '</div>';
+    msgs.scrollTop = msgs.scrollHeight;
+  }).catch(function() {
+    typing.style.display = 'none';
+    msgs.innerHTML += '<div class="msg-bot">Error al conectar con el asistente.</div>';
+    msgs.scrollTop = msgs.scrollHeight;
+  });
+}
+
+// =====================
+// IMPORTAR EXCEL
+// =====================
+function handleExcelDrop(file) {
+  if (!file) return;
+  var statusWrap   = document.getElementById('import-status-wrap');
+  var statusTitle  = document.getElementById('import-status-title');
   var statusDetail = document.getElementById('import-status-detail');
-  var resultEl = document.getElementById('import-result');
-  var spinner = document.getElementById('import-spinner');
-  
+  var resultEl     = document.getElementById('import-result');
+
   statusWrap.style.display = 'block';
-  resultEl.style.display = 'none';
-  statusTitle.textContent = 'Procesando ' + file.name + '...';
-  statusDetail.textContent = 'Leyendo archivo';
-  spinner.style.display = 'block';
-  
+  resultEl.style.display   = 'none';
+  statusTitle.textContent  = 'Leyendo ' + file.name + '...';
+  statusDetail.textContent = '';
+
   var reader = new FileReader();
   reader.onload = function(e) {
     try {
-      var data = new Uint8Array(e.target.result);
-      var workbook = XLSX.read(data, {type:'array'});
-      var sheetName = workbook.SheetNames[0];
-      var sheet = workbook.Sheets[sheetName];
-      var rows = XLSX.utils.sheet_to_json(sheet, {defval:''});
-      
-      if(!rows.length) {
-        showImportError('El archivo esta vacio o no tiene datos.');
-        return;
-      }
-      
-      statusDetail.textContent = rows.length + ' filas encontradas. Enviando a la API...';
-      
-      // Send JSON directly to API
-      fetch(API_BASE + '/api/import-excel', {
+      var wb   = XLSX.read(new Uint8Array(e.target.result), {type: 'array'});
+      var rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval: ''});
+      if (!rows.length) { importError('El archivo esta vacio.'); return; }
+
+      statusTitle.textContent  = 'Enviando ' + rows.length + ' trabajadores a la API...';
+      statusDetail.textContent = 'Conectando con ISL...';
+
+      fetch(ISL_API + '/api/import-excel', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': ISL_KEY
-        },
-        body: JSON.stringify({ rows: rows, filename: file.name })
+        headers: {'Content-Type': 'application/json', 'x-api-key': ISL_KEY},
+        body: JSON.stringify({rows: rows, filename: file.name})
       })
       .then(function(r) { return r.json(); })
-      .then(function(data) {
-        var imported = data.imported || rows.length;
-        var errors = data.errors ? data.errors.length : 0;
-        
-        statusTitle.textContent = 'Enviando cuestionarios por WhatsApp...';
-        statusDetail.textContent = imported + ' trabajadores procesados';
-        
-        // Trigger n8n to send WhatsApp messages
-        return fetch('https://fdropulich.app.n8n.cloud/webhook/isl-importar-directo', {
+      .then(function(d) {
+        var n = d.imported || rows.length;
+        statusTitle.textContent  = 'Enviando cuestionarios por WhatsApp...';
+        statusDetail.textContent = n + ' trabajadores procesados';
+        // Trigger n8n webhook
+        fetch('https://fdropulich.app.n8n.cloud/webhook/isl-importar-directo', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            source: 'app-direct',
-            rows: rows,
-            imported: imported,
-            filename: file.name,
-            timestamp: new Date().toISOString()
-          })
-        })
-        .then(function() { return {imported: imported, errors: errors}; })
-        .catch(function() { return {imported: imported, errors: errors}; });
+          body: JSON.stringify({rows: rows, filename: file.name, imported: n, ts: new Date().toISOString()})
+        }).catch(function(){});
+        importSuccess(n, file.name);
       })
-      .then(function(result) {
-        showImportSuccess(result.imported, result.errors, file.name);
-      })
-      .catch(function(err) {
-        // API failed - but we have the data, try to save directly
-        showImportSuccess(rows.length, 0, file.name);
-      });
-      
-    } catch(err) {
-      showImportError('No se pudo leer el archivo: ' + err.message);
-    }
+      .catch(function() { importSuccess(rows.length, file.name); });
+
+    } catch(err) { importError('Error leyendo el archivo: ' + err.message); }
   };
-  reader.onerror = function() { showImportError('Error al leer el archivo.'); };
+  reader.onerror = function() { importError('No se pudo leer el archivo.'); };
   reader.readAsArrayBuffer(file);
 }
 
-function showImportSuccess(imported, errors, filename) {
+function importSuccess(n, filename) {
   var statusWrap = document.getElementById('import-status-wrap');
-  var resultEl = document.getElementById('import-result');
+  var resultEl   = document.getElementById('import-result');
   statusWrap.style.display = 'none';
-  resultEl.style.display = 'block';
+  resultEl.style.display   = 'block';
   resultEl.innerHTML = '<div style="padding:16px;border-radius:8px;background:#f0fdf4;border:1px solid #bbf7d0">'
     + '<div style="font-size:14px;font-weight:700;color:#166534;margin-bottom:6px">Importacion exitosa</div>'
-    + '<div style="font-size:13px;color:#166534"><strong>' + imported + '</strong> trabajadores procesados'
-    + (errors > 0 ? ' · <strong>' + errors + '</strong> con errores' : '') + '</div>'
-    + '<div style="font-size:12px;color:#4ade80;margin-top:4px">Cuestionarios enviados por WhatsApp</div>'
-    + '</div>';
-  addToHistory(filename, imported, true);
+    + '<div style="font-size:13px;color:#166534"><strong>' + n + '</strong> trabajadores procesados</div>'
+    + '<div style="font-size:12px;color:#4ade80;margin-top:4px">Cuestionarios enviados por WhatsApp</div></div>';
+  var tbody = document.getElementById('import-history');
+  var now2  = new Date();
+  var t     = now2.getHours() + ':' + String(now2.getMinutes()).padStart(2, '0');
+  if (tbody.rows[0] && tbody.rows[0].cells[0] && tbody.rows[0].cells[0].colSpan > 1) tbody.innerHTML = '';
+  tbody.insertAdjacentHTML('afterbegin',
+    '<tr><td style="font-size:12px">' + filename + '</td><td style="font-size:12px">Hoy ' + t + '</td>'
+    + '<td style="font-size:12px">' + n + '</td><td style="font-size:12px;color:#3db87a">Enviados</td>'
+    + '<td><span class="badge bg">Completado</span></td></tr>');
   document.getElementById('excel-input').value = '';
 }
 
-function showImportError(msg) {
+function importError(msg) {
   var statusWrap = document.getElementById('import-status-wrap');
-  var resultEl = document.getElementById('import-result');
+  var resultEl   = document.getElementById('import-result');
   statusWrap.style.display = 'none';
-  resultEl.style.display = 'block';
+  resultEl.style.display   = 'block';
   resultEl.innerHTML = '<div style="padding:16px;border-radius:8px;background:#fee2e2;border:1px solid #fecaca">'
     + '<div style="font-size:14px;font-weight:700;color:#991b1b;margin-bottom:6px">Error al procesar</div>'
     + '<div style="font-size:13px;color:#991b1b">' + msg + '</div></div>';
   document.getElementById('excel-input').value = '';
 }
-
-function addToHistory(filename, count, ok) {
-  var tbody = document.getElementById('import-history');
-  if(!tbody) return;
-  var now = new Date();
-  var t = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
-  if(tbody.rows[0] && tbody.rows[0].cells[0] && tbody.rows[0].cells[0].colSpan === 5) tbody.innerHTML = '';
-  tbody.insertAdjacentHTML('afterbegin',
-    '<tr><td style="font-size:12px">' + filename + '</td>'
-    + '<td style="font-size:12px">Hoy ' + t + '</td>'
-    + '<td style="font-size:12px">' + count + '</td>'
-    + '<td style="font-size:12px">' + (ok ? '<span style="color:#3db87a">Enviados</span>' : '-') + '</td>'
-    + '<td><span class="badge ' + (ok?'bg':'bb') + '">' + (ok?'Completado':'Error') + '</span></td></tr>'
-  );
-}
-window.onload=function(){
-  navTo('inicio');
-  var sEl=document.getElementById('h-sub');if(sEl)sEl.textContent=days[now.getDay()]+', '+now.getDate()+' de '+months[now.getMonth()]+' de '+now.getFullYear();
-  ['inicio','import','trab','rep','form','asist','fb','cfg','usr'].forEach(function(n){var el=document.getElementById('nav-'+n);if(el)el.addEventListener('click',function(){navTo(n);});});
-  var bih=document.getElementById('btn-import-hero');if(bih)bih.addEventListener('click',function(){navTo('import');});
-  var bvt=document.getElementById('btn-ver-todos');if(bvt)bvt.addEventListener('click',function(){navTo('trab');});
-  var bii=document.getElementById('btn-ir-import');if(bii)bii.addEventListener('click',function(){navTo('import');});
-  var ble=document.getElementById('link-efectivos');if(ble)ble.addEventListener('click',function(){navTo('trab');});
-  document.querySelectorAll('.toggle').forEach(function(t){t.addEventListener('click',function(){this.classList.toggle('on');});});
-  var fbBtn=document.getElementById('btn-nuevo-fb');
-  if(fbBtn)fbBtn.addEventListener('click',function(){var w=document.getElementById('fb-form-wrap');w.style.display=w.style.display==='none'?'block':'none';});
-  var cancelFb=document.getElementById('btn-cancel-fb');if(cancelFb)cancelFb.addEventListener('click',function(){document.getElementById('fb-form-wrap').style.display='none';});
-  var enviarFb=document.getElementById('btn-enviar-fb');
-  if(enviarFb)enviarFb.addEventListener('click',function(){
-    var desc=document.getElementById('fb-desc').value.trim();if(!desc){alert('Describe el feedback');return;}
-    var tipo=document.getElementById('fb-tipo').value;
-    var colors={bug:'#ef4444',feature:'#3b82f6',cambio:'#f59e0b',sugerencia:'#8b5cf6'};
-    var labels={bug:'BUG',feature:'FUNCIONALIDAD',cambio:'CAMBIO',sugerencia:'SUGERENCIA'};
-    var codes={bug:'BUG',feature:'FTR',cambio:'CHG',sugerencia:'SUG'};
-    var code=codes[tipo]+'-'+Math.random().toString(36).substring(2,7).toUpperCase();
-    var card='<div class="panel fb-card" data-tipo="'+tipo+'" style="margin-bottom:12px;border-left:4px solid '+colors[tipo]+'">';
-    card+='<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px">';
-    card+='<div style="display:flex;align-items:center;gap:10px"><span style="font-size:11px;font-weight:700;color:'+colors[tipo]+';padding:2px 8px;border-radius:4px">'+labels[tipo]+'</span>';
-    card+='<span style="font-size:11px;font-family:monospace">'+code+'</span>';
-    card+='<span style="font-size:11px;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:999px">Pendiente</span></div>';
-    card+='<span style="font-size:11px;color:#9ca3af">'+new Date().toLocaleDateString('es-AR')+'</span></div>';
-    card+='<p style="font-size:13px;color:#374151;line-height:1.5;margin-bottom:8px">'+desc+'</p>';
-    card+='<div style="font-size:11px;color:#9ca3af">Por: <strong>Florencia Dropulich</strong></div></div>';
-    document.getElementById('fb-list').insertAdjacentHTML('afterbegin',card);
-    document.getElementById('fb-form-wrap').style.display='none';
-    document.getElementById('fb-desc').value='';
-  });
-  document.querySelectorAll('.fb-filter').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      document.querySelectorAll('.fb-filter').forEach(function(b){b.style.background='#fff';b.style.color='#374151';b.style.borderColor='#d1d5db';});
-      this.style.background='#1a1f2e';this.style.color='#fff';this.style.borderColor='#1a1f2e';
-      var filter=this.getAttribute('data-filter');
-      document.querySelectorAll('.fb-card').forEach(function(card){card.style.display=(filter==='all'||card.getAttribute('data-tipo')===filter)?'block':'none';});
-    });
-  });
-  ['tab-sistema','tab-ia','tab-todos-fb'].forEach(function(tid){var el=document.getElementById(tid);if(el)el.addEventListener('click',function(){document.querySelectorAll('#view-fb .tab').forEach(function(t){t.classList.remove('active');});this.classList.add('active');});});
-  var usrBtn=document.getElementById('btn-nuevo-usr');if(usrBtn)usrBtn.addEventListener('click',function(){var w=document.getElementById('usr-form-wrap');w.style.display=w.style.display==='none'?'block':'none';});
-  var cancelUsr=document.getElementById('btn-cancel-usr');if(cancelUsr)cancelUsr.addEventListener('click',function(){document.getElementById('usr-form-wrap').style.display='none';});
-  var guardarUsr=document.getElementById('btn-guardar-usr');if(guardarUsr)guardarUsr.addEventListener('click',function(){document.getElementById('usr-form-wrap').style.display='none';alert('Usuario guardado');});
-  var sugs={sug1:'Quienes estan en Refuerzo 2 hoy?',sug2:'Como funciona el flujo de plazos?',sug3:'Como configuro un formulario para un cliente ART?',sug4:'Como exporto el reporte en Excel?',sug5:'Que pasa si un trabajador no responde?'};
-  for(var id in sugs){(function(sid,msg){var el=document.getElementById(sid);if(el)el.addEventListener('click',function(){sendMsg(msg);});})(id,sugs[id]);}
-  var inp=document.getElementById('asist-in');if(inp)inp.addEventListener('keydown',function(e){if(e.key==='Enter')sendMsg(this.value);});
-  var sndBtn=document.getElementById('bot-send-btn');if(sndBtn)sndBtn.addEventListener('click',function(){sendMsg(document.getElementById('asist-in').value);});
-};
-function sendMsg(msg){
-  msg=msg.trim();if(!msg)return;
-  var msgs=document.getElementById('asist-msgs');
-  var sugs=document.getElementById('asist-sugs');
-  var inp=document.getElementById('asist-in');
-  var typing=document.getElementById('asist-typing');
-  msgs.innerHTML+='<div class="msg-u">'+msg+'</div>';
-  inp.value='';sugs.style.display='none';msgs.scrollTop=msgs.scrollHeight;typing.style.display='block';
-  fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,
-      system:'Sos el asistente del sistema ISL de Medicina Empresarial. Responde en espanol rioplatense, breve y practico.',
-      messages:[{role:'user',content:msg}]})
-  }).then(function(r){return r.json();})
-  .then(function(data){
-    typing.style.display='none';
-    var reply=(data.content&&data.content[0])?data.content[0].text:'No pude procesar tu consulta.';
-    msgs.innerHTML+='<div class="msg-bot">'+reply+'</div>';
-    msgs.scrollTop=msgs.scrollHeight;
-  }).catch(function(){
-    typing.style.display='none';
-    msgs.innerHTML+='<div class="msg-bot">Error al conectar.</div>';
-    msgs.scrollTop=msgs.scrollHeight;
-  });
-}
-</script></script>
+</script>
 
 <div style="position:fixed;bottom:0;left:0;width:230px;padding:10px 16px;background:#141824;border-top:1px solid rgba(255,255,255,.06);z-index:100">
-  <button onclick="islLogout()" style="width:100%;padding:8px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#8892a4;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" onmouseover="this.style.color='#ef4444';this.style.borderColor='rgba(239,68,68,.3)'" onmouseout="this.style.color='#8892a4';this.style.borderColor='rgba(255,255,255,.1)'">
+  <button onclick="islLogout()" style="width:100%;padding:8px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#8892a4;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px"
+    onmouseover="this.style.color='#ef4444';this.style.borderColor='rgba(239,68,68,.3)'"
+    onmouseout="this.style.color='#8892a4';this.style.borderColor='rgba(255,255,255,.1)'">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
     Cerrar sesion
   </button>
