@@ -173,13 +173,13 @@ document.addEventListener('DOMContentLoaded', function() {
     <div id="isl-err" style="display:none;background:#fee2e2;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;font-size:13px;color:#ef4444;margin-bottom:16px"></div>
     <div style="margin-bottom:16px">
       <label style="display:block;font-size:12px;font-weight:600;color:#94a3b8;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Email</label>
-      <input id="isl-email" type="email" placeholder="usuario@islarg.com.ar" style="width:100%;padding:11px 14px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:14px;outline:none;box-sizing:border-box" id="isl-enter-field"/>
+      <input id="isl-email" type="email" placeholder="usuario@islarg.com.ar" style="width:100%;padding:11px 14px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:14px;outline:none;box-sizing:border-box" onkeydown="if(event.key==='Enter')islLogin()"/>
     </div>
     <div style="margin-bottom:24px">
       <label style="display:block;font-size:12px;font-weight:600;color:#94a3b8;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Contrasena</label>
-      <input id="isl-pass" type="password" placeholder="••••••••" style="width:100%;padding:11px 14px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:14px;outline:none;box-sizing:border-box" id="isl-enter-field"/>
+      <input id="isl-pass" type="password" placeholder="••••••••" style="width:100%;padding:11px 14px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:14px;outline:none;box-sizing:border-box" id="isl-enter-field"/ onkeydown="if(event.key==='Enter')islLogin()">
     </div>
-    <button id="isl-login-btn" style="width:100%;padding:12px;border-radius:8px;border:none;background:#3db87a;color:#fff;font-size:15px;font-weight:600;cursor:pointer" onmouseover="this.style.background='#2ea065'" onmouseout="this.style.background='#3db87a'">Ingresar</button>
+    <button id="isl-login-btn" style="width:100%;padding:12px;border-radius:8px;border:none;background:#3db87a;color:#fff;font-size:15px;font-weight:600;cursor:pointer" onmouseover="this.style.background='#2ea065'" onmouseout="this.style.background='#3db87a'" onclick="islLogin()">Ingresar</button>
   </div>
 </div>
 <div class="app">
