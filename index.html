@@ -146,6 +146,40 @@ document.addEventListener('DOMContentLoaded',function(){
   try{var s=sessionStorage.getItem('isl_ok');if(s&&ISL_USERS[s])document.getElementById('isl-login').classList.add('hidden');}catch(x){}
 });
 </script>
+<script>
+var ISL_USERS={'admin@islarg.com.ar':'Admin2026','test@islarg.com.ar':'Test2026','operador@islarg.com.ar':'Oper2026'};
+function islLogin(){
+  var e=(document.getElementById('isl-email').value||'').trim().toLowerCase();
+  var p=document.getElementById('isl-pass').value||'';
+  var err=document.getElementById('isl-err');
+  if(!ISL_USERS[e]||ISL_USERS[e]!==p){err.textContent='Email o contrasena incorrectos.';err.style.display='block';return;}
+  err.style.display='none';
+  try{sessionStorage.setItem('isl_ok',e);}catch(x){}
+  document.getElementById('isl-login').classList.add('hidden');
+}
+function islLogout(){
+  try{sessionStorage.removeItem('isl_ok');}catch(x){}
+  document.getElementById('isl-email').value='';
+  document.getElementById('isl-pass').value='';
+  document.getElementById('isl-login').classList.remove('hidden');
+}
+function verResp(btn){
+  var row=btn.closest('tr');
+  var n=row.cells[0]?row.cells[0].textContent.trim():'';
+  var s=row.cells[1]?row.cells[1].textContent.trim():'';
+  var e=row.cells[2]?row.cells[2].textContent.trim():'';
+  var ec=e.includes('Efectivo')?'#dcfce7':e.includes('Refuerzo')?'#fef3c7':'#fee2e2';
+  var et=e.includes('Efectivo')?'#166534':e.includes('Refuerzo')?'#92400e':'#991b1b';
+  var resp=e.includes('Efectivo')?'"Si, confirmo que estoy recibiendo atencion medica correctamente."':e.includes('Refuerzo')?'Sin respuesta aun. Recordatorios enviados.':'No respondio a ningun mensaje. Caso cerrado.';
+  var m=document.getElementById('isl-rm');
+  if(!m){m=document.createElement('div');m.id='isl-rm';m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;display:flex;align-items:center;justify-content:center';document.body.appendChild(m);}
+  m.innerHTML='<div style="background:#fff;border-radius:12px;padding:28px;max-width:460px;width:90%;box-shadow:0 20px 40px rgba(0,0,0,.25)"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><div><div style="font-size:16px;font-weight:700">'+n+'</div><div style="font-size:12px;color:#9ca3af">'+s+'</div></div><button onclick="document.getElementById('isl-rm').style.display='none'" style="background:#f3f4f6;border:none;border-radius:8px;width:30px;height:30px;font-size:18px;cursor:pointer">&times;</button></div><div style="background:#f8fafc;border-radius:8px;padding:12px;margin-bottom:12px"><span style="background:'+ec+';color:'+et+';padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600">'+e+'</span></div><div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px;margin-bottom:16px"><div style="font-size:11px;font-weight:600;color:#166534;margin-bottom:6px">RESPUESTA VIA WHATSAPP</div><div style="font-size:13px;color:#374151;line-height:1.6">'+resp+'</div></div><div style="display:flex;gap:8px;justify-content:flex-end"><button onclick="document.getElementById('isl-rm').style.display='none'" style="padding:7px 14px;border-radius:7px;border:1px solid #d1d5db;background:#fff;cursor:pointer;font-size:13px">Cerrar</button><button onclick="var a=document.createElement('a');a.href='data:text/plain,ISL%0ATrabajador: '+encodeURIComponent(n)+'%0ASiniestro: '+s+'%0AEstado: '+encodeURIComponent(e)+'';a.download='resp_'+s+'.txt';a.click()" style="padding:7px 14px;border-radius:7px;border:none;background:#3db87a;color:#fff;cursor:pointer;font-size:13px;font-weight:600">Descargar</button></div></div>';
+  m.style.display='flex';
+}
+document.addEventListener('DOMContentLoaded',function(){
+  try{var s=sessionStorage.getItem('isl_ok');if(s&&ISL_USERS[s])document.getElementById('isl-login').classList.add('hidden');}catch(x){}
+});
+</script>
 </head>
 <body>
 <style>
