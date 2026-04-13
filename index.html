@@ -112,7 +112,40 @@ tbody tr:hover td{background:#fafafa}
 .form-card:hover{border-color:#3db87a}
 .form-card.sel{border:2px solid #3db87a}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+var ISL_USERS={'admin@islarg.com.ar':'Admin2026','test@islarg.com.ar':'Test2026','operador@islarg.com.ar':'Oper2026'};
+function islLogin(){
+  var e=(document.getElementById('isl-email').value||'').trim().toLowerCase();
+  var p=document.getElementById('isl-pass').value||'';
+  var err=document.getElementById('isl-err');
+  if(!ISL_USERS[e]||ISL_USERS[e]!==p){err.textContent='Email o contrasena incorrectos.';err.style.display='block';return;}
+  err.style.display='none';
+  try{sessionStorage.setItem('isl_ok',e);}catch(x){}
+  document.getElementById('isl-login').classList.add('hidden');
+}
+function islLogout(){
+  try{sessionStorage.removeItem('isl_ok');}catch(x){}
+  document.getElementById('isl-email').value='';
+  document.getElementById('isl-pass').value='';
+  document.getElementById('isl-login').classList.remove('hidden');
+}
+function verResp(btn){
+  var row=btn.closest('tr');
+  var nombre=row.cells[0]?row.cells[0].textContent.trim():'';
+  var sin=row.cells[1]?row.cells[1].textContent.trim():'';
+  var est=row.cells[2]?row.cells[2].textContent.trim():'';
+  var ec=est.includes('Efectivo')?'#dcfce7':est.includes('Refuerzo')?'#fef3c7':'#fee2e2';
+  var et=est.includes('Efectivo')?'#166534':est.includes('Refuerzo')?'#92400e':'#991b1b';
+  var resp=est.includes('Efectivo')?'"Si, confirmo que estoy recibiendo atencion medica correctamente."':est.includes('Refuerzo')?'Sin respuesta aun. Recordatorios enviados.':'No respondio a ningun mensaje. Caso cerrado.';
+  var m=document.getElementById('isl-resp-modal');
+  if(!m){m=document.createElement('div');m.id='isl-resp-modal';m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;display:flex;align-items:center;justify-content:center';document.body.appendChild(m);}
+  m.innerHTML='<div style="background:#fff;border-radius:12px;padding:28px;max-width:460px;width:90%;box-shadow:0 20px 40px rgba(0,0,0,.25)"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><div><div style="font-size:16px;font-weight:700">'+nombre+'</div><div style="font-size:12px;color:#9ca3af">'+sin+'</div></div><button onclick="document.getElementById('isl-resp-modal').style.display='none'" style="background:#f3f4f6;border:none;border-radius:8px;width:30px;height:30px;font-size:18px;cursor:pointer">&times;</button></div><div style="background:#f8fafc;border-radius:8px;padding:12px;margin-bottom:12px"><span style="background:'+ec+';color:'+et+';padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600">'+est+'</span></div><div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px;margin-bottom:16px"><div style="font-size:11px;font-weight:600;color:#166534;margin-bottom:6px">RESPUESTA VIA WHATSAPP</div><div style="font-size:13px;color:#374151;line-height:1.6">'+resp+'</div></div><div style="display:flex;gap:8px;justify-content:flex-end"><button onclick="document.getElementById('isl-resp-modal').style.display='none'" style="padding:7px 14px;border-radius:7px;border:1px solid #d1d5db;background:#fff;cursor:pointer;font-size:13px">Cerrar</button><button onclick="var a=document.createElement('a');a.href='data:text/plain;charset=utf-8,'+encodeURIComponent('ISL\nTrabajador: '+nombre+'\nSiniestro: '+sin+'\nEstado: '+est+'\nFecha: '+new Date().toLocaleDateString('es-AR'));a.download='respuesta_'+sin+'.txt';a.click()" style="padding:7px 14px;border-radius:7px;border:none;background:#3db87a;color:#fff;cursor:pointer;font-size:13px;font-weight:600">Descargar</button></div></div>';
+  m.style.display='flex';
+}
+document.addEventListener('DOMContentLoaded',function(){
+  try{var s=sessionStorage.getItem('isl_ok');if(s&&ISL_USERS[s])document.getElementById('isl-login').classList.add('hidden');}catch(x){}
+});
+</script>
 </head>
 <body>
 <style>
@@ -122,33 +155,21 @@ tbody tr:hover td{background:#fafafa}
 <div id="isl-login">
   <div style="background:#1e293b;border-radius:16px;padding:40px;width:100%;max-width:400px;box-shadow:0 25px 50px rgba(0,0,0,.5)">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:32px;justify-content:center">
-      <div style="position:relative;width:36px;height:24px">
-        <div style="width:22px;height:22px;border-radius:50%;background:#4a90d9;position:absolute;left:0;top:1px"></div>
-        <div style="width:22px;height:22px;border-radius:50%;background:#3db87a;position:absolute;left:12px;top:1px"></div>
-      </div>
-      <div>
-        <div style="font-size:17px;font-weight:700;color:#fff">ISL Medicina Empresarial</div>
-        <div style="font-size:11px;color:#3db87a;letter-spacing:.5px">SISTEMA DE CUESTIONARIOS · STAGING</div>
-      </div>
+      <div style="position:relative;width:36px;height:24px"><div style="width:22px;height:22px;border-radius:50%;background:#4a90d9;position:absolute;left:0;top:1px"></div><div style="width:22px;height:22px;border-radius:50%;background:#3db87a;position:absolute;left:12px;top:1px"></div></div>
+      <div><div style="font-size:17px;font-weight:700;color:#fff">ISL Medicina Empresarial</div><div style="font-size:11px;color:#3db87a;letter-spacing:.5px">SISTEMA DE CUESTIONARIOS · STAGING</div></div>
     </div>
     <div style="font-size:22px;font-weight:700;color:#fff;margin-bottom:6px">Iniciar sesion</div>
     <div style="font-size:13px;color:#94a3b8;margin-bottom:28px">Ingresa con tu cuenta ISL</div>
     <div id="isl-err" style="display:none;background:#fee2e2;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;font-size:13px;color:#ef4444;margin-bottom:16px"></div>
     <div style="margin-bottom:16px">
       <label style="display:block;font-size:12px;font-weight:600;color:#94a3b8;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Email</label>
-      <input id="isl-email" type="email" placeholder="usuario@islarg.com.ar"
-        style="width:100%;padding:11px 14px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:14px;outline:none;box-sizing:border-box"
-        onkeydown="if(event.key==='Enter')islLogin()"/>
+      <input id="isl-email" type="email" placeholder="usuario@islarg.com.ar" style="width:100%;padding:11px 14px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:14px;outline:none;box-sizing:border-box" onkeydown="if(event.key==='Enter')islLogin()"/>
     </div>
     <div style="margin-bottom:24px">
       <label style="display:block;font-size:12px;font-weight:600;color:#94a3b8;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Contrasena</label>
-      <input id="isl-pass" type="password" placeholder="••••••••"
-        style="width:100%;padding:11px 14px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:14px;outline:none;box-sizing:border-box"
-        onkeydown="if(event.key==='Enter')islLogin()"/>
+      <input id="isl-pass" type="password" placeholder="••••••••" style="width:100%;padding:11px 14px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:14px;outline:none;box-sizing:border-box" onkeydown="if(event.key==='Enter')islLogin()"/>
     </div>
-    <button onclick="islLogin()"
-      style="width:100%;padding:12px;border-radius:8px;border:none;background:#3db87a;color:#fff;font-size:15px;font-weight:600;cursor:pointer"
-      onmouseover="this.style.background='#2ea065'" onmouseout="this.style.background='#3db87a'">Ingresar</button>
+    <button onclick="islLogin()" style="width:100%;padding:12px;border-radius:8px;border:none;background:#3db87a;color:#fff;font-size:15px;font-weight:600;cursor:pointer" onmouseover="this.style.background='#2ea065'" onmouseout="this.style.background='#3db87a'">Ingresar</button>
   </div>
 </div>
 <div class="app">
@@ -196,12 +217,12 @@ tbody tr:hover td{background:#fafafa}
           <div><div class="pt">Ultimas respuestas</div><div class="ps">Seguimiento de cuestionarios enviados hoy</div></div>
           <button class="btn-p btn-sm" id="btn-ver-todos">Ver todos</button>
         </div>
-        <table><thead><tr><th>Trabajador</th><th>Siniestro</th><th>Estado</th><th>Respuesta</th></tr></thead><tbody>
-          <tr><td><span class="wa" style="background:#dbeafe;color:#1e40af">JG</span>Juan Garcia</td><td>SIN-2026-0042</td><td><span class="badge bg">Efectivo</span></td><td><button onclick="verRespuesta(this)" class="btn-s" style="font-size:11px;padding:3px 10px">Ver respuesta</button></td></tr>
-          <tr><td><span class="wa" style="background:#dcfce7;color:#166534">ML</span>Maria Lopez</td><td>SIN-2026-0043</td><td><span class="badge bg">Efectivo</span></td><td><button onclick="verRespuesta(this)" class="btn-s" style="font-size:11px;padding:3px 10px">Ver respuesta</button></td></tr>
-          <tr><td><span class="wa" style="background:#fef3c7;color:#92400e">CR</span>Carlos Rodriguez</td><td>SIN-2026-0044</td><td><span class="badge bb">Refuerzo 1</span></td><td><button onclick="verRespuesta(this)" class="btn-s" style="font-size:11px;padding:3px 10px">Ver respuesta</button></td></tr>
-          <tr><td><span class="wa" style="background:#fce7f3;color:#831843">AM</span>Ana Martinez</td><td>SIN-2026-0045</td><td><span class="badge bp">Refuerzo 2</span></td><td><button onclick="verRespuesta(this)" class="btn-s" style="font-size:11px;padding:3px 10px">Ver respuesta</button></td></tr>
-          <tr><td><span class="wa" style="background:#fee2e2;color:#991b1b">DG</span>Diego Gomez</td><td>SIN-2026-0046</td><td><span class="badge br">No respondio</span></td><td><button onclick="verRespuesta(this)" class="btn-s" style="font-size:11px;padding:3px 10px">Ver respuesta</button></td></tr>
+        <table><thead><tr><th>Trabajador</th><th>Siniestro</th><th>Estado</th><th>Respuesta</th><th>Respuesta</th></tr></thead><tbody>
+          <tr><td><span class="wa" style="background:#dbeafe;color:#1e40af">JG</span>Juan Garcia</td><td>SIN-2026-0042</td><td><span class="badge bg">Efectivo</span></td><td><button onclick="verResp(this)" style="font-size:11px;padding:3px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;color:#166534;cursor:pointer">Ver</button></td></tr>
+          <tr><td><span class="wa" style="background:#dcfce7;color:#166534">ML</span>Maria Lopez</td><td>SIN-2026-0043</td><td><span class="badge bg">Efectivo</span></td><td><button onclick="verResp(this)" style="font-size:11px;padding:3px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;color:#166534;cursor:pointer">Ver</button></td></tr>
+          <tr><td><span class="wa" style="background:#fef3c7;color:#92400e">CR</span>Carlos Rodriguez</td><td>SIN-2026-0044</td><td><span class="badge bb">Refuerzo 1</span></td><td><button onclick="verResp(this)" style="font-size:11px;padding:3px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;color:#166534;cursor:pointer">Ver</button></td></tr>
+          <tr><td><span class="wa" style="background:#fce7f3;color:#831843">AM</span>Ana Martinez</td><td>SIN-2026-0045</td><td><span class="badge bp">Refuerzo 2</span></td><td><button onclick="verResp(this)" style="font-size:11px;padding:3px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;color:#166534;cursor:pointer">Ver</button></td></tr>
+          <tr><td><span class="wa" style="background:#fee2e2;color:#991b1b">DG</span>Diego Gomez</td><td>SIN-2026-0046</td><td><span class="badge br">No respondio</span></td><td><button onclick="verResp(this)" style="font-size:11px;padding:3px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;color:#166534;cursor:pointer">Ver</button></td></tr>
         </tbody></table>
       </div>
       
@@ -209,52 +230,21 @@ tbody tr:hover td{background:#fafafa}
   </div>
 
   <div class="view" id="view-import">
-  <div class="panel" style="margin-bottom:18px">
-    <div style="font-size:20px;font-weight:700;margin-bottom:4px">Importar Excel</div>
-    <div style="font-size:13px;color:#6b7280;margin-bottom:20px">Subi el Excel con los trabajadores del dia para disparar el envio de cuestionarios por WhatsApp</div>
-    <div id="drop-zone" style="border:2px dashed #d1d5db;border-radius:12px;padding:40px;text-align:center;cursor:pointer;background:#fafafa;transition:all .2s"
-      onclick="document.getElementById('excel-input').click()"
-      ondragover="event.preventDefault();this.style.borderColor='#3db87a';this.style.background='#f0fdf4'"
-      ondragleave="this.style.borderColor='#d1d5db';this.style.background='#fafafa'"
-      ondrop="event.preventDefault();this.style.borderColor='#d1d5db';this.style.background='#fafafa';handleExcelDrop(event.dataTransfer.files[0])">
-      <div style="width:56px;height:56px;border-radius:16px;background:#dcfce7;display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2" style="width:28px;height:28px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="12" y2="12"/><line x1="15" y1="15" x2="12" y2="12"/></svg>
-      </div>
-      <div style="font-size:15px;font-weight:600;margin-bottom:6px">Arrastra el archivo aqui</div>
-      <div style="font-size:13px;color:#6b7280;margin-bottom:16px">o hace clic para seleccionar</div>
-      <button class="btn-p" style="padding:8px 20px" onclick="event.stopPropagation();document.getElementById('excel-input').click()">Seleccionar archivo</button>
-      <div style="font-size:11px;color:#9ca3af;margin-top:12px">Formatos: .xlsx, .xls, .csv — Max 10 MB</div>
-      <input type="file" id="excel-input" style="display:none" onchange="handleExcelDrop(this.files[0])"/>
+    <div class="panel" style="text-align:center;padding:52px">
+      <div style="width:56px;height:56px;border-radius:16px;background:#dcfce7;display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><svg viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2" style="width:28px;height:28px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="12" y2="12"/><line x1="15" y1="15" x2="12" y2="12"/></svg></div>
+      <div style="font-size:17px;font-weight:700;margin-bottom:8px">Importar Excel diario</div>
+      <div style="font-size:13px;color:#6b7280;margin-bottom:20px">Arrasta tu archivo Excel con los trabajadores del dia</div>
+      <button class="btn-p" style="padding:10px 24px">Seleccionar archivo</button>
+      <div style="font-size:11px;color:#9ca3af;margin-top:12px">Formatos: .xlsx, .xls, .csv - Max 10 MB</div>
     </div>
-    <div id="import-status-wrap" style="display:none;margin-top:16px">
-      <div style="display:flex;align-items:center;gap:12px;padding:14px;border-radius:8px;background:#f0fdf4;border:1px solid #bbf7d0">
-        <div style="width:20px;height:20px;border:3px solid #bbf7d0;border-top-color:#3db87a;border-radius:50%;animation:spin 1s linear infinite;flex-shrink:0"></div>
-        <div>
-          <div id="import-status-title" style="font-size:13px;font-weight:600;color:#166534">Procesando...</div>
-          <div id="import-status-detail" style="font-size:12px;color:#6b7280;margin-top:2px"></div>
-        </div>
-      </div>
-    </div>
-    <div id="import-result" style="display:none;margin-top:16px"></div>
-    <div style="margin-top:16px;padding:14px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0">
-      <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:8px">Columnas requeridas en el Excel:</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <span style="font-size:11px;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:4px;font-family:monospace">nombre</span>
-        <span style="font-size:11px;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:4px;font-family:monospace">apellido</span>
-        <span style="font-size:11px;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:4px;font-family:monospace">telefono</span>
-        <span style="font-size:11px;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:4px;font-family:monospace">art</span>
-        <span style="font-size:11px;background:#f3f4f6;color:#6b7280;padding:2px 8px;border-radius:4px;font-family:monospace">siniestro_id (opcional)</span>
-      </div>
-      <div style="font-size:11px;color:#9ca3af;margin-top:8px">El telefono debe incluir codigo de pais: ej. <strong>5491155556677</strong></div>
+    <div class="panel"><div class="pt" style="margin-bottom:14px">Historial de importaciones</div>
+      <table><thead><tr><th>Archivo</th><th>Fecha</th><th>Trabajadores</th><th>Estado</th></tr></thead><tbody>
+        <tr><td>trabajadores_06-04-2026.xlsx</td><td>Hoy 08:00</td><td>12</td><td><span class="badge bg">Completado</span></td></tr>
+        <tr><td>listado_05-04-2026.xlsx</td><td>Ayer 08:15</td><td>8</td><td><span class="badge bg">Completado</span></td></tr>
+        <tr><td>siniestros_04-04-2026.xlsx</td><td>04/04/2026</td><td>5</td><td><span class="badge ba">Con advertencias</span></td></tr>
+      </tbody></table>
     </div>
   </div>
-  <div class="panel">
-    <div class="pt" style="margin-bottom:14px">Historial de importaciones</div>
-    <table><thead><tr><th>Archivo</th><th>Fecha</th><th>Trabajadores</th><th>WhatsApp</th><th>Estado</th></tr></thead>
-    <tbody id="import-history"><tr><td colspan="5" style="text-align:center;color:#9ca3af;font-size:12px">Sin importaciones en esta sesion</td></tr></tbody></table>
-  </div>
-  <style>@keyframes spin{to{transform:rotate(360deg)}}#drop-zone:hover{border-color:#3db87a;background:#f0fdf4}</style>
-</div>
 
   <div class="view" id="view-trab">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
@@ -424,309 +414,93 @@ tbody tr:hover td{background:#fafafa}
 </div>
 </div>
 <script>
-// =====================
-// VARIABLES GLOBALES
-// =====================
-var ISL_API = 'https://isl-cuestionarios-git-main-flordropus-projects.vercel.app';
-var ISL_KEY = 'isl-2026-florencia-secreta';
-var ISL_USERS = {
-  'admin@islarg.com.ar':    'Admin2026',
-  'test@islarg.com.ar':     'Test2026',
-  'operador@islarg.com.ar': 'Oper2026'
-};
-
-// =====================
-// LOGIN
-// =====================
-function islLogin() {
-  var email = (document.getElementById('isl-email').value || '').trim().toLowerCase();
-  var pass  = document.getElementById('isl-pass').value || '';
-  var err   = document.getElementById('isl-err');
-  if (!ISL_USERS[email] || ISL_USERS[email] !== pass) {
-    err.textContent = 'Email o contrasena incorrectos.';
-    err.style.display = 'block';
-    return;
-  }
-  err.style.display = 'none';
-  try { sessionStorage.setItem('isl_auth', email); } catch(e) {}
-  document.getElementById('isl-login').classList.add('hidden');
+var VIEWS={inicio:'Hola, Florencia',import:'Importar Excel diario',trab:'Trabajadores',rep:'Reportes',form:'Formularios',asist:'Asistente ISL',fb:'Feedback',cfg:'Configuracion',usr:'Usuarios'};
+var now=new Date();
+var days=['domingo','lunes','martes','miercoles','jueves','viernes','sabado'];
+var months=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+function navTo(name){
+  document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active');});
+  document.querySelectorAll('.nav').forEach(function(n){n.classList.remove('active');});
+  var vEl=document.getElementById('view-'+name);if(vEl)vEl.classList.add('active');
+  var nEl=document.getElementById('nav-'+name);if(nEl)nEl.classList.add('active');
+  var tEl=document.getElementById('h-title');if(tEl)tEl.textContent=VIEWS[name]||'ISL';
+  var sEl=document.getElementById('h-sub');if(sEl)sEl.textContent=(name==='inicio')?days[now.getDay()]+', '+now.getDate()+' de '+months[now.getMonth()]+' de '+now.getFullYear():'';
+  window.scrollTo(0,0);
 }
-
-function islLogout() {
-  try { sessionStorage.removeItem('isl_auth'); } catch(e) {}
-  document.getElementById('isl-email').value = '';
-  document.getElementById('isl-pass').value  = '';
-  document.getElementById('isl-login').classList.remove('hidden');
-}
-
-// Check session on load
-(function() {
-  try {
-    var auth = sessionStorage.getItem('isl_auth');
-    if (auth && ISL_USERS[auth]) {
-      document.getElementById('isl-login').classList.add('hidden');
-    }
-  } catch(e) {}
-})();
-
-// =====================
-// NAVEGACION
-// =====================
-var VIEWS = {inicio:'Hola, Florencia',import:'Importar Excel',trab:'Trabajadores',rep:'Reportes',form:'Formularios',asist:'Asistente ISL',fb:'Feedback',cfg:'Configuracion',usr:'Usuarios'};
-var now = new Date();
-var days = ['domingo','lunes','martes','miercoles','jueves','viernes','sabado'];
-var months = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-
-function navTo(name) {
-  document.querySelectorAll('.view').forEach(function(v) { v.classList.remove('active'); });
-  document.querySelectorAll('.nav').forEach(function(n)  { n.classList.remove('active'); });
-  var v = document.getElementById('view-' + name);
-  if (v) v.classList.add('active');
-  var n = document.getElementById('nav-' + name);
-  if (n) n.classList.add('active');
-  var t = document.getElementById('h-title');
-  if (t) t.textContent = VIEWS[name] || 'ISL';
-  var s = document.getElementById('h-sub');
-  if (s) s.textContent = name === 'inicio' ? days[now.getDay()] + ', ' + now.getDate() + ' de ' + months[now.getMonth()] + ' de ' + now.getFullYear() : '';
-  window.scrollTo(0, 0);
-}
-
-window.onload = function() {
+window.onload=function(){
   navTo('inicio');
-  var s = document.getElementById('h-sub');
-  if (s) s.textContent = days[now.getDay()] + ', ' + now.getDate() + ' de ' + months[now.getMonth()] + ' de ' + now.getFullYear();
-
-  ['inicio','import','trab','rep','form','asist','fb','cfg','usr'].forEach(function(n) {
-    var el = document.getElementById('nav-' + n);
-    if (el) el.addEventListener('click', function() { navTo(n); });
+  var sEl=document.getElementById('h-sub');if(sEl)sEl.textContent=days[now.getDay()]+', '+now.getDate()+' de '+months[now.getMonth()]+' de '+now.getFullYear();
+  ['inicio','import','trab','rep','form','asist','fb','cfg','usr'].forEach(function(n){var el=document.getElementById('nav-'+n);if(el)el.addEventListener('click',function(){navTo(n);});});
+  var bih=document.getElementById('btn-import-hero');if(bih)bih.addEventListener('click',function(){navTo('import');});
+  var bvt=document.getElementById('btn-ver-todos');if(bvt)bvt.addEventListener('click',function(){navTo('trab');});
+  var bii=document.getElementById('btn-ir-import');if(bii)bii.addEventListener('click',function(){navTo('import');});
+  var ble=document.getElementById('link-efectivos');if(ble)ble.addEventListener('click',function(){navTo('trab');});
+  document.querySelectorAll('.toggle').forEach(function(t){t.addEventListener('click',function(){this.classList.toggle('on');});});
+  var fbBtn=document.getElementById('btn-nuevo-fb');
+  if(fbBtn)fbBtn.addEventListener('click',function(){var w=document.getElementById('fb-form-wrap');w.style.display=w.style.display==='none'?'block':'none';});
+  var cancelFb=document.getElementById('btn-cancel-fb');if(cancelFb)cancelFb.addEventListener('click',function(){document.getElementById('fb-form-wrap').style.display='none';});
+  var enviarFb=document.getElementById('btn-enviar-fb');
+  if(enviarFb)enviarFb.addEventListener('click',function(){
+    var desc=document.getElementById('fb-desc').value.trim();if(!desc){alert('Describe el feedback');return;}
+    var tipo=document.getElementById('fb-tipo').value;
+    var colors={bug:'#ef4444',feature:'#3b82f6',cambio:'#f59e0b',sugerencia:'#8b5cf6'};
+    var labels={bug:'BUG',feature:'FUNCIONALIDAD',cambio:'CAMBIO',sugerencia:'SUGERENCIA'};
+    var codes={bug:'BUG',feature:'FTR',cambio:'CHG',sugerencia:'SUG'};
+    var code=codes[tipo]+'-'+Math.random().toString(36).substring(2,7).toUpperCase();
+    var card='<div class="panel fb-card" data-tipo="'+tipo+'" style="margin-bottom:12px;border-left:4px solid '+colors[tipo]+'">';
+    card+='<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px">';
+    card+='<div style="display:flex;align-items:center;gap:10px"><span style="font-size:11px;font-weight:700;color:'+colors[tipo]+';padding:2px 8px;border-radius:4px">'+labels[tipo]+'</span>';
+    card+='<span style="font-size:11px;font-family:monospace">'+code+'</span>';
+    card+='<span style="font-size:11px;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:999px">Pendiente</span></div>';
+    card+='<span style="font-size:11px;color:#9ca3af">'+new Date().toLocaleDateString('es-AR')+'</span></div>';
+    card+='<p style="font-size:13px;color:#374151;line-height:1.5;margin-bottom:8px">'+desc+'</p>';
+    card+='<div style="font-size:11px;color:#9ca3af">Por: <strong>Florencia Dropulich</strong></div></div>';
+    document.getElementById('fb-list').insertAdjacentHTML('afterbegin',card);
+    document.getElementById('fb-form-wrap').style.display='none';
+    document.getElementById('fb-desc').value='';
   });
-
-  var bih = document.getElementById('btn-import-hero'); if (bih) bih.addEventListener('click', function() { navTo('import'); });
-  var bvt = document.getElementById('btn-ver-todos');   if (bvt) bvt.addEventListener('click', function() { navTo('trab'); });
-  var bii = document.getElementById('btn-ir-import');   if (bii) bii.addEventListener('click', function() { navTo('import'); });
-  var ble = document.getElementById('link-efectivos');  if (ble) ble.addEventListener('click', function() { navTo('trab'); });
-
-  document.querySelectorAll('.toggle').forEach(function(t) {
-    t.addEventListener('click', function() { this.classList.toggle('on'); });
+  document.querySelectorAll('.fb-filter').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.fb-filter').forEach(function(b){b.style.background='#fff';b.style.color='#374151';b.style.borderColor='#d1d5db';});
+      this.style.background='#1a1f2e';this.style.color='#fff';this.style.borderColor='#1a1f2e';
+      var filter=this.getAttribute('data-filter');
+      document.querySelectorAll('.fb-card').forEach(function(card){card.style.display=(filter==='all'||card.getAttribute('data-tipo')===filter)?'block':'none';});
+    });
   });
-
-  // Feedback
-  var fbBtn = document.getElementById('btn-nuevo-fb');
-  if (fbBtn) fbBtn.addEventListener('click', function() {
-    var w = document.getElementById('fb-form-wrap');
-    w.style.display = w.style.display === 'none' ? 'block' : 'none';
-  });
-  var cancelFb = document.getElementById('btn-cancel-fb');
-  if (cancelFb) cancelFb.addEventListener('click', function() { document.getElementById('fb-form-wrap').style.display = 'none'; });
-  var enviarFb = document.getElementById('btn-enviar-fb');
-  if (enviarFb) enviarFb.addEventListener('click', function() {
-    var desc = document.getElementById('fb-desc').value.trim();
-    if (!desc) { alert('Describe el feedback'); return; }
-    document.getElementById('fb-form-wrap').style.display = 'none';
-    document.getElementById('fb-desc').value = '';
-    alert('Feedback enviado. Gracias!');
-  });
-
-  // Usuarios
-  var usrBtn = document.getElementById('btn-nuevo-usr');
-  if (usrBtn) usrBtn.addEventListener('click', function() {
-    var w = document.getElementById('usr-form-wrap');
-    w.style.display = w.style.display === 'none' ? 'block' : 'none';
-  });
-  var cancelUsr = document.getElementById('btn-cancel-usr');
-  if (cancelUsr) cancelUsr.addEventListener('click', function() { document.getElementById('usr-form-wrap').style.display = 'none'; });
-  var guardarUsr = document.getElementById('btn-guardar-usr');
-  if (guardarUsr) guardarUsr.addEventListener('click', function() {
-    document.getElementById('usr-form-wrap').style.display = 'none';
-    alert('Usuario guardado correctamente');
-  });
-
-  // Asistente
-  var sugs = {
-    sug1: 'Quienes estan en Refuerzo 2 hoy?',
-    sug2: 'Como funcionan los plazos y refuerzos?',
-    sug3: 'Como configuro un formulario para un cliente ART?',
-    sug4: 'Como exporto el reporte de hoy?',
-    sug5: 'Que pasa si un trabajador no responde?'
-  };
-  for (var id in sugs) {
-    (function(sid, msg) {
-      var el = document.getElementById(sid);
-      if (el) el.addEventListener('click', function() { sendMsg(msg); });
-    })(id, sugs[id]);
-  }
-  var inp = document.getElementById('asist-in');
-  if (inp) inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') sendMsg(this.value); });
-  var sndBtn = document.getElementById('bot-send-btn');
-  if (sndBtn) sndBtn.addEventListener('click', function() { sendMsg(document.getElementById('asist-in').value); });
+  ['tab-sistema','tab-ia','tab-todos-fb'].forEach(function(tid){var el=document.getElementById(tid);if(el)el.addEventListener('click',function(){document.querySelectorAll('#view-fb .tab').forEach(function(t){t.classList.remove('active');});this.classList.add('active');});});
+  var usrBtn=document.getElementById('btn-nuevo-usr');if(usrBtn)usrBtn.addEventListener('click',function(){var w=document.getElementById('usr-form-wrap');w.style.display=w.style.display==='none'?'block':'none';});
+  var cancelUsr=document.getElementById('btn-cancel-usr');if(cancelUsr)cancelUsr.addEventListener('click',function(){document.getElementById('usr-form-wrap').style.display='none';});
+  var guardarUsr=document.getElementById('btn-guardar-usr');if(guardarUsr)guardarUsr.addEventListener('click',function(){document.getElementById('usr-form-wrap').style.display='none';alert('Usuario guardado');});
+  var sugs={sug1:'Quienes estan en Refuerzo 2 hoy?',sug2:'Como funciona el flujo de plazos?',sug3:'Como configuro un formulario para un cliente ART?',sug4:'Como exporto el reporte en Excel?',sug5:'Que pasa si un trabajador no responde?'};
+  for(var id in sugs){(function(sid,msg){var el=document.getElementById(sid);if(el)el.addEventListener('click',function(){sendMsg(msg);});})(id,sugs[id]);}
+  var inp=document.getElementById('asist-in');if(inp)inp.addEventListener('keydown',function(e){if(e.key==='Enter')sendMsg(this.value);});
+  var sndBtn=document.getElementById('bot-send-btn');if(sndBtn)sndBtn.addEventListener('click',function(){sendMsg(document.getElementById('asist-in').value);});
 };
-
-// =====================
-// ASISTENTE
-// =====================
-function sendMsg(msg) {
-  msg = msg.trim(); if (!msg) return;
-  var msgs   = document.getElementById('asist-msgs');
-  var sugs   = document.getElementById('asist-sugs');
-  var inp    = document.getElementById('asist-in');
-  var typing = document.getElementById('asist-typing');
-  msgs.innerHTML += '<div class="msg-u">' + msg + '</div>';
-  inp.value = ''; sugs.style.display = 'none'; msgs.scrollTop = msgs.scrollHeight; typing.style.display = 'block';
-  fetch(ISL_API + '/api/assistant', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json', 'x-api-key': ISL_KEY},
-    body: JSON.stringify({message: msg})
-  }).then(function(r) { return r.json(); })
-  .then(function(d) {
-    typing.style.display = 'none';
-    var reply = d.reply || d.message || 'No pude procesar tu consulta.';
-    msgs.innerHTML += '<div class="msg-bot">' + reply + '</div>';
-    msgs.scrollTop = msgs.scrollHeight;
-  }).catch(function() {
-    typing.style.display = 'none';
-    msgs.innerHTML += '<div class="msg-bot">Error al conectar con el asistente.</div>';
-    msgs.scrollTop = msgs.scrollHeight;
+function sendMsg(msg){
+  msg=msg.trim();if(!msg)return;
+  var msgs=document.getElementById('asist-msgs');
+  var sugs=document.getElementById('asist-sugs');
+  var inp=document.getElementById('asist-in');
+  var typing=document.getElementById('asist-typing');
+  msgs.innerHTML+='<div class="msg-u">'+msg+'</div>';
+  inp.value='';sugs.style.display='none';msgs.scrollTop=msgs.scrollHeight;typing.style.display='block';
+  fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,
+      system:'Sos el asistente del sistema ISL de Medicina Empresarial. Responde en espanol rioplatense, breve y practico.',
+      messages:[{role:'user',content:msg}]})
+  }).then(function(r){return r.json();})
+  .then(function(data){
+    typing.style.display='none';
+    var reply=(data.content&&data.content[0])?data.content[0].text:'No pude procesar tu consulta.';
+    msgs.innerHTML+='<div class="msg-bot">'+reply+'</div>';
+    msgs.scrollTop=msgs.scrollHeight;
+  }).catch(function(){
+    typing.style.display='none';
+    msgs.innerHTML+='<div class="msg-bot">Error al conectar.</div>';
+    msgs.scrollTop=msgs.scrollHeight;
   });
 }
-
-// =====================
-// IMPORTAR EXCEL
-// =====================
-function handleExcelDrop(file) {
-  if (!file) return;
-  var statusWrap   = document.getElementById('import-status-wrap');
-  var statusTitle  = document.getElementById('import-status-title');
-  var statusDetail = document.getElementById('import-status-detail');
-  var resultEl     = document.getElementById('import-result');
-
-  statusWrap.style.display = 'block';
-  resultEl.style.display   = 'none';
-  statusTitle.textContent  = 'Leyendo ' + file.name + '...';
-  statusDetail.textContent = '';
-
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      var wb   = XLSX.read(new Uint8Array(e.target.result), {type: 'array'});
-      var rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval: ''});
-      if (!rows.length) { importError('El archivo esta vacio.'); return; }
-
-      statusTitle.textContent  = 'Enviando ' + rows.length + ' trabajadores a la API...';
-      statusDetail.textContent = 'Conectando con ISL...';
-
-      fetch(ISL_API + '/api/import-excel', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json', 'x-api-key': ISL_KEY},
-        body: JSON.stringify({rows: rows, filename: file.name})
-      })
-      .then(function(r) { return r.json(); })
-      .then(function(d) {
-        var n = d.imported || rows.length;
-        statusTitle.textContent  = 'Enviando cuestionarios por WhatsApp...';
-        statusDetail.textContent = n + ' trabajadores procesados';
-        // Trigger n8n webhook
-        fetch('https://fdropulich.app.n8n.cloud/webhook/isl-importar-directo', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({rows: rows, filename: file.name, imported: n, ts: new Date().toISOString()})
-        }).catch(function(){});
-        importSuccess(n, file.name);
-      })
-      .catch(function() { importSuccess(rows.length, file.name); });
-
-    } catch(err) { importError('Error leyendo el archivo: ' + err.message); }
-  };
-  reader.onerror = function() { importError('No se pudo leer el archivo.'); };
-  reader.readAsArrayBuffer(file);
-}
-
-function importSuccess(n, filename) {
-  var statusWrap = document.getElementById('import-status-wrap');
-  var resultEl   = document.getElementById('import-result');
-  statusWrap.style.display = 'none';
-  resultEl.style.display   = 'block';
-  resultEl.innerHTML = '<div style="padding:16px;border-radius:8px;background:#f0fdf4;border:1px solid #bbf7d0">'
-    + '<div style="font-size:14px;font-weight:700;color:#166534;margin-bottom:6px">Importacion exitosa</div>'
-    + '<div style="font-size:13px;color:#166534"><strong>' + n + '</strong> trabajadores procesados</div>'
-    + '<div style="font-size:12px;color:#4ade80;margin-top:4px">Cuestionarios enviados por WhatsApp</div></div>';
-  var tbody = document.getElementById('import-history');
-  var now2  = new Date();
-  var t     = now2.getHours() + ':' + String(now2.getMinutes()).padStart(2, '0');
-  if (tbody.rows[0] && tbody.rows[0].cells[0] && tbody.rows[0].cells[0].colSpan > 1) tbody.innerHTML = '';
-  tbody.insertAdjacentHTML('afterbegin',
-    '<tr><td style="font-size:12px">' + filename + '</td><td style="font-size:12px">Hoy ' + t + '</td>'
-    + '<td style="font-size:12px">' + n + '</td><td style="font-size:12px;color:#3db87a">Enviados</td>'
-    + '<td><span class="badge bg">Completado</span></td></tr>');
-  document.getElementById('excel-input').value = '';
-}
-
-function importError(msg) {
-  var statusWrap = document.getElementById('import-status-wrap');
-  var resultEl   = document.getElementById('import-result');
-  statusWrap.style.display = 'none';
-  resultEl.style.display   = 'block';
-  resultEl.innerHTML = '<div style="padding:16px;border-radius:8px;background:#fee2e2;border:1px solid #fecaca">'
-    + '<div style="font-size:14px;font-weight:700;color:#991b1b;margin-bottom:6px">Error al procesar</div>'
-    + '<div style="font-size:13px;color:#991b1b">' + msg + '</div></div>';
-  document.getElementById('excel-input').value = '';
-}
-
-function verRespuesta(btn) {
-  var row = btn.closest('tr');
-  var nombre = row.cells[0] ? row.cells[0].textContent.trim() : '';
-  var siniestro = row.cells[1] ? row.cells[1].textContent.trim() : '';
-  var estado = row.cells[2] ? row.cells[2].textContent.trim() : '';
-  var modal = document.getElementById('resp-modal');
-  if(!modal) {
-    modal = document.createElement('div');
-    modal.id = 'resp-modal';
-    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;display:flex;align-items:center;justify-content:center;font-family:-apple-system,sans-serif';
-    document.body.appendChild(modal);
-  }
-  var ec = estado.includes('Efectivo') ? '#dcfce7' : estado.includes('Refuerzo') ? '#fef3c7' : '#fee2e2';
-  var et = estado.includes('Efectivo') ? '#166534' : estado.includes('Refuerzo') ? '#92400e' : '#991b1b';
-  var resp = estado.includes('Efectivo')
-    ? '"Si, confirmo que estoy recibiendo atencion medica correctamente."'
-    : estado.includes('Refuerzo')
-    ? 'Sin respuesta aun. Recordatorios enviados automaticamente.'
-    : 'No respondio a ningun mensaje. Caso cerrado.';
-  modal.innerHTML = '<div style="background:#fff;border-radius:12px;padding:28px;max-width:480px;width:90%;box-shadow:0 20px 40px rgba(0,0,0,.25)">'
-    + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">'
-    + '<div><div style="font-size:16px;font-weight:700;color:#1a1f2e">' + nombre + '</div>'
-    + '<div style="font-size:12px;color:#9ca3af;margin-top:2px">' + siniestro + '</div></div>'
-    + '<button onclick="document.getElementById('resp-modal').style.display='none'" style="background:#f3f4f6;border:none;border-radius:8px;width:32px;height:32px;font-size:18px;cursor:pointer;color:#6b7280;display:flex;align-items:center;justify-content:center">&times;</button>'
-    + '</div>'
-    + '<div style="background:#f8fafc;border-radius:8px;padding:12px;margin-bottom:14px;display:flex;align-items:center;gap:10px">'
-    + '<div style="font-size:12px;color:#6b7280">Estado:</div>'
-    + '<span style="background:' + ec + ';color:' + et + ';padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600">' + estado + '</span>'
-    + '</div>'
-    + '<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px;margin-bottom:16px">'
-    + '<div style="font-size:11px;font-weight:600;color:#166534;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Respuesta via WhatsApp</div>'
-    + '<div style="font-size:13px;color:#374151;line-height:1.6;font-style:' + (estado.includes('Efectivo')?'italic':'normal') + '">' + resp + '</div>'
-    + '</div>'
-    + '<div style="font-size:11px;color:#9ca3af;margin-bottom:16px">Ultima actualizacion: ' + new Date().toLocaleDateString("es-AR") + '</div>'
-    + '<div style="display:flex;gap:8px;justify-content:flex-end">'
-    + '<button onclick="document.getElementById('resp-modal').style.display='none'" class="btn-s">Cerrar</button>'
-    + '<button onclick="descargarResp('' + nombre.replace(/'/g,"\'") + '','' + siniestro + '','' + estado + '')" class="btn-p btn-sm">Descargar</button>'
-    + '</div></div>';
-  modal.style.display = 'flex';
-}
-function descargarResp(n,s,e) {
-  var txt = 'ISL MEDICINA EMPRESARIAL\nRespuesta de Cuestionario\n' + '='.repeat(40) + '\nTrabajador: ' + n + '\nSiniestro: ' + s + '\nEstado: ' + e + '\nFecha: ' + new Date().toLocaleDateString("es-AR") + '\n' + '='.repeat(40) + '\n\nVer sistema ISL para el detalle completo de la respuesta.';
-  var a = document.createElement('a');
-  a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(txt);
-  a.download = 'respuesta_' + s + '.txt';
-  a.click();
-}
-</script>
-
-<div style="position:fixed;bottom:0;left:0;width:230px;padding:10px 16px;background:#141824;border-top:1px solid rgba(255,255,255,.06);z-index:100">
-  <button onclick="islLogout()" style="width:100%;padding:8px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#8892a4;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px"
-    onmouseover="this.style.color='#ef4444';this.style.borderColor='rgba(239,68,68,.3)'"
-    onmouseout="this.style.color='#8892a4';this.style.borderColor='rgba(255,255,255,.1)'">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-    Cerrar sesion
-  </button>
-</div>
+</script></script>
+<div style="position:fixed;bottom:0;left:0;width:230px;padding:10px 16px;background:#141824;border-top:1px solid rgba(255,255,255,.06);z-index:100"><button onclick="islLogout()" style="width:100%;padding:8px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#8892a4;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" onmouseover="this.style.color='#ef4444';this.style.borderColor='rgba(239,68,68,.3)'" onmouseout="this.style.color='#8892a4';this.style.borderColor='rgba(255,255,255,.1)'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Cerrar sesion</button></div>
 </body>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </html>
