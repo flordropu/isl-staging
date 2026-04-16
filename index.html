@@ -1,122 +1,74 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>ISL — Sistema de Gestión de Cuestionarios</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f2f5;color:#1a1f2e;font-size:14px}
-.app{display:flex;min-height:100vh}
-.sb{width:230px;background:#141824;display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:50}
-.sb-logo{padding:18px 16px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,0.06)}
-.lc{position:relative;width:30px;height:20px}
-.lc1{width:18px;height:18px;border-radius:50%;background:#4a90d9;position:absolute;left:0;top:1px}
-.lc2{width:18px;height:18px;border-radius:50%;background:#3db87a;position:absolute;left:10px;top:1px}
-.sb-t{font-size:15px;font-weight:700;color:#fff}
-.sb-sub{font-size:10px;color:#4a90d9;text-transform:uppercase;letter-spacing:.08em;font-weight:600}
-.sb-sec{font-size:10px;color:#3d4757;padding:12px 16px 4px;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
-.nav{display:flex;align-items:center;gap:9px;padding:9px 14px;cursor:pointer;border-radius:7px;margin:1px 8px;font-size:13px;color:#8892a4;font-weight:500}
-.nav:hover{background:rgba(255,255,255,.07);color:#c8cdd8}
-.nav.active{background:rgba(61,184,122,.15);color:#3db87a;border:1px solid rgba(61,184,122,.2)}
-.nav svg{width:15px;height:15px;flex-shrink:0}
-.nav-sub{padding-left:36px;font-size:12px}
-.sb-badge{font-size:9px;background:#e67e22;color:#fff;padding:3px 9px;border-radius:4px;margin:8px 16px;font-weight:700;width:fit-content}
-.sb-foot{margin-top:auto;padding:12px 14px;border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:9px}
-.ava{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#3db87a,#4a90d9);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
-.main{flex:1;display:flex;flex-direction:column;margin-left:230px;min-height:100vh}
-.hero{background:linear-gradient(135deg,#2d9e66,#4a90d9);padding:20px 28px;display:flex;align-items:center;justify-content:space-between}
-.hero h1{font-size:20px;font-weight:700;color:#fff}
-.hero p{font-size:13px;color:rgba(255,255,255,.85);margin-top:2px}
-.hero-btn{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:7px;font-weight:600}
-.content{flex:1;padding:22px 26px}
-.view{display:none}.view.active{display:block}
-.panel{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:16px 20px;margin-bottom:16px}
-.pt{font-size:14px;font-weight:700;color:#1a1f2e}
-.ps{font-size:12px;color:#6b7280;margin-top:2px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f1f5f9;display:flex;min-height:100vh}
+.sidebar{width:230px;background:#141824;position:fixed;top:0;left:0;height:100vh;display:flex;flex-direction:column;z-index:200;padding-bottom:56px;overflow-y:auto}
+.logo{padding:20px 16px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.06)}
+.logo-ic{position:relative;width:32px;height:21px}
+.logo-ic div{width:20px;height:20px;border-radius:50%;position:absolute;top:0}
+.logo-ic div:first-child{background:#4a90d9;left:0}
+.logo-ic div:last-child{background:#3db87a;left:10px}
+.logo-txt b{font-size:15px;font-weight:700;color:#fff;display:block}
+.logo-txt span{font-size:9px;color:#3db87a;letter-spacing:.08em;text-transform:uppercase}
+.nav-sec{padding:16px 10px 4px;font-size:9px;color:rgba(255,255,255,.3);letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+.nav{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:8px;cursor:pointer;color:#8892a4;font-size:13px;font-weight:500;margin:1px 6px;transition:all .15s}
+.nav:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav.active{background:#1e293b;color:#fff}
+.nav.active svg{stroke:#3db87a}
+.nav svg{width:16px;height:16px;flex-shrink:0}
+.env-badge{background:#1e40af;color:#93c5fd;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;margin:8px 16px 4px;display:inline-block}
+.app{margin-left:230px;flex:1;display:flex;flex-direction:column;min-height:100vh}
+.hero{background:linear-gradient(135deg,#1e6bb8 0%,#2ec07a 100%);padding:20px 28px 18px}
+.hero h1{font-size:24px;font-weight:700;color:#fff}
+.hero p{font-size:13px;color:rgba(255,255,255,.75);margin-top:2px}
+.content{padding:20px 24px;flex:1}
+.view{display:none}
+.view.active{display:block}
 .kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px}
 .kpi{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:16px;display:flex;justify-content:space-between;align-items:flex-start;border-left:3px solid #e5e7eb}
 .kpi.kb{border-left-color:#4a90d9}.kpi.kg{border-left-color:#3db87a}.kpi.ka{border-left-color:#e67e22}.kpi.kp{border-left-color:#8b5cf6}.kpi.kr{border-left-color:#e24b4a}
 .kl{font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px;font-weight:600}
-.kv{font-size:30px;font-weight:800;color:#1a1f2e;line-height:1}
+.kv{font-size:28px;font-weight:800;color:#1a1f2e;line-height:1}
 .ks{font-size:12px;color:#6b7280;margin-top:5px}
 .ks.g{color:#3db87a;cursor:pointer;font-weight:500}
-.ki{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.ki{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .ki svg{width:19px;height:19px}
-.two{display:grid;grid-template-columns:1fr;gap:16px}
+.panel{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:18px}
+.pt{font-size:15px;font-weight:700;color:#1a1f2e}
+.ps{font-size:12px;color:#6b7280;margin-top:2px}
 table{width:100%;border-collapse:collapse;font-size:13px}
-thead th{font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:.07em;padding:8px 10px;text-align:left;border-bottom:1px solid #f0f0f0;font-weight:600}
-tbody td{padding:11px 10px;border-bottom:1px solid #f5f5f5;color:#1a1f2e;vertical-align:middle}
+thead th{font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:.05em;font-weight:600;text-align:left;padding:8px 10px;border-bottom:1px solid #f3f4f6}
+tbody td{padding:10px;border-bottom:1px solid #f9fafb;color:#374151;vertical-align:middle}
 tbody tr:last-child td{border-bottom:none}
-tbody tr:hover td{background:#fafafa}
-.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
-.bg{background:#dcfce7;color:#166534}.bb{background:#dbeafe;color:#1e40af}.ba{background:#fef3c7;color:#92400e}.br{background:#fee2e2;color:#991b1b}.bp{background:#fce7f3;color:#831843}
-.wa{width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;margin-right:8px;vertical-align:middle;flex-shrink:0}
-.btn-p{background:#3db87a;border:none;border-radius:7px;padding:8px 16px;font-size:13px;cursor:pointer;color:#fff;font-weight:600}
-.btn-s{background:#fff;border:1px solid #e5e7eb;border-radius:7px;padding:8px 16px;font-size:13px;cursor:pointer;color:#6b7280;font-weight:500}
-.btn-sm{font-size:12px;padding:5px 12px}
-.btn-bl{background:#4a90d9;border:none;border-radius:7px;padding:8px 16px;font-size:13px;cursor:pointer;color:#fff;font-weight:600}
-.ev-item{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid #f5f5f5}
-.ev-item:last-child{border-bottom:none}
-.dot{width:8px;height:8px;border-radius:50%;margin-right:10px;flex-shrink:0}
-.dg{background:#3db87a}.da{background:#e67e22}.dgr{background:#d1d5db}
-.tab-row{display:flex;border-bottom:1px solid #e5e7eb;margin-bottom:16px}
-.tab{padding:9px 16px;font-size:13px;cursor:pointer;color:#6b7280;border-bottom:2px solid transparent;margin-bottom:-1px;font-weight:500}
-.tab.active{color:#3db87a;border-bottom-color:#3db87a;font-weight:700}
-.fg{margin-bottom:14px}
-.fl{font-size:11px;color:#6b7280;margin-bottom:5px;display:block;text-transform:uppercase;letter-spacing:.07em;font-weight:600}
-.fi{width:100%;border:1px solid #e5e7eb;border-radius:8px;padding:9px 12px;font-size:13px;background:#f9fafb;color:#1a1f2e;outline:none;font-family:inherit}
-.fi:focus{border-color:#3db87a}
-.fta{width:100%;border:1px solid #e5e7eb;border-radius:8px;padding:9px 12px;font-size:13px;background:#f9fafb;color:#1a1f2e;min-height:80px;resize:vertical;outline:none;font-family:inherit}
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.tog-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #f5f5f5}
-.tog-row:last-child{border-bottom:none}
-.tog-label{font-size:13px;color:#1a1f2e;font-weight:600}
-.tog-sub{font-size:12px;color:#6b7280;margin-top:2px}
-.toggle{width:40px;height:22px;border-radius:11px;background:#e5e7eb;position:relative;cursor:pointer;flex-shrink:0;transition:background .2s}
-.toggle.on{background:#3db87a}
-.toggle::after{content:'';width:16px;height:16px;border-radius:50%;background:#fff;position:absolute;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
-.toggle.on::after{left:21px}
-.cfg-title{font-size:11px;font-weight:700;color:#9ca3af;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #f0f0f0;text-transform:uppercase;letter-spacing:.06em}
-.cfg-sec{margin-bottom:18px}
-.api-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.api-key{flex:1;border:1px solid #e5e7eb;border-radius:7px;padding:8px 10px;font-size:12px;background:#f9fafb;color:#6b7280;font-family:monospace}
-.api-st{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:700;white-space:nowrap}
-.as-ok{background:#dcfce7;color:#166534}.as-pend{background:#fef3c7;color:#92400e}
-.fb-item{border:1px solid #e5e7eb;border-radius:10px;padding:14px 18px;margin-bottom:12px;background:#fff}
-.fb-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;gap:12px}
-.fb-title{font-size:13px;font-weight:700;color:#1a1f2e}
-.fb-meta{font-size:11px;color:#9ca3af;margin-top:3px}
-.fb-body{font-size:13px;color:#6b7280;line-height:1.55}
-.fb-resp{background:#f0fdf4;border-radius:8px;padding:10px 14px;margin-top:10px;border-left:3px solid #3db87a}
-.resp-lbl{font-size:11px;color:#166534;font-weight:700;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
-.fb-resp-txt{font-size:13px;color:#1a1f2e;line-height:1.5}
-.bot-panel{background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;margin-bottom:16px}
-.bot-hdr{background:linear-gradient(135deg,#2d9e66,#4a90d9);padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
-.bot-hdr-t{color:#fff;font-size:14px;font-weight:700}
-.bot-online{display:flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,.9)}
-.bot-dot{width:7px;height:7px;border-radius:50%;background:#7fff7f}
-.bot-msgs{padding:16px;min-height:240px;max-height:380px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:#f8f9fb}
-.msg-bot{max-width:80%;padding:10px 14px;border-radius:14px 14px 14px 4px;font-size:13px;line-height:1.6;background:#fff;color:#1a1f2e;border:1px solid #e5e7eb;align-self:flex-start}
-.msg-u{max-width:80%;padding:10px 14px;border-radius:14px 14px 4px 14px;font-size:13px;line-height:1.6;background:#3db87a;color:#fff;align-self:flex-end;font-weight:500}
-.bot-sugs{display:flex;flex-wrap:wrap;gap:7px;padding:0 16px 14px;background:#f8f9fb}
-.sug{background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:6px 13px;font-size:12px;color:#1a1f2e;cursor:pointer;font-weight:500}
-.sug:hover{background:#eaf3de;border-color:#3db87a;color:#166534}
-.bot-typing{font-size:12px;color:#9ca3af;padding:0 16px 10px;background:#f8f9fb;display:none;font-style:italic}
-.bot-ir{display:flex;gap:8px;padding:12px 16px;border-top:1px solid #e5e7eb;background:#fff}
-.bot-in{flex:1;border:1px solid #e5e7eb;border-radius:24px;padding:9px 16px;font-size:13px;background:#f9fafb;color:#1a1f2e;outline:none;font-family:inherit}
-.bot-in:focus{border-color:#3db87a}
-.bot-snd{background:#3db87a;border:none;border-radius:50%;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.bot-snd svg{width:15px;height:15px;color:#fff}
-.form-card{border:1px solid #e5e7eb;border-radius:12px;padding:16px;cursor:pointer;background:#fff}
-.form-card:hover{border-color:#3db87a}
-.form-card.sel{border:2px solid #3db87a}
+tbody tr:hover{background:#fafafa}
+.wa{width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-right:8px;flex-shrink:0;vertical-align:middle}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap}
+.bg{background:#dcfce7;color:#166534}.bb{background:#fef3c7;color:#92400e}.bp{background:#ede9fe;color:#6d28d9}.ba{background:#fee2e2;color:#991b1b}.ba2{background:#fff7ed;color:#c2410c}
+.btn-p{background:#3db87a;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer}
+.btn-p:hover{background:#2ea065}
+.btn-s{background:#fff;color:#374151;border:1px solid #d1d5db;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:500;cursor:pointer}
+.btn-s:hover{background:#f9fafb}
+.btn-sm{padding:5px 12px;font-size:12px}
+.form-step{background:#fff;border:1px solid #e2e8f0;border-radius:5px;padding:6px 8px;font-size:11px;color:#374151;margin-bottom:4px}
+.msg-u{background:#3db87a;color:#fff;padding:10px 14px;border-radius:12px 12px 0 12px;font-size:13px;max-width:80%;align-self:flex-end;margin:4px 0}
+.msg-bot{background:#f3f4f6;color:#374151;padding:10px 14px;border-radius:12px 12px 12px 0;font-size:13px;max-width:80%;align-self:flex-start;margin:4px 0}
+#isl-login{position:fixed;inset:0;background:#0f172a;z-index:9999;display:flex;align-items:center;justify-content:center}
+#isl-login.hidden{display:none!important}
+.logout-bar{position:fixed;bottom:0;left:0;width:230px;padding:10px 16px;background:#141824;border-top:1px solid rgba(255,255,255,.06);z-index:300}
+.logout-bar button{width:100%;padding:8px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#8892a4;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.logout-bar button:hover{color:#ef4444}
+#isl-rm{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;align-items:center;justify-content:center}
+#modal-nf{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;align-items:center;justify-content:center}
 </style>
 </head>
 <body>
-<style>#isl-login{position:fixed;inset:0;background:#0f172a;z-index:9999;display:flex;align-items:center;justify-content:center}#isl-login.hidden{display:none!important}</style>
-<div id="isl-login" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
-  <div style="background:#1e293b;border-radius:16px;padding:40px;width:100%;max-width:400px;box-shadow:0 25px 50px rgba(0,0,0,.5)">
+<div id="isl-login">
+  <div style="background:#1e293b;border-radius:16px;padding:40px;width:100%;max-width:400px;box-shadow:0 25px 50px rgba(0,0,0,.5);font-family:-apple-system,sans-serif">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:32px;justify-content:center">
       <div style="position:relative;width:36px;height:24px"><div style="width:22px;height:22px;border-radius:50%;background:#4a90d9;position:absolute;left:0;top:1px"></div><div style="width:22px;height:22px;border-radius:50%;background:#3db87a;position:absolute;left:12px;top:1px"></div></div>
       <div><div style="font-size:17px;font-weight:700;color:#fff">ISL Medicina Empresarial</div><div style="font-size:11px;color:#3db87a;letter-spacing:.5px">SISTEMA DE CUESTIONARIOS</div></div>
@@ -129,464 +81,349 @@ tbody tr:hover td{background:#fafafa}
     <button id="isl-btn" style="width:100%;padding:12px;border-radius:8px;border:none;background:#3db87a;color:#fff;font-size:15px;font-weight:600;cursor:pointer">Ingresar</button>
   </div>
 </div>
+<div class="sidebar">
+  <div class="logo"><div class="logo-ic"><div></div><div></div></div><div class="logo-txt"><b>ISL</b><span>Cuestionarios</span></div></div>
+  <span class="env-badge">STAGING</span>
+  <div class="nav-sec">Principal</div>
+  <div class="nav active" id="nav-inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Inicio</div>
+  <div class="nav" id="nav-import"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Importar Excel</div>
+  <div class="nav" id="nav-trab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Trabajadores</div>
+  <div class="nav" id="nav-rep"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Reportes</div>
+  <div class="nav" id="nav-form"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>Formularios</div>
+  <div class="nav-sec">Soporte</div>
+  <div class="nav" id="nav-asist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Asistente ISL</div>
+  <div class="nav" id="nav-fb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>Feedback</div>
+  <div class="nav-sec">Configuracion</div>
+  <div class="nav" id="nav-cfg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>Configuracion</div>
+  <div class="nav" id="nav-usr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Usuarios</div>
+</div>
+<div class="logout-bar"><button id="btn-logout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Cerrar sesion</button></div>
+<div class="app">
+  <div class="hero"><h1 id="h-title">Hola, Florencia</h1><p id="h-sub"></p></div>
+  <div class="content">
+
+<div class="view active" id="view-inicio">
+  <div class="kpi-grid">
+    <div class="kpi kb"><div><div class="kl">Contactados</div><div class="kv">12</div><div class="ks">siniestros activos</div></div><div class="ki" style="background:#dbeafe"><svg viewBox="0 0 24 24" fill="none" stroke="#1e40af" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg></div></div>
+    <div class="kpi kg"><div><div class="kl">Completos con DNI</div><div class="kv" style="color:#3db87a">7</div><div class="ks g" id="link-efectivos">ver detalle</div></div><div class="ki" style="background:#dcfce7"><svg viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg></div></div>
+    <div class="kpi ka"><div><div class="kl">Finalizados sin DNI</div><div class="kv" style="color:#e67e22">2</div><div class="ks">pendiente documento</div></div><div class="ki" style="background:#fef3c7"><svg viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg></div></div>
+    <div class="kpi kp"><div><div class="kl">En Refuerzo</div><div class="kv" style="color:#8b5cf6">3</div><div class="ks">esperando respuesta</div></div><div class="ki" style="background:#f5f3ff"><svg viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div></div>
+    <div class="kpi kr"><div><div class="kl">Sin Respuesta</div><div class="kv" style="color:#e24b4a">2</div><div class="ks">casos cerrados</div></div><div class="ki" style="background:#fee2e2"><svg viewBox="0 0 24 24" fill="none" stroke="#991b1b" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div></div>
+  </div>
+  <div class="panel" style="margin-bottom:14px;padding:14px 16px">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span style="font-size:12px;font-weight:600;color:#374151">Filtrar:</span>
+      <input type="date" id="f-desde" style="padding:5px 8px;border-radius:6px;border:1px solid #d1d5db;font-size:12px"/>
+      <span style="font-size:12px;color:#9ca3af">al</span>
+      <input type="date" id="f-hasta" style="padding:5px 8px;border-radius:6px;border:1px solid #d1d5db;font-size:12px"/>
+      <select id="f-estado" style="padding:5px 8px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;background:#fff"><option value="">Todos los estados</option><option>Completos con DNI</option><option>Finalizados sin DNI</option><option>En Refuerzo</option><option>Sin Respuesta</option></select>
+      <select id="f-art" style="padding:5px 8px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;background:#fff"><option value="">Todas las ART</option><option>Provincia ART</option><option>Galeno ART</option><option>Swiss Medical ART</option></select>
+      <button class="btn-p btn-sm" id="btn-filtrar">Buscar</button>
+      <button class="btn-s btn-sm" id="btn-limpiar">Limpiar</button>
+      <button class="btn-s btn-sm" id="btn-exportar" style="margin-left:auto">Exportar CSV</button>
+    </div>
+  </div>
+  <div class="panel">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div><div class="pt">Seguimiento de casos</div><div class="ps" id="tabla-sub">Todos los siniestros activos</div></div></div>
+    <table><thead><tr><th>Nombre y Apellido</th><th>DNI</th><th>Siniestro</th><th>ART</th><th>Estado</th><th>Fecha</th><th></th></tr></thead>
+    <tbody id="casos-tbody">
+      <tr data-fecha="2026-04-06"><td><span class="wa" style="background:#dbeafe;color:#1e40af">JG</span>Juan Garcia</td><td style="font-size:12px">35.421.876</td><td style="font-size:12px">SIN-2026-0042</td><td style="font-size:12px">Provincia ART</td><td><span class="badge bg">Completos con DNI</span></td><td style="font-size:12px;color:#9ca3af">06/04/2026</td><td><button class="btn-s btn-sm btn-ver" data-n="Juan Garcia" data-d="35.421.876" data-s="SIN-2026-0042" data-a="Provincia ART" data-e="Completos con DNI">Ver</button></td></tr>
+      <tr data-fecha="2026-04-07"><td><span class="wa" style="background:#dcfce7;color:#166534">ML</span>Maria Lopez</td><td style="font-size:12px">28.765.432</td><td style="font-size:12px">SIN-2026-0043</td><td style="font-size:12px">Galeno ART</td><td><span class="badge bg">Completos con DNI</span></td><td style="font-size:12px;color:#9ca3af">07/04/2026</td><td><button class="btn-s btn-sm btn-ver" data-n="Maria Lopez" data-d="28.765.432" data-s="SIN-2026-0043" data-a="Galeno ART" data-e="Completos con DNI">Ver</button></td></tr>
+      <tr data-fecha="2026-04-07"><td><span class="wa" style="background:#fef3c7;color:#92400e">CR</span>Carlos Rodriguez</td><td style="font-size:12px">41.234.567</td><td style="font-size:12px">SIN-2026-0044</td><td style="font-size:12px">Provincia ART</td><td><span class="badge bb">En Refuerzo</span></td><td style="font-size:12px;color:#9ca3af">07/04/2026</td><td><button class="btn-s btn-sm btn-ver" data-n="Carlos Rodriguez" data-d="41.234.567" data-s="SIN-2026-0044" data-a="Provincia ART" data-e="En Refuerzo">Ver</button></td></tr>
+      <tr data-fecha="2026-04-08"><td><span class="wa" style="background:#fce7f3;color:#831843">AM</span>Ana Martinez</td><td style="font-size:12px">33.987.654</td><td style="font-size:12px">SIN-2026-0045</td><td style="font-size:12px">Swiss Medical ART</td><td><span class="badge bp">En Refuerzo</span></td><td style="font-size:12px;color:#9ca3af">08/04/2026</td><td><button class="btn-s btn-sm btn-ver" data-n="Ana Martinez" data-d="33.987.654" data-s="SIN-2026-0045" data-a="Swiss Medical ART" data-e="En Refuerzo">Ver</button></td></tr>
+      <tr data-fecha="2026-04-05"><td><span class="wa" style="background:#fee2e2;color:#991b1b">DG</span>Diego Gomez</td><td style="font-size:12px">39.112.233</td><td style="font-size:12px">SIN-2026-0046</td><td style="font-size:12px">Galeno ART</td><td><span class="badge ba">Sin Respuesta</span></td><td style="font-size:12px;color:#9ca3af">05/04/2026</td><td><button class="btn-s btn-sm btn-ver" data-n="Diego Gomez" data-d="39.112.233" data-s="SIN-2026-0046" data-a="Galeno ART" data-e="Sin Respuesta">Ver</button></td></tr>
+      <tr data-fecha="2026-04-08"><td><span class="wa" style="background:#dbeafe;color:#1e40af">RS</span>Roberto Sanchez</td><td style="font-size:12px">26.543.210</td><td style="font-size:12px">SIN-2026-0047</td><td style="font-size:12px">Provincia ART</td><td><span class="badge bg">Completos con DNI</span></td><td style="font-size:12px;color:#9ca3af">08/04/2026</td><td><button class="btn-s btn-sm btn-ver" data-n="Roberto Sanchez" data-d="26.543.210" data-s="SIN-2026-0047" data-a="Provincia ART" data-e="Completos con DNI">Ver</button></td></tr>
+      <tr data-fecha="2026-04-09"><td><span class="wa" style="background:#fff7ed;color:#c2410c">LF</span>Laura Fernandez</td><td style="font-size:12px">44.678.901</td><td style="font-size:12px">SIN-2026-0048</td><td style="font-size:12px">Swiss Medical ART</td><td><span class="badge ba2">Finalizados sin DNI</span></td><td style="font-size:12px;color:#9ca3af">09/04/2026</td><td><button class="btn-s btn-sm btn-ver" data-n="Laura Fernandez" data-d="44.678.901" data-s="SIN-2026-0048" data-a="Swiss Medical ART" data-e="Finalizados sin DNI">Ver</button></td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<div class="view" id="view-import">
+  <div class="panel" style="margin-bottom:18px">
+    <div style="font-size:20px;font-weight:700;margin-bottom:4px">Importar Excel</div>
+    <div style="font-size:13px;color:#6b7280;margin-bottom:20px">Subi el Excel con los trabajadores del dia para disparar cuestionarios WhatsApp</div>
+    <div id="drop-zone" style="border:2px dashed #d1d5db;border-radius:12px;padding:40px;text-align:center;cursor:pointer;background:#fafafa">
+      <div style="width:56px;height:56px;border-radius:16px;background:#dcfce7;display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><svg viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2" style="width:28px;height:28px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="12" y2="12"/><line x1="15" y1="15" x2="12" y2="12"/></svg></div>
+      <div style="font-size:15px;font-weight:600;margin-bottom:6px">Arrastra el archivo aqui</div>
+      <div style="font-size:13px;color:#6b7280;margin-bottom:16px">o hace clic para seleccionar</div>
+      <button class="btn-p" id="btn-sel-file">Seleccionar archivo</button>
+      <div style="font-size:11px;color:#9ca3af;margin-top:12px">Formatos: .xlsx, .xls, .csv — Max 10 MB</div>
+      <input type="file" id="excel-input" accept=".xlsx,.xls,.csv" style="display:none"/>
+    </div>
+    <div id="import-result" style="display:none;margin-top:16px"></div>
+    <div style="margin-top:16px;padding:14px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0">
+      <div style="font-size:12px;font-weight:600;color:#374151;margin-bottom:8px">Columnas requeridas:</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span style="font-size:11px;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:4px;font-family:monospace">nombre</span>
+        <span style="font-size:11px;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:4px;font-family:monospace">apellido</span>
+        <span style="font-size:11px;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:4px;font-family:monospace">telefono</span>
+        <span style="font-size:11px;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:4px;font-family:monospace">art</span>
+        <span style="font-size:11px;background:#f3f4f6;color:#6b7280;padding:2px 8px;border-radius:4px;font-family:monospace">siniestro_id (opcional)</span>
+      </div>
+      <div style="font-size:11px;color:#9ca3af;margin-top:8px">Telefono con codigo de pais: ej. <strong>5491155556677</strong></div>
+    </div>
+  </div>
+  <div class="panel"><div class="pt" style="margin-bottom:14px">Historial de importaciones</div><table><thead><tr><th>Archivo</th><th>Fecha</th><th>Trabajadores</th><th>Estado</th></tr></thead><tbody id="import-history"><tr><td colspan="4" style="text-align:center;color:#9ca3af;font-size:12px;padding:20px">Sin importaciones en esta sesion</td></tr></tbody></table></div>
+</div>
+
+<div class="view" id="view-trab">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+    <div><div style="font-size:20px;font-weight:700">Trabajadores</div><div style="font-size:13px;color:#6b7280;margin-top:2px">Gestion de siniestrados por ART</div></div>
+    <div style="display:flex;gap:8px"><button class="btn-s btn-sm" id="btn-ir-import">Importar Excel</button><button class="btn-p btn-sm">+ Agregar</button></div>
+  </div>
+  <div class="panel" style="margin-bottom:14px;padding:14px 16px">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span style="font-size:12px;font-weight:600;color:#374151">Filtrar:</span>
+      <input type="text" id="t-buscar" placeholder="Nombre, DNI o siniestro..." style="padding:5px 10px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;width:200px"/>
+      <select id="t-estado" style="padding:5px 8px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;background:#fff"><option value="">Todos los estados</option><option>Completos con DNI</option><option>Finalizados sin DNI</option><option>En Refuerzo</option><option>Sin Respuesta</option></select>
+      <select id="t-art" style="padding:5px 8px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;background:#fff"><option value="">Todas las ART</option><option>Provincia ART</option><option>Galeno ART</option><option>Swiss Medical ART</option></select>
+      <button class="btn-p btn-sm" id="btn-tf">Buscar</button>
+      <button class="btn-s btn-sm" id="btn-tl">Limpiar</button>
+      <button class="btn-s btn-sm" id="btn-te" style="margin-left:auto">Exportar CSV</button>
+    </div>
+  </div>
+  <div class="panel">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div><div class="pt">Listado de trabajadores</div><div class="ps" id="trab-sub">7 trabajadores registrados</div></div></div>
+    <table><thead><tr><th>Nombre y Apellido</th><th>DNI</th><th>Telefono</th><th>Siniestro</th><th>ART</th><th>Estado</th><th>Fecha</th><th></th></tr></thead>
+    <tbody id="trab-tbody">
+      <tr><td><span class="wa" style="background:#dbeafe;color:#1e40af">JG</span>Juan Garcia</td><td style="font-size:12px">35.421.876</td><td style="font-size:12px">+54 911 5555-0001</td><td style="font-size:12px">SIN-2026-0042</td><td style="font-size:12px">Provincia ART</td><td><span class="badge bg">Completos con DNI</span></td><td style="font-size:12px;color:#9ca3af">06/04/2026</td><td><button class="btn-s btn-sm btn-ver" data-n="Juan Garcia" data-d="35.421.876" data-s="SIN-2026-0042" data-a="Provincia ART" data-e="Completos con DNI">Ver</button></td></tr>
+      <tr><td><span class="wa" style="background:#dcfce7;color:#166534">ML</span>Maria Lopez</td><td style="font-size:12px">28.765.432</td><td style="font-size:12px">+54 911 5555-0002</td><td style="font-size:12px">SIN-2026-0043</td><td style="font-size:12px">Galeno ART</td><td><span class="badge bg">Completos con DNI</span></td><td style="font-size:12px;color:#9ca3af">07/04/2026</td><td><button class="btn-s btn-sm btn-ver" data-n="Maria Lopez" data-d="28.765.432" data-s="SIN-2026-0043" data-a="Galeno ART" data-e="Completos con DNI">Ver</button></td></tr>
+      <tr><td><span class="wa" style="background:#fef3c7;color:#92400e">CR</span>Carlos Rodriguez</td><td style="font-size:12px">41.234.567</td><td style="font-size:12px">+54 911 5555-0003</td><td style="font-size:12px">SIN-2026-0044</td><td style="font-size:12px">Provincia ART</td><td><span class="badge bb">En Refuerzo</span></td><td style="font-size:12px;color:#9ca3af">07/04/2026</td><td><button class="btn-s btn-sm btn-ver" data-n="Carlos Rodriguez" data-d="41.234.567" data-s="SIN-2026-0044" data-a="Provincia ART" data-e="En Refuerzo">Ver</button></td></tr>
+      <tr><td><span class="wa" style="background:#fce7f3;color:#831843">AM</span>Ana Martinez</td><td style="font-size:12px">33.987.654</td><td style="font-size:12px">+54 911 5555-0004</td><td style="font-size:12px">SIN-2026-0045</td><td style="font-size:12px">Swiss Medical ART</td><td><span class="badge bp">En Refuerzo</span></td><td style="font-size:12px;color:#9ca3af">08/04/2026</td><td><button class="btn-s btn-sm btn-ver" data-n="Ana Martinez" data-d="33.987.654" data-s="SIN-2026-0045" data-a="Swiss Medical ART" data-e="En Refuerzo">Ver</button></td></tr>
+      <tr><td><span class="wa" style="background:#fee2e2;color:#991b1b">DG</span>Diego Gomez</td><td style="font-size:12px">39.112.233</td><td style="font-size:12px">+54 911 5555-0005</td><td style="font-size:12px">SIN-2026-0046</td><td style="font-size:12px">Galeno ART</td><td><span class="badge ba">Sin Respuesta</span></td><td style="font-size:12px;color:#9ca3af">05/04/2026</td><td><button class="btn-s btn-sm btn-ver" data-n="Diego Gomez" data-d="39.112.233" data-s="SIN-2026-0046" data-a="Galeno ART" data-e="Sin Respuesta">Ver</button></td></tr>
+      <tr><td><span class="wa" style="background:#dbeafe;color:#1e40af">RS</span>Roberto Sanchez</td><td style="font-size:12px">26.543.210</td><td style="font-size:12px">+54 911 5555-0006</td><td style="font-size:12px">SIN-2026-0047</td><td style="font-size:12px">Provincia ART</td><td><span class="badge bg">Completos con DNI</span></td><td style="font-size:12px;color:#9ca3af">08/04/2026</td><td><button class="btn-s btn-sm btn-ver" data-n="Roberto Sanchez" data-d="26.543.210" data-s="SIN-2026-0047" data-a="Provincia ART" data-e="Completos con DNI">Ver</button></td></tr>
+      <tr><td><span class="wa" style="background:#fff7ed;color:#c2410c">LF</span>Laura Fernandez</td><td style="font-size:12px">44.678.901</td><td style="font-size:12px">+54 911 5555-0007</td><td style="font-size:12px">SIN-2026-0048</td><td style="font-size:12px">Swiss Medical ART</td><td><span class="badge ba2">Finalizados sin DNI</span></td><td style="font-size:12px;color:#9ca3af">09/04/2026</td><td><button class="btn-s btn-sm btn-ver" data-n="Laura Fernandez" data-d="44.678.901" data-s="SIN-2026-0048" data-a="Swiss Medical ART" data-e="Finalizados sin DNI">Ver</button></td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<div class="view" id="view-rep">
+  <div style="font-size:20px;font-weight:700;margin-bottom:18px">Reportes</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px">
+    <div class="panel" style="text-align:center;padding:24px"><div style="font-size:32px;font-weight:800;color:#3db87a">7</div><div style="font-size:12px;color:#6b7280;margin-top:4px">Completos con DNI</div></div>
+    <div class="panel" style="text-align:center;padding:24px"><div style="font-size:32px;font-weight:800;color:#8b5cf6">3</div><div style="font-size:12px;color:#6b7280;margin-top:4px">En Refuerzo</div></div>
+    <div class="panel" style="text-align:center;padding:24px"><div style="font-size:32px;font-weight:800;color:#e24b4a">2</div><div style="font-size:12px;color:#6b7280;margin-top:4px">Sin Respuesta</div></div>
+  </div>
+  <div class="panel"><div class="pt" style="margin-bottom:14px">Actividad reciente</div><div style="font-size:13px;color:#6b7280;padding:20px;text-align:center">Conecta la API para ver reportes en tiempo real</div></div>
+</div>
+
+<div class="view" id="view-form">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+    <div><div style="font-size:20px;font-weight:700">Formularios / Flujos</div><div style="font-size:13px;color:#6b7280;margin-top:2px">Configuracion y edicion de cuestionarios WhatsApp</div></div>
+    <button class="btn-p btn-sm" id="btn-nuevo-flujo">+ Nuevo flujo</button>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px">
+    <div class="panel" style="border-top:3px solid #4a90d9;cursor:pointer" id="card-laboral">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><span style="font-size:10px;background:#dbeafe;color:#1e40af;padding:2px 9px;border-radius:20px;font-weight:700">ACTIVO</span><span style="font-size:10px;color:#9ca3af">21 preguntas</span></div>
+      <div style="font-size:15px;font-weight:700;margin-bottom:4px">Siniestro Laboral</div>
+      <div style="font-size:12px;color:#6b7280;margin-bottom:12px">art_siniestros_full</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px"><span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">Titular</span><span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">Laboral</span><span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">Salud</span><span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">Siniestro</span><span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">DNI</span></div>
+      <div style="font-size:11px;color:#9ca3af;border-top:1px solid #f3f4f6;padding-top:8px">8 casos activos</div>
+    </div>
+    <div class="panel" style="border-top:3px solid #8b5cf6;cursor:pointer" id="card-itinere">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><span style="font-size:10px;background:#f5f3ff;color:#6d28d9;padding:2px 9px;border-radius:20px;font-weight:700">ACTIVO</span><span style="font-size:10px;color:#9ca3af">26 preguntas</span></div>
+      <div style="font-size:15px;font-weight:700;margin-bottom:4px">Siniestro In Itinere</div>
+      <div style="font-size:12px;color:#6b7280;margin-bottom:12px">art_siniestros_full + itinere</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px"><span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">Titular</span><span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">Laboral</span><span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">Salud</span><span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">Siniestro</span><span style="font-size:10px;background:#ede9fe;color:#6d28d9;padding:2px 7px;border-radius:4px">+ Itinere</span><span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">DNI</span></div>
+      <div style="font-size:11px;color:#9ca3af;border-top:1px solid #f3f4f6;padding-top:8px">4 casos activos</div>
+    </div>
+    <div class="panel" style="border:2px dashed #d1d5db;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:160px;cursor:pointer;background:#fafafa" id="card-nuevo">
+      <div style="font-size:32px;color:#d1d5db;margin-bottom:8px">+</div>
+      <div style="font-size:13px;color:#9ca3af;font-weight:500">Nuevo flujo</div>
+      <div style="font-size:11px;color:#d1d5db;margin-top:4px">Configurar cuestionario</div>
+    </div>
+  </div>
+  <div class="panel">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div><div class="pt" id="flujo-titulo">Flujo: Siniestro Laboral</div><div class="ps">Pasos del cuestionario WhatsApp — clic en una card para cambiar</div></div>
+      <div style="display:flex;gap:8px"><button class="btn-s btn-sm" id="btn-editar-flujo">Editar</button><button class="btn-p btn-sm" id="btn-guardar-flujo" style="display:none">Guardar cambios</button></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+      <div style="background:#f0f7ff;border-radius:8px;padding:12px;border:1px solid #bfdbfe"><div style="font-size:10px;font-weight:700;color:#1e40af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Identificacion</div><div class="form-step">1. Bienvenida + titular (SI/NO)</div><div class="form-step">2. Confirmacion titular</div><div class="form-step">3. Tipo: Trabajo / In itinere</div></div>
+      <div style="background:#f0fdf4;border-radius:8px;padding:12px;border:1px solid #bbf7d0"><div style="font-size:10px;font-weight:700;color:#166534;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Bloque Laboral</div><div class="form-step">4. Tarea <span style="color:#9ca3af">(min 3 palabras)</span></div><div class="form-step">5. Antiguedad (ano)</div><div class="form-step">6. Horario laboral</div><div class="form-step">7. Otro empleador</div><div class="form-step">8. Modalidad</div></div>
+      <div style="background:#fff8f0;border-radius:8px;padding:12px;border:1px solid #fed7aa"><div style="font-size:10px;font-weight:700;color:#c2410c;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Salud + Siniestro</div><div class="form-step">9. Patologias previas</div><div class="form-step">10. Lesiones previas</div><div class="form-step">11. Accidente <span style="color:#9ca3af">(min 5 palabras)</span></div><div class="form-step">12. Lesiones <span style="color:#9ca3af">(min 3 palabras)</span></div><div class="form-step">13. Atencion medica</div><div class="form-step">14. Domicilio laboral</div></div>
+      <div style="background:#fafafa;border-radius:8px;padding:12px;border:1px solid #e2e8f0"><div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Cierre</div><div class="form-step" style="background:#ede9fe;border-color:#ddd6fe;color:#6d28d9">+ Bloque Itinere (si aplica)</div><div class="form-step">25. Foto DNI frente y dorso</div><div class="form-step" style="background:#dcfce7;border-color:#bbf7d0;color:#166534;font-weight:600">Mensaje de cierre</div><div style="margin-top:10px;padding-top:10px;border-top:1px solid #e5e7eb;font-size:10px;color:#6b7280;line-height:1.7"><strong style="color:#374151;display:block;margin-bottom:3px">Validaciones:</strong>Tarea: min 3 palabras<br>Accidente: min 5 palabras<br>Lesiones: min 3 palabras<br>DNI: hasta 2 reintentos</div></div>
+    </div>
+    <div id="edit-panel" style="display:none;margin-top:16px;padding:16px;background:#fffbeb;border:1px solid #fde68a;border-radius:8px">
+      <div style="font-size:13px;font-weight:600;color:#92400e;margin-bottom:12px">Modo edicion</div>
+      <div id="edit-list" style="display:flex;flex-direction:column;gap:8px"></div>
+      <button class="btn-p btn-sm" id="btn-add-step" style="margin-top:10px">+ Agregar paso</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-nf" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:12px;padding:28px;max-width:460px;width:90%;box-shadow:0 20px 40px rgba(0,0,0,.2)">
+    <div style="font-size:16px;font-weight:700;margin-bottom:16px">Nuevo flujo de cuestionario</div>
+    <div style="margin-bottom:12px"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Nombre del flujo</label><input id="nf-nombre" type="text" placeholder="Ej: Siniestro Vial" style="width:100%;padding:8px 12px;border-radius:7px;border:1px solid #d1d5db;font-size:13px;outline:none"/></div>
+    <div style="margin-bottom:12px"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">ART / Cliente</label><input id="nf-art" type="text" placeholder="Ej: Provincia ART" style="width:100%;padding:8px 12px;border-radius:7px;border:1px solid #d1d5db;font-size:13px;outline:none"/></div>
+    <div style="margin-bottom:16px"><label style="display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px">Basado en</label><select id="nf-base" style="width:100%;padding:8px 12px;border-radius:7px;border:1px solid #d1d5db;font-size:13px;background:#fff"><option value="laboral">Siniestro Laboral (21 preguntas)</option><option value="itinere">Siniestro In Itinere (26 preguntas)</option><option value="custom">Flujo personalizado (desde cero)</option></select></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn-s" id="btn-cancelar-nf">Cancelar</button><button class="btn-p" id="btn-crear-nf">Crear flujo</button></div>
+  </div>
+</div>
+
+<div class="view" id="view-asist">
+  <div style="margin-bottom:18px"><div style="font-size:20px;font-weight:700">Asistente ISL</div><div style="font-size:13px;color:#6b7280;margin-top:2px">Consultas sobre el sistema y casos</div></div>
+  <div class="panel" style="display:flex;flex-direction:column;height:500px">
+    <div id="asist-msgs" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:4px;padding:8px 0;margin-bottom:12px"></div>
+    <div id="asist-sugs" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+      <button class="btn-s btn-sm" id="sug1">Quienes estan en Refuerzo?</button><button class="btn-s btn-sm" id="sug2">Como funcionan los plazos?</button><button class="btn-s btn-sm" id="sug3">Como configuro un formulario?</button><button class="btn-s btn-sm" id="sug4">Como exporto el reporte?</button><button class="btn-s btn-sm" id="sug5">Que pasa si no responde?</button>
+    </div>
+    <div id="asist-typing" style="display:none;font-size:12px;color:#9ca3af;margin-bottom:8px">Escribiendo...</div>
+    <div style="display:flex;gap:8px"><input id="asist-in" type="text" placeholder="Escribi tu consulta..." style="flex:1;padding:10px 14px;border-radius:8px;border:1px solid #d1d5db;font-size:13px;outline:none"/><button class="btn-p" id="bot-send-btn">Enviar</button></div>
+  </div>
+</div>
+
+<div class="view" id="view-fb">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px"><div><div style="font-size:20px;font-weight:700">Feedback</div><div style="font-size:13px;color:#6b7280;margin-top:2px">Reporta problemas o sugerencias</div></div><button class="btn-p btn-sm" id="btn-nuevo-fb">+ Nuevo feedback</button></div>
+  <div id="fb-wrap" style="display:none;margin-bottom:16px"><div class="panel"><div style="font-size:14px;font-weight:600;margin-bottom:12px">Nuevo feedback</div><select style="width:100%;padding:8px 12px;border-radius:7px;border:1px solid #d1d5db;font-size:13px;margin-bottom:10px;background:#fff"><option>Problema / Bug</option><option>Sugerencia</option><option>Mejora</option></select><textarea id="fb-desc" rows="3" placeholder="Describe el problema o sugerencia..." style="width:100%;padding:8px 12px;border-radius:7px;border:1px solid #d1d5db;font-size:13px;outline:none;resize:vertical"></textarea><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px"><button class="btn-s btn-sm" id="btn-fb-cancel">Cancelar</button><button class="btn-p btn-sm" id="btn-fb-send">Enviar</button></div></div></div>
+  <div class="panel"><div class="pt" style="margin-bottom:14px">Historial</div><div style="font-size:13px;color:#6b7280;text-align:center;padding:20px">Sin feedback registrado</div></div>
+</div>
+
+<div class="view" id="view-cfg">
+  <div style="font-size:20px;font-weight:700;margin-bottom:18px">Configuracion</div>
+  <div class="panel" style="margin-bottom:14px"><div class="pt" style="margin-bottom:14px">Integraciones</div><div style="display:flex;flex-direction:column;gap:12px"><div style="display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid #e2e8f0;border-radius:8px"><div><div style="font-size:13px;font-weight:600">WhatsApp (Twilio Sandbox)</div><div style="font-size:11px;color:#6b7280">+1 415 523 8886 · join live-wheat</div></div><span class="badge bg">Conectado</span></div><div style="display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid #e2e8f0;border-radius:8px"><div><div style="font-size:13px;font-weight:600">n8n Automations</div><div style="font-size:11px;color:#6b7280">fdropulich.app.n8n.cloud · 4 flujos activos</div></div><span class="badge bg">Conectado</span></div><div style="display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid #e2e8f0;border-radius:8px"><div><div style="font-size:13px;font-weight:600">Supabase</div><div style="font-size:11px;color:#6b7280">upfvmgpccdfujcwswrnd.supabase.co</div></div><span class="badge bg">Conectado</span></div></div></div>
+  <div class="panel"><div class="pt" style="margin-bottom:14px">Parametros del sistema</div><div style="display:flex;flex-direction:column;gap:12px"><div style="display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:13px;font-weight:500">Refuerzo 1 (dias)</div><div style="font-size:11px;color:#6b7280">Dias sin respuesta para primer refuerzo</div></div><input type="number" value="2" style="width:60px;padding:5px 8px;border-radius:6px;border:1px solid #d1d5db;font-size:13px;text-align:center"/></div><div style="display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:13px;font-weight:500">Refuerzo 2 (dias)</div><div style="font-size:11px;color:#6b7280">Dias sin respuesta para segundo refuerzo</div></div><input type="number" value="4" style="width:60px;padding:5px 8px;border-radius:6px;border:1px solid #d1d5db;font-size:13px;text-align:center"/></div><div style="display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:13px;font-weight:500">Cierre automatico (dias)</div><div style="font-size:11px;color:#6b7280">Dias para cerrar caso sin respuesta</div></div><input type="number" value="7" style="width:60px;padding:5px 8px;border-radius:6px;border:1px solid #d1d5db;font-size:13px;text-align:center"/></div></div></div>
+</div>
+
+<div class="view" id="view-usr">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px"><div><div style="font-size:20px;font-weight:700">Usuarios</div><div style="font-size:13px;color:#6b7280;margin-top:2px">Gestion de accesos al sistema</div></div><button class="btn-p btn-sm" id="btn-nuevo-usr">+ Nuevo usuario</button></div>
+  <div id="usr-wrap" style="display:none;margin-bottom:16px"><div class="panel"><div style="font-size:14px;font-weight:600;margin-bottom:12px">Nuevo usuario</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px"><input type="text" placeholder="Nombre" style="padding:8px 12px;border-radius:7px;border:1px solid #d1d5db;font-size:13px;outline:none"/><input type="email" placeholder="Email" style="padding:8px 12px;border-radius:7px;border:1px solid #d1d5db;font-size:13px;outline:none"/></div><select style="width:100%;padding:8px 12px;border-radius:7px;border:1px solid #d1d5db;font-size:13px;margin-bottom:10px;background:#fff"><option>Operador</option><option>Administrador</option></select><div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn-s btn-sm" id="btn-usr-cancel">Cancelar</button><button class="btn-p btn-sm" id="btn-usr-save">Guardar</button></div></div></div>
+  <div class="panel"><table><thead><tr><th>Nombre</th><th>Email</th><th>Rol</th><th>Estado</th></tr></thead><tbody><tr><td>Admin ISL</td><td style="font-size:12px">admin@islarg.com.ar</td><td><span class="badge bg">Administrador</span></td><td style="font-size:11px;color:#3db87a">Activo</td></tr><tr><td>Test User</td><td style="font-size:12px">test@islarg.com.ar</td><td><span class="badge bg">Administrador</span></td><td style="font-size:11px;color:#3db87a">Activo</td></tr><tr><td>Operador</td><td style="font-size:12px">operador@islarg.com.ar</td><td><span class="badge bb">Operador</span></td><td style="font-size:11px;color:#3db87a">Activo</td></tr></tbody></table></div>
+</div>
+
+  </div>
+</div>
+<div id="isl-rm" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;align-items:center;justify-content:center"></div>
+
 <script>
-var ISL_USERS={'admin@islarg.com.ar':'Admin2026','test@islarg.com.ar':'Test2026','operador@islarg.com.ar':'Oper2026'};
+var ISL_U={'admin@islarg.com.ar':'Admin2026','test@islarg.com.ar':'Test2026','operador@islarg.com.ar':'Oper2026'};
+var ISL_ADMIN=['admin@islarg.com.ar','test@islarg.com.ar'];
 function islLogin(){
   var e=(document.getElementById('isl-email').value||'').trim().toLowerCase();
   var p=document.getElementById('isl-pass').value||'';
   var err=document.getElementById('isl-err');
-  if(!ISL_USERS[e]||ISL_USERS[e]!==p){err.textContent='Email o contrasena incorrectos.';err.style.display='block';return;}
+  if(!ISL_U[e]||ISL_U[e]!==p){err.textContent='Email o contrasena incorrectos.';err.style.display='block';return;}
   err.style.display='none';
-  try{sessionStorage.setItem('isl_ok','1');}catch(x){}
+  try{sessionStorage.setItem('isl_u',e);}catch(x){}
   document.getElementById('isl-login').classList.add('hidden');
+  if(ISL_ADMIN.indexOf(e)<0){var nf=document.getElementById('btn-nuevo-flujo');if(nf)nf.style.display='none';var be=document.getElementById('btn-editar-flujo');if(be)be.style.display='none';}
 }
 function islLogout(){
-  try{sessionStorage.removeItem('isl_ok');}catch(x){}
-  document.getElementById('isl-email').value='';
-  document.getElementById('isl-pass').value='';
+  try{sessionStorage.removeItem('isl_u');}catch(x){}
+  document.getElementById('isl-email').value='';document.getElementById('isl-pass').value='';
   document.getElementById('isl-login').classList.remove('hidden');
 }
-// Wire button immediately - script runs after DOM is built
-document.getElementById('isl-btn').addEventListener('click', islLogin);
-document.getElementById('isl-email').addEventListener('keydown', function(ev){if(ev.key==='Enter')islLogin();});
-document.getElementById('isl-pass').addEventListener('keydown', function(ev){if(ev.key==='Enter')islLogin();});
-try{if(sessionStorage.getItem('isl_ok'))document.getElementById('isl-login').classList.add('hidden');}catch(x){}
-</script>
-<div class="app">
-<div class="sb">
-  <div class="sb-logo">
-    <div class="lc"><div class="lc1"></div><div class="lc2"></div></div>
-    <div><div class="sb-t">ISL</div><div class="sb-sub">Cuestionarios</div></div>
-  </div>
-  <div class="sb-sec">Principal</div>
-  <div class="nav active" id="nav-inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Inicio</div>
-  <div class="nav" id="nav-import"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Importar Excel</div>
-  <div class="nav" id="nav-trab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Trabajadores</div>
-  <div class="nav" id="nav-rep"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Reportes</div>
-  <div class="nav" id="nav-form"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>Formularios</div>
-  <div class="sb-sec">Soporte</div>
-  <div class="nav" id="nav-asist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Asistente ISL</div>
-  <div class="nav" id="nav-fb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>Feedback</div>
-  <div class="sb-sec">Configuracion</div>
-  <div class="nav" id="nav-cfg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Configuracion</div>
-  <div class="nav nav-sub" id="nav-usr">Usuarios</div>
-  <div class="sb-badge">STAGING - DEMO</div>
-  <div class="sb-foot">
-    <div class="ava">FD</div>
-    <div><div style="font-size:12px;color:#c8cdd8;font-weight:600">Florencia Dropulich</div><div style="font-size:11px;color:#555e72">Administrador</div></div>
-  </div>
-</div>
-
-<div class="main">
-  <div class="hero">
-    <div><h1 id="h-title">Hola, Florencia</h1><p id="h-sub"></p></div>
-    
-  </div><div class="view active" id="view-inicio">
-    <div class="kpi-grid">
-      <div class="kpi kb"><div><div class="kl">Contactados</div><div class="kv">12</div><div class="ks">siniestros activos</div></div><div class="ki" style="background:#dbeafe"><svg viewBox="0 0 24 24" fill="none" stroke="#1e40af" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg></div></div>
-      <div class="kpi kg"><div><div class="kl">Completos con DNI</div><div class="kv" style="color:#3db87a">7</div><div class="ks g" id="link-efectivos">ver detalle</div></div><div class="ki" style="background:#dcfce7"><svg viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg></div></div>
-      <div class="kpi ka"><div><div class="kl">Finalizados sin DNI</div><div class="kv" style="color:#e67e22">2</div><div class="ks">pendiente documento</div></div><div class="ki" style="background:#fef3c7"><svg viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg></div></div>
-      <div class="kpi kp"><div><div class="kl">En Refuerzo</div><div class="kv" style="color:#8b5cf6">3</div><div class="ks">esperando respuesta</div></div><div class="ki" style="background:#f5f3ff"><svg viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div></div>
-      <div class="kpi kr"><div><div class="kl">Sin Respuesta</div><div class="kv" style="color:#e24b4a">2</div><div class="ks">casos cerrados</div></div><div class="ki" style="background:#fee2e2"><svg viewBox="0 0 24 24" fill="none" stroke="#991b1b" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div></div>
-    </div>
-    <div class="panel" style="margin-bottom:14px;padding:14px 16px">
-      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-        <span style="font-size:12px;font-weight:600;color:#374151">Filtrar:</span>
-        <input type="date" id="filtro-desde" style="padding:5px 8px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;color:#374151"/>
-        <span style="font-size:12px;color:#9ca3af">al</span>
-        <input type="date" id="filtro-hasta" style="padding:5px 8px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;color:#374151"/>
-        <select id="filtro-estado" style="padding:5px 8px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;color:#374151;background:#fff">
-          <option value="">Todos los estados</option>
-          <option value="Completos con DNI">Completos con DNI</option>
-          <option value="Finalizados sin DNI">Finalizados sin DNI</option>
-          <option value="En Refuerzo">En Refuerzo</option>
-          <option value="Sin Respuesta">Sin Respuesta</option>
-        </select>
-        <button class="btn-p btn-sm" id="btn-filtrar">Buscar</button>
-        <button class="btn-s btn-sm" id="btn-limpiar">Limpiar</button>
-        <button class="btn-s btn-sm" style="margin-left:auto" id="btn-exportar">Exportar CSV</button>
-      </div>
-    </div>
-    <div class="panel">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-        <div><div class="pt">Seguimiento de casos</div><div class="ps" id="tabla-sub">Todos los siniestros activos</div></div>
-      </div>
-      <table id="casos-tabla"><thead><tr><th>Nombre y Apellido</th><th>DNI</th><th>Siniestro</th><th>ART</th><th>Estado</th><th>Fecha</th><th></th></tr></thead>
-      <tbody id="casos-tbody">
-        <tr><td><span class="wa" style="background:#dbeafe;color:#1e40af">JG</span>Juan Garcia</td><td style="font-size:12px">35.421.876</td><td style="font-size:12px">SIN-2026-0042</td><td style="font-size:11px;color:#374151">Provincia ART</td><td><span class="badge bg">Completos con DNI</span></td><td style="font-size:12px;color:#9ca3af">06/04/2026</td><td><button data-n="Juan Garcia" data-d="35.421.876" data-s="SIN-2026-0042" data-e="Completos con DNI" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:5px;color:#166534;cursor:pointer">Ver</button></td></tr>
-        <tr><td><span class="wa" style="background:#dcfce7;color:#166534">ML</span>Maria Lopez</td><td style="font-size:12px">28.765.432</td><td style="font-size:12px">SIN-2026-0043</td><td style="font-size:11px;color:#374151">Galeno ART</td><td><span class="badge bg">Completos con DNI</span></td><td style="font-size:12px;color:#9ca3af">07/04/2026</td><td><button data-n="Maria Lopez" data-d="28.765.432" data-s="SIN-2026-0043" data-e="Completos con DNI" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:5px;color:#166534;cursor:pointer">Ver</button></td></tr>
-        <tr><td><span class="wa" style="background:#fef3c7;color:#92400e">CR</span>Carlos Rodriguez</td><td style="font-size:12px">41.234.567</td><td style="font-size:12px">SIN-2026-0044</td><td style="font-size:11px;color:#374151">Provincia ART</td><td><span class="badge bb">En Refuerzo</span></td><td style="font-size:12px;color:#9ca3af">07/04/2026</td><td><button data-n="Carlos Rodriguez" data-d="41.234.567" data-s="SIN-2026-0044" data-e="En Refuerzo" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#fffbeb;border:1px solid #fde68a;border-radius:5px;color:#92400e;cursor:pointer">Ver</button></td></tr>
-        <tr><td><span class="wa" style="background:#fce7f3;color:#831843">AM</span>Ana Martinez</td><td style="font-size:12px">33.987.654</td><td style="font-size:12px">SIN-2026-0045</td><td style="font-size:11px;color:#374151">Swiss Medical ART</td><td><span class="badge bp">En Refuerzo</span></td><td style="font-size:12px;color:#9ca3af">08/04/2026</td><td><button data-n="Ana Martinez" data-d="33.987.654" data-s="SIN-2026-0045" data-e="En Refuerzo" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#fffbeb;border:1px solid #fde68a;border-radius:5px;color:#92400e;cursor:pointer">Ver</button></td></tr>
-        <tr><td><span class="wa" style="background:#fee2e2;color:#991b1b">DG</span>Diego Gomez</td><td style="font-size:12px">39.112.233</td><td style="font-size:12px">SIN-2026-0046</td><td style="font-size:11px;color:#374151">Galeno ART</td><td><span class="badge ba">Sin Respuesta</span></td><td style="font-size:12px;color:#9ca3af">05/04/2026</td><td><button data-n="Diego Gomez" data-d="39.112.233" data-s="SIN-2026-0046" data-e="Sin Respuesta" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#fee2e2;border:1px solid #fecaca;border-radius:5px;color:#991b1b;cursor:pointer">Ver</button></td></tr>
-        <tr><td><span class="wa" style="background:#dbeafe;color:#1e40af">RS</span>Roberto Sanchez</td><td style="font-size:12px">26.543.210</td><td style="font-size:12px">SIN-2026-0047</td><td style="font-size:11px;color:#374151">Provincia ART</td><td><span class="badge bg">Completos con DNI</span></td><td style="font-size:12px;color:#9ca3af">08/04/2026</td><td><button data-n="Roberto Sanchez" data-d="26.543.210" data-s="SIN-2026-0047" data-e="Completos con DNI" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:5px;color:#166534;cursor:pointer">Ver</button></td></tr>
-        <tr><td><span class="wa" style="background:#fff7ed;color:#c2410c">LF</span>Laura Fernandez</td><td style="font-size:12px">44.678.901</td><td style="font-size:12px">SIN-2026-0048</td><td style="font-size:11px;color:#374151">Swiss Medical ART</td><td><span class="badge ba2">Finalizados sin DNI</span></td><td style="font-size:12px;color:#9ca3af">09/04/2026</td><td><button data-n="Laura Fernandez" data-d="44.678.901" data-s="SIN-2026-0048" data-e="Finalizados sin DNI" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#fff7ed;border:1px solid #fed7aa;border-radius:5px;color:#c2410c;cursor:pointer">Ver</button></td></tr>
-      </tbody></table>
-    </div>
-  </div>
-div>
-    </div>
-  </div>
-
-  <div class="view" id="view-import">
-    <div class="panel" style="text-align:center;padding:52px">
-      <div style="width:56px;height:56px;border-radius:16px;background:#dcfce7;display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><svg viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2" style="width:28px;height:28px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="12" y2="12"/><line x1="15" y1="15" x2="12" y2="12"/></svg></div>
-      <div style="font-size:17px;font-weight:700;margin-bottom:8px">Importar Excel diario</div>
-      <div style="font-size:13px;color:#6b7280;margin-bottom:20px">Arrasta tu archivo Excel con los trabajadores del dia</div>
-      <button class="btn-p" style="padding:10px 24px">Seleccionar archivo</button>
-      <div style="font-size:11px;color:#9ca3af;margin-top:12px">Formatos: .xlsx, .xls, .csv - Max 10 MB</div>
-    </div>
-    <div class="panel"><div class="pt" style="margin-bottom:14px">Historial de importaciones</div>
-      <table><thead><tr><th>Archivo</th><th>Fecha</th><th>Trabajadores</th><th>Estado</th></tr></thead><tbody>
-        <tr><td>trabajadores_06-04-2026.xlsx</td><td>Hoy 08:00</td><td>12</td><td><span class="badge bg">Completado</span></td></tr>
-        <tr><td>listado_05-04-2026.xlsx</td><td>Ayer 08:15</td><td>8</td><td><span class="badge bg">Completado</span></td></tr>
-        <tr><td>siniestros_04-04-2026.xlsx</td><td>04/04/2026</td><td>5</td><td><span class="badge ba">Con advertencias</span></td></tr>
-      </tbody></table>
-    </div>
-  </div>
-
-  <div class="view" id="view-trab">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
-      <div><div style="font-size:20px;font-weight:700">Trabajadores</div><div style="font-size:13px;color:#6b7280;margin-top:2px">Seguimiento de cuestionarios</div></div>
-      <div style="display:flex;gap:8px"><button class="btn-s btn-sm" id="btn-ir-import">Importar Excel</button><button class="btn-p btn-sm">+ Agregar</button></div>
-    </div>
-    <div class="panel"><table><thead><tr><th>Trabajador</th><th>Siniestro</th><th>Cliente (ART)</th><th>Enviado</th><th>Estado</th><th>Via</th></tr></thead><tbody>
-      <tr><td><span class="wa" style="background:#dbeafe;color:#1e40af">JG</span>Juan Garcia</td><td>SIN-2026-0042</td><td>Provincia ART</td><td>06/04/2026</td><td><span class="badge bg">Efectivo</span></td><td>WhatsApp</td></tr>
-      <tr><td><span class="wa" style="background:#dcfce7;color:#166534">ML</span>Maria Lopez</td><td>SIN-2026-0043</td><td>Provincia ART</td><td>06/04/2026</td><td><span class="badge bg">Efectivo</span></td><td>WhatsApp</td></tr>
-      <tr><td><span class="wa" style="background:#fef3c7;color:#92400e">CR</span>Carlos Rodriguez</td><td>SIN-2026-0044</td><td>Galeno ART</td><td>05/04/2026</td><td><span class="badge bb">Refuerzo 1</span></td><td>WhatsApp</td></tr>
-      <tr><td><span class="wa" style="background:#fce7f3;color:#831843">AM</span>Ana Martinez</td><td>SIN-2026-0045</td><td>Galeno ART</td><td>04/04/2026</td><td><span class="badge bp">Refuerzo 2</span></td><td>WhatsApp</td></tr>
-      <tr><td><span class="wa" style="background:#fee2e2;color:#991b1b">DG</span>Diego Gomez</td><td>SIN-2026-0046</td><td>Provincia ART</td><td>03/04/2026</td><td><span class="badge br">No respondio</span></td><td>-</td></tr>
-      <tr><td><span class="wa" style="background:#dbeafe;color:#1e40af">RS</span>Roberto Sanchez</td><td>SIN-2026-0047</td><td>Swiss Medical</td><td>06/04/2026</td><td><span class="badge bg">Efectivo</span></td><td>WhatsApp</td></tr>
-      <tr><td><span class="wa" style="background:#dcfce7;color:#166534">LF</span>Laura Fernandez</td><td>SIN-2026-0048</td><td>Swiss Medical</td><td>06/04/2026</td><td><span class="badge bg">Efectivo</span></td><td>WhatsApp</td></tr>
-    </tbody></table></div>
-  </div>
-
-  <div class="view" id="view-rep">
-    <div style="margin-bottom:18px"><div style="font-size:20px;font-weight:700">Reportes</div><div style="font-size:13px;color:#6b7280;margin-top:2px">Exporta los datos en el formato que necesites</div></div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px">
-      <div class="panel" style="text-align:center;cursor:pointer"><div style="width:42px;height:42px;border-radius:50%;background:#dbeafe;display:flex;align-items:center;justify-content:center;margin:0 auto 12px"><svg viewBox="0 0 24 24" fill="none" stroke="#1e40af" stroke-width="2" style="width:20px;height:20px"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div><div style="font-size:14px;font-weight:700">Texto copiable</div><div style="font-size:12px;color:#6b7280;margin-top:4px">Para pegar en otro sistema</div></div>
-      <div class="panel" style="text-align:center;cursor:pointer"><div style="width:42px;height:42px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;margin:0 auto 12px"><svg viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2" style="width:20px;height:20px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div><div style="font-size:14px;font-weight:700">Excel / CSV</div><div style="font-size:12px;color:#6b7280;margin-top:4px">Planilla descargable</div></div>
-      <div class="panel" style="text-align:center;cursor:pointer"><div style="width:42px;height:42px;border-radius:50%;background:#fee2e2;display:flex;align-items:center;justify-content:center;margin:0 auto 12px"><svg viewBox="0 0 24 24" fill="none" stroke="#991b1b" stroke-width="2" style="width:20px;height:20px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg></div><div style="font-size:14px;font-weight:700">PDF</div><div style="font-size:12px;color:#6b7280;margin-top:4px">Documento formal</div></div>
-    </div>
-    <div class="panel"><div class="pt" style="margin-bottom:14px">Resumen por evento</div>
-      <table><thead><tr><th>Evento / ART</th><th>Enviados</th><th>Efectivos</th><th>Ref. 1</th><th>Ref. 2</th><th>Sin resp.</th><th>% Resp.</th></tr></thead><tbody>
-        <tr><td style="font-weight:600">Siniestro Vial - Provincia ART</td><td>8</td><td style="color:#3db87a;font-weight:700">6</td><td>1</td><td>0</td><td>1</td><td><span style="color:#3db87a;font-weight:700">75%</span></td></tr>
-        <tr><td style="font-weight:600">Accidente Laboral - Galeno ART</td><td>5</td><td style="color:#3db87a;font-weight:700">2</td><td>1</td><td>1</td><td>1</td><td><span style="color:#e67e22;font-weight:700">40%</span></td></tr>
-        <tr><td style="font-weight:600">Control - Swiss Medical</td><td>3</td><td style="color:#3db87a;font-weight:700">1</td><td>0</td><td>1</td><td>1</td><td><span style="color:#e24b4a;font-weight:700">33%</span></td></tr>
-      </tbody></table>
-    </div>
-  </div>
-
-  <div class="view" id="view-form">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-      <div><div style="font-size:20px;font-weight:700">Formularios / Flujos</div><div style="font-size:13px;color:#6b7280;margin-top:2px">Configuracion de cuestionarios por tipo de siniestro</div></div>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px">
-      <div class="panel" style="border-top:3px solid #4a90d9;cursor:pointer" id="card-laboral">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-          <span style="font-size:10px;background:#dbeafe;color:#1e40af;padding:2px 9px;border-radius:20px;font-weight:700">ACTIVO</span>
-          <span style="font-size:10px;color:#9ca3af">21 preguntas</span>
-        </div>
-        <div style="font-size:15px;font-weight:700;margin-bottom:4px">Siniestro Laboral</div>
-        <div style="font-size:12px;color:#6b7280;margin-bottom:12px">art_siniestros_full</div>
-        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px">
-          <span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">Titular</span>
-          <span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">Laboral</span>
-          <span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">Salud</span>
-          <span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">Siniestro</span>
-          <span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">DNI</span>
-        </div>
-        <div style="font-size:11px;color:#9ca3af;border-top:1px solid #f3f4f6;padding-top:8px">Usado en 8 casos activos</div>
-      </div>
-      <div class="panel" style="border-top:3px solid #8b5cf6;cursor:pointer" id="card-itinere">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-          <span style="font-size:10px;background:#f5f3ff;color:#6d28d9;padding:2px 9px;border-radius:20px;font-weight:700">ACTIVO</span>
-          <span style="font-size:10px;color:#9ca3af">26 preguntas</span>
-        </div>
-        <div style="font-size:15px;font-weight:700;margin-bottom:4px">Siniestro In Itinere</div>
-        <div style="font-size:12px;color:#6b7280;margin-bottom:12px">art_siniestros_full + bloque itinere</div>
-        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px">
-          <span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">Titular</span>
-          <span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">Laboral</span>
-          <span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">Salud</span>
-          <span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">Siniestro</span>
-          <span style="font-size:10px;background:#ede9fe;color:#6d28d9;padding:2px 7px;border-radius:4px">+ Itinere</span>
-          <span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">DNI</span>
-        </div>
-        <div style="font-size:11px;color:#9ca3af;border-top:1px solid #f3f4f6;padding-top:8px">Usado en 4 casos activos</div>
-      </div>
-      <div class="panel" style="border:2px dashed #d1d5db;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:160px;cursor:pointer;background:#fafafa" id="card-nuevo">
-        <div style="font-size:32px;color:#d1d5db;margin-bottom:8px">+</div>
-        <div style="font-size:13px;color:#9ca3af;font-weight:500">Nuevo flujo</div>
-        <div style="font-size:11px;color:#d1d5db;margin-top:4px">Configurar cuestionario</div>
-      </div>
-    </div>
-    <div class="panel" id="flujo-detalle">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-        <div><div class="pt" id="flujo-titulo">Flujo: Siniestro Laboral</div><div class="ps">Pasos del cuestionario enviado por WhatsApp</div></div>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
-        <div style="background:#f0f7ff;border-radius:8px;padding:12px;border:1px solid #bfdbfe">
-          <div style="font-size:10px;font-weight:700;color:#1e40af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Identificacion</div>
-          <div style="display:flex;flex-direction:column;gap:5px">
-            <div style="background:#fff;border:1px solid #e2e8f0;border-radius:5px;padding:6px 8px;font-size:11px;color:#374151">1. Bienvenida + titular (SI/NO)</div>
-            <div style="background:#fff;border:1px solid #e2e8f0;border-radius:5px;padding:6px 8px;font-size:11px;color:#374151">2. Confirmacion titular</div>
-            <div style="background:#fff;border:1px solid #e2e8f0;border-radius:5px;padding:6px 8px;font-size:11px;color:#374151">3. Tipo: Trabajo / In itinere</div>
-          </div>
-        </div>
-        <div style="background:#f0fdf4;border-radius:8px;padding:12px;border:1px solid #bbf7d0">
-          <div style="font-size:10px;font-weight:700;color:#166534;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Bloque Laboral</div>
-          <div style="display:flex;flex-direction:column;gap:5px">
-            <div style="background:#fff;border:1px solid #e2e8f0;border-radius:5px;padding:6px 8px;font-size:11px;color:#374151">4. Tarea <span style="color:#9ca3af">(min 3 palabras)</span></div>
-            <div style="background:#fff;border:1px solid #e2e8f0;border-radius:5px;padding:6px 8px;font-size:11px;color:#374151">5. Antiguedad (ano)</div>
-            <div style="background:#fff;border:1px solid #e2e8f0;border-radius:5px;padding:6px 8px;font-size:11px;color:#374151">6. Horario laboral</div>
-            <div style="background:#fff;border:1px solid #e2e8f0;border-radius:5px;padding:6px 8px;font-size:11px;color:#374151">7. Otro empleador</div>
-            <div style="background:#fff;border:1px solid #e2e8f0;border-radius:5px;padding:6px 8px;font-size:11px;color:#374151">8. Modalidad</div>
-          </div>
-        </div>
-        <div style="background:#fff8f0;border-radius:8px;padding:12px;border:1px solid #fed7aa">
-          <div style="font-size:10px;font-weight:700;color:#c2410c;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Salud + Siniestro</div>
-          <div style="display:flex;flex-direction:column;gap:5px">
-            <div style="background:#fff;border:1px solid #e2e8f0;border-radius:5px;padding:6px 8px;font-size:11px;color:#374151">9. Patologias previas</div>
-            <div style="background:#fff;border:1px solid #e2e8f0;border-radius:5px;padding:6px 8px;font-size:11px;color:#374151">10. Lesiones previas</div>
-            <div style="background:#fff;border:1px solid #e2e8f0;border-radius:5px;padding:6px 8px;font-size:11px;color:#374151">11. Accidente <span style="color:#9ca3af">(min 5 palabras)</span></div>
-            <div style="background:#fff;border:1px solid #e2e8f0;border-radius:5px;padding:6px 8px;font-size:11px;color:#374151">12. Lesiones <span style="color:#9ca3af">(min 3 palabras)</span></div>
-            <div style="background:#fff;border:1px solid #e2e8f0;border-radius:5px;padding:6px 8px;font-size:11px;color:#374151">13. Atencion medica</div>
-            <div style="background:#fff;border:1px solid #e2e8f0;border-radius:5px;padding:6px 8px;font-size:11px;color:#374151">14. Domicilio laboral</div>
-          </div>
-        </div>
-        <div style="background:#fafafa;border-radius:8px;padding:12px;border:1px solid #e2e8f0">
-          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Cierre</div>
-          <div style="display:flex;flex-direction:column;gap:5px">
-            <div style="background:#ede9fe;border:1px solid #ddd6fe;border-radius:5px;padding:6px 8px;font-size:11px;color:#6d28d9">+ Bloque Itinere (si aplica)</div>
-            <div style="background:#fff;border:1px solid #e2e8f0;border-radius:5px;padding:6px 8px;font-size:11px;color:#374151">25. Foto DNI frente y dorso</div>
-            <div style="background:#dcfce7;border:1px solid #bbf7d0;border-radius:5px;padding:6px 8px;font-size:11px;color:#166534;font-weight:600">Mensaje de cierre</div>
-          </div>
-          <div style="margin-top:10px;padding-top:10px;border-top:1px solid #e5e7eb">
-            <div style="font-size:10px;font-weight:600;color:#374151;margin-bottom:4px">Validaciones:</div>
-            <div style="font-size:10px;color:#6b7280;line-height:1.7">Tarea: min 3 palabras<br>Accidente: min 5 palabras<br>Lesiones: min 3 palabras<br>DNI: hasta 2 reintentos</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="view" id="view-asist">
-    <div style="margin-bottom:18px"><div style="font-size:20px;font-weight:700">Asistente ISL</div><div style="font-size:13px;color:#6b7280;margin-top:2px">Consultas sobre el sistema y flujos de trabajo</div></div>
-    <div class="bot-panel">
-      <div class="bot-hdr"><div><div class="bot-hdr-t">Asistente ISL</div><div class="bot-online"><div class="bot-dot"></div>En linea</div></div></div>
-      <div class="bot-msgs" id="asist-msgs">
-        <div class="msg-bot">Hola Florencia! Soy el asistente del sistema ISL.<br><br>Puedo ayudarte con consultas sobre casos activos, estados del flujo, configuracion de formularios por ART, importacion de Excel y reportes.<br><br>En que te ayudo hoy?</div>
-      </div>
-      <div class="bot-sugs" id="asist-sugs">
-        <div class="sug" id="sug1">Quienes estan en Refuerzo 2?</div>
-        <div class="sug" id="sug2">Como funcionan los plazos?</div>
-        <div class="sug" id="sug3">Agregar formulario nuevo</div>
-        <div class="sug" id="sug4">Exportar reporte de hoy</div>
-        <div class="sug" id="sug5">Que pasa si no responde?</div>
-      </div>
-      <div class="bot-typing" id="asist-typing">Escribiendo...</div>
-      <div class="bot-ir">
-        <input class="bot-in" id="asist-in" placeholder="Escribi tu consulta sobre el sistema ISL..."/>
-        <button class="bot-snd" id="bot-send-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg></button>
-      </div>
-    </div>
-  </div>
-
-  <div class="view" id="view-fb">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
-    <div><div style="font-size:20px;font-weight:700;color:#1a1f2e">Feedback</div><div style="font-size:13px;color:#6b7280;margin-top:2px">Gestioná el feedback y las correcciones al sistema</div></div>
-    <button class="btn-p btn-sm" id="btn-nuevo-fb">+ Nuevo feedback</button>
-  </div>
-  <div id="fb-form-wrap" style="display:none"><div class="panel" style="border:2px solid #3db87a;margin-bottom:18px"><div class="pt" style="margin-bottom:16px">Enviar nuevo feedback</div><div class="frow"><div class="fg"><label class="fl">Tipo</label><select class="fi" id="fb-tipo"><option value="bug">Bug</option><option value="feature">Nueva Funcionalidad</option><option value="cambio">Cambio</option><option value="sugerencia">Sugerencia</option></select></div><div class="fg"><label class="fl">Prioridad</label><select class="fi"><option>Alta</option><option selected>Media</option><option>Baja</option></select></div></div><div class="fg"><label class="fl">Descripcion</label><textarea class="fta" id="fb-desc" placeholder="Describí el problema o sugerencia..."></textarea></div><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px"><button class="btn-s" id="btn-cancel-fb">Cancelar</button><button class="btn-p" id="btn-enviar-fb">Enviar feedback</button></div></div></div>
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px">
-    <div class="panel" style="padding:14px;text-align:center;border-top:3px solid #ef4444"><div style="font-size:22px;font-weight:700;color:#ef4444">6</div><div style="font-size:11px;color:#6b7280;margin-top:2px;text-transform:uppercase;letter-spacing:.5px">Bugs</div></div>
-    <div class="panel" style="padding:14px;text-align:center;border-top:3px solid #3b82f6"><div style="font-size:22px;font-weight:700;color:#3b82f6">1</div><div style="font-size:11px;color:#6b7280;margin-top:2px;text-transform:uppercase;letter-spacing:.5px">Nueva Func.</div></div>
-    <div class="panel" style="padding:14px;text-align:center;border-top:3px solid #f59e0b"><div style="font-size:22px;font-weight:700;color:#f59e0b">1</div><div style="font-size:11px;color:#6b7280;margin-top:2px;text-transform:uppercase;letter-spacing:.5px">Cambios</div></div>
-    <div class="panel" style="padding:14px;text-align:center;border-top:3px solid #8b5cf6"><div style="font-size:22px;font-weight:700;color:#8b5cf6">2</div><div style="font-size:11px;color:#6b7280;margin-top:2px;text-transform:uppercase;letter-spacing:.5px">Sugerencias</div></div>
-  </div>
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-    <div class="tab-row" style="margin-bottom:0"><div class="tab active" id="tab-sistema">Sistema (10)</div><div class="tab" id="tab-ia">IA (0)</div><div class="tab" id="tab-todos-fb">Todos (10)</div></div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap"><button class="fb-filter active" data-filter="all" style="padding:4px 12px;border-radius:999px;border:1px solid #1a1f2e;background:#1a1f2e;color:#fff;font-size:12px;cursor:pointer">Todos</button><button class="fb-filter" data-filter="bug" style="padding:4px 12px;border-radius:999px;border:1px solid #fecaca;background:#fff5f5;color:#ef4444;font-size:12px;cursor:pointer">Bug</button><button class="fb-filter" data-filter="feature" style="padding:4px 12px;border-radius:999px;border:1px solid #bfdbfe;background:#eff6ff;color:#3b82f6;font-size:12px;cursor:pointer">Funcionalidad</button><button class="fb-filter" data-filter="cambio" style="padding:4px 12px;border-radius:999px;border:1px solid #fde68a;background:#fffbeb;color:#d97706;font-size:12px;cursor:pointer">Cambio</button><button class="fb-filter" data-filter="sugerencia" style="padding:4px 12px;border-radius:999px;border:1px solid #ddd6fe;background:#f5f3ff;color:#7c3aed;font-size:12px;cursor:pointer">Sugerencia</button></div>
-  </div>
-  <div id="fb-list">
-    <div class="panel fb-card" data-tipo="bug" style="margin-bottom:12px;border-left:4px solid #ef4444"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span style="font-size:11px;font-weight:700;color:#ef4444;background:#fff5f5;border:1px solid #fecaca;padding:2px 8px;border-radius:4px">BUG</span><span style="font-size:11px;font-weight:600;font-family:monospace">BUG-HAJ92</span><span style="font-size:11px;background:#fef3c7;color:#92400e;border:1px solid #fde68a;padding:2px 8px;border-radius:999px">Pendiente</span></div><div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font-size:11px;color:#9ca3af">08/04/2026</span><select class="fi" style="font-size:11px;padding:3px 6px;width:auto"><option>Pendiente</option><option>En Backlog</option><option>En proceso</option><option>Resuelto</option><option>Rechazado</option></select></div></div><p style="font-size:13px;color:#374151;line-height:1.5;margin-bottom:8px">Error 500 al seleccionar la seccion Reportes del sistema. El usuario no puede acceder a los reportes.</p><div style="font-size:11px;color:#9ca3af">Por: <strong>Administrador</strong></div></div>
-    <div class="panel fb-card" data-tipo="sugerencia" style="margin-bottom:12px;border-left:4px solid #8b5cf6"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span style="font-size:11px;font-weight:700;color:#7c3aed;background:#f5f3ff;border:1px solid #ddd6fe;padding:2px 8px;border-radius:4px">SUGERENCIA</span><span style="font-size:11px;font-weight:600;font-family:monospace">SUG-0K8J2</span><span style="font-size:11px;background:#dcfce7;color:#166534;border:1px solid #bbf7d0;padding:2px 8px;border-radius:999px">Resuelto</span></div><div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font-size:11px;color:#9ca3af">07/04/2026</span><select class="fi" style="font-size:11px;padding:3px 6px;width:auto"><option>Pendiente</option><option>En Backlog</option><option>En proceso</option><option selected>Resuelto</option><option>Rechazado</option></select></div></div><p style="font-size:13px;color:#374151;line-height:1.5;margin-bottom:8px">Ampliar el tiempo de sesion inactiva a 1 hora para evitar tener que volver a loguearse constantemente.</p><div style="font-size:11px;color:#9ca3af">Por: <strong>Florencia Dropulich</strong></div></div>
-    <div class="panel fb-card" data-tipo="bug" style="margin-bottom:12px;border-left:4px solid #ef4444"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span style="font-size:11px;font-weight:700;color:#ef4444;background:#fff5f5;border:1px solid #fecaca;padding:2px 8px;border-radius:4px">BUG</span><span style="font-size:11px;font-weight:600;font-family:monospace">BUG-NTKDE</span><span style="font-size:11px;background:#dcfce7;color:#166534;border:1px solid #bbf7d0;padding:2px 8px;border-radius:999px">Resuelto</span></div><div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font-size:11px;color:#9ca3af">07/04/2026</span><select class="fi" style="font-size:11px;padding:3px 6px;width:auto"><option>Pendiente</option><option>En Backlog</option><option>En proceso</option><option selected>Resuelto</option><option>Rechazado</option></select></div></div><p style="font-size:13px;color:#374151;line-height:1.5;margin-bottom:8px">Al crear una busqueda y guardarla no aparece el boton de editar requisitos.</p><div style="font-size:11px;color:#9ca3af">Por: <strong>Florencia Dropulich</strong></div></div>
-    <div class="panel fb-card" data-tipo="cambio" style="margin-bottom:12px;border-left:4px solid #f59e0b"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span style="font-size:11px;font-weight:700;color:#d97706;background:#fffbeb;border:1px solid #fde68a;padding:2px 8px;border-radius:4px">CAMBIO</span><span style="font-size:11px;font-weight:600;font-family:monospace">CHG-SGKN9</span><span style="font-size:11px;background:#dcfce7;color:#166534;border:1px solid #bbf7d0;padding:2px 8px;border-radius:999px">Resuelto</span></div><div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font-size:11px;color:#9ca3af">07/04/2026</span><select class="fi" style="font-size:11px;padding:3px 6px;width:auto"><option>Pendiente</option><option>En Backlog</option><option>En proceso</option><option selected>Resuelto</option><option>Rechazado</option></select></div></div><p style="font-size:13px;color:#374151;line-height:1.5;margin-bottom:8px">Agregar campo para asignar manualmente una busqueda a candidatos sin asignacion automatica.</p><div style="font-size:11px;color:#9ca3af">Por: <strong>Florencia Dropulich</strong></div></div>
-    <div class="panel fb-card" data-tipo="feature" style="margin-bottom:12px;border-left:4px solid #3b82f6"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span style="font-size:11px;font-weight:700;color:#3b82f6;background:#eff6ff;border:1px solid #bfdbfe;padding:2px 8px;border-radius:4px">FUNCIONALIDAD</span><span style="font-size:11px;font-weight:600;font-family:monospace">FTR-5XYL2</span><span style="font-size:11px;background:#dcfce7;color:#166534;border:1px solid #bbf7d0;padding:2px 8px;border-radius:999px">Resuelto</span></div><div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span style="font-size:11px;color:#9ca3af">07/04/2026</span><select class="fi" style="font-size:11px;padding:3px 6px;width:auto"><option>Pendiente</option><option>En Backlog</option><option>En proceso</option><option selected>Resuelto</option><option>Rechazado</option></select></div></div><p style="font-size:13px;color:#374151;line-height:1.5;margin-bottom:8px">Agregar filtro por ART en los reportes para segmentar datos por empresa aseguradora.</p><div style="font-size:11px;color:#9ca3af">Por: <strong>Florencia Dropulich</strong></div></div>
-  </div>
-</div>
-<div class="view" id="view-cfg">
-  <div style="margin-bottom:24px"><div style="font-size:20px;font-weight:700;color:#1a1f2e">Configuracion</div><div style="font-size:13px;color:#6b7280;margin-top:2px">Ajustes del sistema ISL (solo Admin)</div></div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
-    <div>
-      <div class="panel" style="margin-bottom:18px"><div class="pt" style="margin-bottom:16px">API y Conexiones</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f3f4f6"><div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:8px;background:#ea4b71;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700">n8n</div><div><div style="font-size:13px;font-weight:600">n8n Cloud</div><div style="font-size:11px;color:#6b7280">fdropulich.app.n8n.cloud</div></div></div><span style="font-size:11px;background:#dcfce7;color:#166534;border:1px solid #bbf7d0;padding:3px 10px;border-radius:999px;font-weight:600">Configurado</span></div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f3f4f6"><div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:8px;background:#f22f46;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700">TWL</div><div><div style="font-size:13px;font-weight:600">Twilio WhatsApp</div><div style="font-size:11px;color:#6b7280">+1 415 523 8886 - Sandbox</div></div></div><span style="font-size:11px;background:#dcfce7;color:#166534;border:1px solid #bbf7d0;padding:3px 10px;border-radius:999px;font-weight:600">Activo</span></div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f3f4f6"><div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:8px;background:#3ecf8e;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700">SB</div><div><div style="font-size:13px;font-weight:600">Supabase</div><div style="font-size:11px;color:#6b7280">isl-cuestionarios - Tabla: cases</div></div></div><span style="font-size:11px;background:#dcfce7;color:#166534;border:1px solid #bbf7d0;padding:3px 10px;border-radius:999px;font-weight:600">Configurado</span></div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f3f4f6"><div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:8px;background:#d97706;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700">AI</div><div><div style="font-size:13px;font-weight:600">Claude API (Anthropic)</div><div style="font-size:11px;color:#6b7280">claude-sonnet-4-20250514</div></div></div><span style="font-size:11px;background:#dcfce7;color:#166534;border:1px solid #bbf7d0;padding:3px 10px;border-radius:999px;font-weight:600">Configurado</span></div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0"><div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:8px;background:#ea4335;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700">G</div><div><div style="font-size:13px;font-weight:600">Gmail</div><div style="font-size:11px;color:#6b7280">testingislarg@gmail.com</div></div></div><span style="font-size:11px;background:#dcfce7;color:#166534;border:1px solid #bbf7d0;padding:3px 10px;border-radius:999px;font-weight:600">Conectado</span></div>
-      </div>
-      <div class="panel"><div class="pt" style="margin-bottom:16px">Flujo de trabajo</div>
-        <div class="tog-row"><div><div class="tog-label">Refuerzo automatico</div><div class="tog-sub">Envia refuerzo al vencer el plazo</div></div><div class="toggle on"></div></div>
-        <div class="tog-row"><div><div class="tog-label">Cierre automatico</div><div class="tog-sub">Cierra casos sin respuesta al Ref. 2</div></div><div class="toggle on"></div></div>
-        <div class="tog-row"><div><div class="tog-label">Alerta de vencimiento</div><div class="tog-sub">Notificacion 2hs antes del plazo</div></div><div class="toggle on"></div></div>
-        <div class="tog-row"><div><div class="tog-label">Reporte diario automatico</div><div class="tog-sub">Envia CSV por email a las 18hs</div></div><div class="toggle on"></div></div>
-        <div style="margin-top:14px;padding-top:12px;border-top:1px solid #f0f0f0">
-          <div class="fg"><label class="fl">Plazo inicial (hs)</label><input class="fi" value="24" type="number" style="width:90px"/></div>
-          <div class="fg"><label class="fl">Plazo Refuerzo 1 (hs)</label><input class="fi" value="24" type="number" style="width:90px"/></div>
-          <div class="fg"><label class="fl">Plazo Refuerzo 2 (hs)</label><input class="fi" value="24" type="number" style="width:90px"/></div>
-        </div>
-      </div>
-    </div>
-    <div>
-      <div class="panel" style="margin-bottom:18px"><div class="pt" style="margin-bottom:16px">Notificaciones</div>
-        <div class="tog-row"><div><div class="tog-label">Resumen diario por email</div><div class="tog-sub">mfdropulich@islarg.com.ar</div></div><div class="toggle on"></div></div>
-        <div class="tog-row"><div><div class="tog-label">Alerta de casos vencidos</div><div class="tog-sub">Al pasar 72hs sin respuesta</div></div><div class="toggle on"></div></div>
-        <div class="tog-row"><div><div class="tog-label">Notificacion de importacion</div><div class="tog-sub">Confirmar cuando se importa un Excel</div></div><div class="toggle"></div></div>
-      </div>
-      <div class="panel" style="margin-bottom:18px"><div class="pt" style="margin-bottom:4px">Etapa 2 - Pendiente IT</div>
-        <div style="font-size:12px;color:#6b7280;margin-bottom:14px">Requiere credenciales de IT</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f3f4f6"><div><div style="font-size:13px;font-weight:600">Azure AD - Client ID</div><div style="font-size:11px;color:#6b7280">Registro de aplicacion en Azure AD</div></div><span style="font-size:11px;background:#fef3c7;color:#92400e;border:1px solid #fde68a;padding:3px 10px;border-radius:999px;font-weight:600">Pendiente IT</span></div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f3f4f6"><div><div style="font-size:13px;font-weight:600">OneDrive / SharePoint</div><div style="font-size:11px;color:#6b7280">Importar Excel desde OneDrive automatico</div></div><span style="font-size:11px;background:#fef3c7;color:#92400e;border:1px solid #fde68a;padding:3px 10px;border-radius:999px;font-weight:600">Pendiente IT</span></div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0"><div><div style="font-size:13px;font-weight:600">Microsoft Graph API</div><div style="font-size:11px;color:#6b7280">Se activa cuando Azure AD este configurado</div></div><span style="font-size:11px;background:#fef3c7;color:#92400e;border:1px solid #fde68a;padding:3px 10px;border-radius:999px;font-weight:600">Pendiente IT</span></div>
-      </div>
-      <div class="panel"><div class="pt" style="margin-bottom:12px">Variables de entorno</div>
-        <div style="background:#0f172a;border-radius:8px;padding:14px;font-family:monospace;font-size:11px;color:#94a3b8;line-height:1.8">
-          <div><span style="color:#34d399">SUPABASE_URL</span>=<span style="color:#fbbf24">upfvmgpcc...supabase.co</span></div>
-          <div><span style="color:#34d399">SUPABASE_SERVICE_ROLE_KEY</span>=<span style="color:#f87171">configurado</span></div>
-          <div><span style="color:#34d399">ISL_API_KEY</span>=<span style="color:#f87171">configurado</span></div>
-          <div><span style="color:#94a3b8;opacity:.5">AZURE_CLIENT_ID</span>=<span style="color:#64748b">pendiente IT</span></div>
-          <div><span style="color:#94a3b8;opacity:.5">AZURE_TENANT_ID</span>=<span style="color:#64748b">pendiente IT</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="view" id="view-usr">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
-    <div><div style="font-size:20px;font-weight:700;color:#1a1f2e">Usuarios</div><div style="font-size:13px;color:#6b7280;margin-top:2px">Alta, baja y asignacion de roles</div></div>
-    <button class="btn-p btn-sm" id="btn-nuevo-usr">+ Nuevo usuario</button>
-  </div>
-  <div id="usr-form-wrap" style="display:none"><div class="panel" style="border:2px solid #3db87a;margin-bottom:18px"><div class="pt" style="margin-bottom:16px">Agregar nuevo usuario</div><div class="frow"><div class="fg"><label class="fl">Nombre completo</label><input class="fi" placeholder="Ej: Maria Gonzalez"/></div><div class="fg"><label class="fl">Email</label><input class="fi" type="email" placeholder="usuario@islarg.com.ar"/></div></div><div class="frow"><div class="fg"><label class="fl">Rol</label><select class="fi"><option>Administrador</option><option>RRHH</option><option>Entrevistador</option></select></div><div class="fg"><label class="fl">Estado</label><select class="fi"><option>Activo</option><option>Inactivo</option></select></div></div><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px"><button class="btn-s" id="btn-cancel-usr">Cancelar</button><button class="btn-p" id="btn-guardar-usr">Guardar usuario</button></div></div></div>
-  <div class="panel" style="margin-bottom:18px"><table><thead><tr><th>Nombre</th><th>Email</th><th>Rol</th><th>Estado</th><th>Ultimo login</th><th>Acciones</th></tr></thead><tbody>
-    <tr><td><div style="display:flex;align-items:center;gap:8px"><span class="wa" style="background:#dbeafe;color:#1e40af">FD</span><div><div style="font-weight:600">Florencia Dropulich</div><div style="font-size:11px;color:#6b7280">Administradora</div></div></div></td><td style="font-size:12px">mfdropulich@islarg.com.ar</td><td><select class="fi" style="font-size:11px;padding:3px 6px;width:auto"><option selected>Administrador</option><option>RRHH</option><option>Entrevistador</option></select></td><td><span class="badge bg">Activo</span></td><td style="font-size:12px;color:#6b7280">9/4/2026</td><td><div style="display:flex;gap:6px"><button class="btn-s" style="font-size:11px;padding:3px 10px">Desactivar</button><button class="btn-s" style="font-size:11px;padding:3px 10px">Reset clave</button></div></td></tr>
-    <tr><td><div style="display:flex;align-items:center;gap:8px"><span class="wa" style="background:#dcfce7;color:#166534">GR</span><div><div style="font-weight:600">Gustavo Rodriguez</div><div style="font-size:11px;color:#6b7280">Operador</div></div></div></td><td style="font-size:12px">grodriguez@islarg.com.ar</td><td><select class="fi" style="font-size:11px;padding:3px 6px;width:auto"><option>Administrador</option><option selected>RRHH</option><option>Entrevistador</option></select></td><td><span class="badge bg">Activo</span></td><td style="font-size:12px;color:#6b7280">01/04/2026</td><td><div style="display:flex;gap:6px"><button class="btn-s" style="font-size:11px;padding:3px 10px">Desactivar</button><button class="btn-s" style="font-size:11px;padding:3px 10px">Reset clave</button></div></td></tr>
-    <tr style="opacity:.7"><td><div style="display:flex;align-items:center;gap:8px"><span class="wa" style="background:#f3f4f6;color:#6b7280">ML</span><div><div style="font-weight:600">Maria Lopez</div></div></div></td><td style="font-size:12px">mlopez@islarg.com.ar</td><td><select class="fi" style="font-size:11px;padding:3px 6px;width:auto"><option>Administrador</option><option selected>RRHH</option><option>Entrevistador</option></select></td><td><span class="badge ba">Inactivo</span></td><td style="font-size:12px;color:#6b7280">28/03/2026</td><td><div style="display:flex;gap:6px"><button class="btn-s" style="font-size:11px;padding:3px 10px;background:#dcfce7;color:#166534;border-color:#bbf7d0">Activar</button><button class="btn-s" style="font-size:11px;padding:3px 10px;color:#ef4444;border-color:#fecaca">Eliminar</button></div></td></tr>
-  </tbody></table></div>
-  <div class="panel" style="border:2px solid #3db87a"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="width:10px;height:10px;border-radius:50%;background:#3db87a;animation:pulse 2s infinite"></div><div class="pt" style="margin-bottom:0">Chatbot ISL - En linea</div></div>
-    <div style="font-size:12px;color:#6b7280;margin-bottom:12px">Asistente virtual disponible 24/7 para consultas del sistema.</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px"><div style="background:#f0f9f4;border:1px solid #bbf7d0;border-radius:8px;padding:10px"><div style="font-size:11px;font-weight:600;color:#166534;margin-bottom:4px">Estado</div><div style="display:flex;align-items:center;gap:6px"><div style="width:8px;height:8px;border-radius:50%;background:#22c55e"></div><span style="font-size:12px;color:#166534;font-weight:600">En linea</span></div></div><div style="background:#f0f9f4;border:1px solid #bbf7d0;border-radius:8px;padding:10px"><div style="font-size:11px;font-weight:600;color:#166534;margin-bottom:4px">Modelo</div><div style="font-size:12px;color:#374151">Claude Sonnet 4</div></div></div>
-    <div style="background:#f8fafc;border-radius:8px;padding:12px;font-size:12px;color:#6b7280;margin-bottom:12px"><strong style="color:#374151">Consultas frecuentes:</strong> estado de casos, plazos de refuerzo, importacion de Excel, reportes diarios.</div>
-    <div style="display:flex;justify-content:flex-end"><button class="btn-p btn-sm" onclick="navTo('asist')">Abrir Asistente ISL</button></div>
-  </div>
-</div>
-
-</div>
-</div>
-</div>
-<script>
+document.getElementById('isl-btn').addEventListener('click',islLogin);
+document.getElementById('isl-email').addEventListener('keydown',function(ev){if(ev.key==='Enter')islLogin();});
+document.getElementById('isl-pass').addEventListener('keydown',function(ev){if(ev.key==='Enter')islLogin();});
+document.getElementById('btn-logout').addEventListener('click',islLogout);
+try{var _su=sessionStorage.getItem('isl_u');if(_su&&ISL_U[_su]){document.getElementById('isl-login').classList.add('hidden');if(ISL_ADMIN.indexOf(_su)<0){var _nf=document.getElementById('btn-nuevo-flujo');if(_nf)_nf.style.display='none';}}}catch(x){}
 var VIEWS={inicio:'Hola, Florencia',import:'Importar Excel',trab:'Trabajadores',rep:'Reportes',form:'Formularios',asist:'Asistente ISL',fb:'Feedback',cfg:'Configuracion',usr:'Usuarios'};
-var _d=new Date(),_days=['domingo','lunes','martes','miercoles','jueves','viernes','sabado'],_months=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+var _D=new Date(),_DAYS=['domingo','lunes','martes','miercoles','jueves','viernes','sabado'],_MONTHS=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 function navTo(n){
   document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active');});
   document.querySelectorAll('.nav').forEach(function(x){x.classList.remove('active');});
   var v=document.getElementById('view-'+n);if(v)v.classList.add('active');
   var nav=document.getElementById('nav-'+n);if(nav)nav.classList.add('active');
   var t=document.getElementById('h-title');if(t)t.textContent=VIEWS[n]||'ISL';
-  var s=document.getElementById('h-sub');if(s)s.textContent=(n==='inicio')?_days[_d.getDay()]+', '+_d.getDate()+' de '+_months[_d.getMonth()]+' de '+_d.getFullYear():'';
+  var s=document.getElementById('h-sub');if(s)s.textContent=n==='inicio'?_DAYS[_D.getDay()]+', '+_D.getDate()+' de '+_MONTHS[_D.getMonth()]+' de '+_D.getFullYear():'';
   window.scrollTo(0,0);
 }
-window.onload=function(){
-  navTo('inicio');
-  var s=document.getElementById('h-sub');if(s)s.textContent=_days[_d.getDay()]+', '+_d.getDate()+' de '+_months[_d.getMonth()]+' de '+_d.getFullYear();
-  ['inicio','import','trab','rep','form','asist','fb','cfg','usr'].forEach(function(n){
-    var el=document.getElementById('nav-'+n);if(el)el.addEventListener('click',function(){navTo(n);});
-  });
-  var bvt=document.getElementById('btn-ver-todos');if(bvt)bvt.addEventListener('click',function(){navTo('trab');});
-  var cl=document.getElementById('card-laboral');if(cl)cl.addEventListener('click',function(){verFlujo('laboral');});
-  var ci=document.getElementById('card-itinere');if(ci)ci.addEventListener('click',function(){verFlujo('itinere');});
-  var ble=document.getElementById('link-efectivos');if(ble)ble.addEventListener('click',function(){navTo('trab');});
-  document.querySelectorAll('.toggle').forEach(function(t){t.addEventListener('click',function(){this.classList.toggle('on');});});
-  // Filtros
-  var bf=document.getElementById('btn-filtrar');if(bf)bf.addEventListener('click',filtrarCasos);
-  var bl=document.getElementById('btn-limpiar');if(bl)bl.addEventListener('click',limpiarFiltro);
-  var be=document.getElementById('btn-exportar');if(be)be.addEventListener('click',exportarCSV);
-  // Tabla ver buttons
-  document.querySelectorAll('.btn-ver').forEach(function(btn){btn.addEventListener('click',function(){verResp(this);});});
-  // Formularios cards
-  var cl=document.getElementById('card-laboral');if(cl)cl.addEventListener('click',function(){verFlujo('laboral');});
-  var ci=document.getElementById('card-itinere');if(ci)ci.addEventListener('click',function(){verFlujo('itinere');});
-  // Asistente
-  var inp=document.getElementById('asist-in');if(inp)inp.addEventListener('keydown',function(e){if(e.key==='Enter')sendMsg(this.value);});
-  var sb=document.getElementById('bot-send-btn');if(sb)sb.addEventListener('click',function(){sendMsg(document.getElementById('asist-in').value);});
-  [['sug1','Quienes estan en Refuerzo hoy?'],['sug2','Como funcionan los plazos?'],['sug3','Como configuro un formulario?'],['sug4','Como exporto el reporte?'],['sug5','Que pasa si no responde?']].forEach(function(x){var el=document.getElementById(x[0]);if(el)el.addEventListener('click',function(){sendMsg(x[1]);});});
-};
-function parseFechaArg(s){if(!s)return null;var p=s.split('/');return p.length===3?new Date(p[2],p[1]-1,p[0]):null;}
-function parseDateInput(s){if(!s)return null;var p=s.split('-');return new Date(p[0],p[1]-1,p[2]);}
+navTo('inicio');
+document.getElementById('h-sub').textContent=_DAYS[_D.getDay()]+', '+_D.getDate()+' de '+_MONTHS[_D.getMonth()]+' de '+_D.getFullYear();
+['inicio','import','trab','rep','form','asist','fb','cfg','usr'].forEach(function(n){var el=document.getElementById('nav-'+n);if(el)el.addEventListener('click',function(){navTo(n);});});
+document.getElementById('link-efectivos').addEventListener('click',function(){navTo('trab');});
+document.getElementById('btn-ir-import').addEventListener('click',function(){navTo('import');});
 function filtrarCasos(){
-  var desde=parseDateInput(document.getElementById('filtro-desde').value);
-  var hasta=parseDateInput(document.getElementById('filtro-hasta').value);
-  var estado=document.getElementById('filtro-estado').value;
-  var rows=document.querySelectorAll('#casos-tbody tr');
-  var count=0;
-  rows.forEach(function(r){
-    var est=r.querySelector('.badge')?r.querySelector('.badge').textContent.trim():'';
-    var cells=r.querySelectorAll('td');
-    var fechaTxt=cells[5]?cells[5].textContent.trim():'';
-    var fecha=parseFechaArg(fechaTxt);
-    var showEst=!estado||est===estado;
-    var showDesde=!desde||!fecha||(fecha>=desde);
-    var showHasta=!hasta||!fecha||(fecha<=hasta);
-    var show=showEst&&showDesde&&showHasta;
-    r.style.display=show?'':'none';
-    if(show)count++;
+  var desde=document.getElementById('f-desde').value,hasta=document.getElementById('f-hasta').value,estado=document.getElementById('f-estado').value,art=document.getElementById('f-art').value,count=0;
+  document.querySelectorAll('#casos-tbody tr').forEach(function(r){
+    var fecha=r.getAttribute('data-fecha')||'',est=r.querySelector('.badge')?r.querySelector('.badge').textContent.trim():'',artTxt=r.querySelectorAll('td')[3]?r.querySelectorAll('td')[3].textContent.trim():'';
+    var ok=(!desde||fecha>=desde)&&(!hasta||fecha<=hasta)&&(!estado||est===estado)&&(!art||artTxt===art);
+    r.style.display=ok?'':'none';if(ok)count++;
   });
-  var sub=document.getElementById('tabla-sub');
-  if(sub)sub.textContent=estado?count+' resultado(s) filtrados':'Todos los siniestros activos';
+  document.getElementById('tabla-sub').textContent=(desde||hasta||estado||art)?count+' resultado(s)':'Todos los siniestros activos';
 }
 function limpiarFiltro(){
-  document.getElementById('filtro-desde').value='';
-  document.getElementById('filtro-hasta').value='';
-  document.getElementById('filtro-estado').value='';
+  ['f-desde','f-hasta','f-estado','f-art'].forEach(function(id){document.getElementById(id).value='';});
   document.querySelectorAll('#casos-tbody tr').forEach(function(r){r.style.display='';});
-  var sub=document.getElementById('tabla-sub');if(sub)sub.textContent='Todos los siniestros activos';
+  document.getElementById('tabla-sub').textContent='Todos los siniestros activos';
 }
-function exportarCSV(){
-  var rows=[['Nombre y Apellido','DNI','Siniestro','Estado','Fecha']];
-  document.querySelectorAll('#casos-tbody tr').forEach(function(r){
-    if(r.style.display!=='none'){
-      var c=r.querySelectorAll('td');
-      rows.push([c[0].textContent.trim(),c[1].textContent.trim(),c[2].textContent.trim(),c[3].textContent.trim(),c[4].textContent.trim()]);
-    }
+function exportCSV(tbodyId,fname){
+  var tbody=document.getElementById(tbodyId),table=tbody.closest('table'),headers=[];
+  table.querySelectorAll('thead th').forEach(function(th){var t=th.textContent.trim();if(t)headers.push('"'+t+'"');});
+  var rows=[headers.join(',')];
+  tbody.querySelectorAll('tr').forEach(function(r){if(r.style.display==='none')return;var cells=[];r.querySelectorAll('td').forEach(function(td,i){if(i<headers.length)cells.push('"'+td.textContent.trim().replace(/"/g,"''")+'"');});if(cells.length)rows.push(cells.join(','));});
+  var a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(rows.join('
+'));a.download=(fname||'export')+'.csv';a.click();
+}
+document.getElementById('btn-filtrar').addEventListener('click',filtrarCasos);
+document.getElementById('btn-limpiar').addEventListener('click',limpiarFiltro);
+document.getElementById('btn-exportar').addEventListener('click',function(){exportCSV('casos-tbody','casos_isl');});
+function filtrarTrab(){
+  var q=(document.getElementById('t-buscar').value||'').toLowerCase(),estado=document.getElementById('t-estado').value,art=document.getElementById('t-art').value,count=0;
+  document.querySelectorAll('#trab-tbody tr').forEach(function(r){
+    var txt=r.textContent.toLowerCase(),est=r.querySelector('.badge')?r.querySelector('.badge').textContent.trim():'',artTxt=r.querySelectorAll('td')[4]?r.querySelectorAll('td')[4].textContent.trim():'';
+    var ok=(!q||txt.includes(q))&&(!estado||est===estado)&&(!art||artTxt===art);
+    r.style.display=ok?'':'none';if(ok)count++;
   });
-  var a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(rows.map(function(r){return r.join(',');}).join('\n'));a.download='casos_isl.csv';a.click();
+  document.getElementById('trab-sub').textContent=count+' trabajadores';
 }
+function limpiarTrab(){
+  ['t-buscar','t-estado','t-art'].forEach(function(id){document.getElementById(id).value='';});
+  document.querySelectorAll('#trab-tbody tr').forEach(function(r){r.style.display='';});
+  document.getElementById('trab-sub').textContent='7 trabajadores registrados';
+}
+document.getElementById('btn-tf').addEventListener('click',filtrarTrab);
+document.getElementById('btn-tl').addEventListener('click',limpiarTrab);
+document.getElementById('btn-te').addEventListener('click',function(){exportCSV('trab-tbody','trabajadores_isl');});
+document.getElementById('t-buscar').addEventListener('keydown',function(ev){if(ev.key==='Enter')filtrarTrab();});
 function verResp(btn){
-  var n=btn.getAttribute('data-n'),d=btn.getAttribute('data-d'),s=btn.getAttribute('data-s'),e=btn.getAttribute('data-e');
-  var ec=e.includes('Completo')?'#dcfce7':e.includes('Refuerzo')?'#fef3c7':e.includes('Sin DNI')?'#fff7ed':'#fee2e2';
-  var et=e.includes('Completo')?'#166534':e.includes('Refuerzo')?'#92400e':e.includes('Sin DNI')?'#c2410c':'#991b1b';
-  var resp=e.includes('Completo')?'Confirma atencion medica correctamente. DNI adjunto.':e.includes('Refuerzo')?'Sin respuesta. Recordatorios enviados.':e.includes('Sin DNI')?'Cuestionario completo. Pendiente foto de DNI.':'No respondio. Caso cerrado.';
+  var n=btn.getAttribute('data-n'),d=btn.getAttribute('data-d'),s=btn.getAttribute('data-s'),a=btn.getAttribute('data-a'),e=btn.getAttribute('data-e');
+  var ec=e.includes('Completo')?'#dcfce7':e.includes('Refuerzo')?'#fef3c7':e.includes('sin DNI')?'#fff7ed':'#fee2e2';
+  var et=e.includes('Completo')?'#166534':e.includes('Refuerzo')?'#92400e':e.includes('sin DNI')?'#c2410c':'#991b1b';
+  var resp=e.includes('Completo')?'Confirma atencion medica. DNI adjunto.':e.includes('Refuerzo')?'Sin respuesta. Recordatorios enviados.':e.includes('sin DNI')?'Cuestionario completo. Pendiente DNI.':'No respondio. Caso cerrado.';
   var m=document.getElementById('isl-rm');
-  if(!m){m=document.createElement('div');m.id='isl-rm';m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;display:flex;align-items:center;justify-content:center';document.body.appendChild(m);}
-  var card=document.createElement('div');
-  card.style.cssText='background:#fff;border-radius:12px;padding:28px;max-width:480px;width:90%;box-shadow:0 20px 40px rgba(0,0,0,.25)';
-  card.innerHTML='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px"><div><div style="font-size:16px;font-weight:700">'+n+'</div><div style="font-size:12px;color:#9ca3af;margin-top:2px">DNI: '+d+' &nbsp;|&nbsp; '+s+'</div></div><button id="rm-x" style="background:#f3f4f6;border:none;border-radius:8px;width:30px;height:30px;font-size:18px;cursor:pointer">&times;</button></div><div style="background:#f8fafc;border-radius:8px;padding:10px 12px;margin-bottom:12px"><span style="background:'+ec+';color:'+et+';padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600">'+e+'</span></div><div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px;margin-bottom:16px"><div style="font-size:11px;font-weight:600;color:#166534;margin-bottom:6px">RESPUESTA VIA WHATSAPP</div><div style="font-size:13px;color:#374151;line-height:1.6">'+resp+'</div></div><div style="display:flex;gap:8px;justify-content:flex-end"><button id="rm-c" style="padding:7px 14px;border-radius:7px;border:1px solid #d1d5db;background:#fff;cursor:pointer;font-size:13px">Cerrar</button><button id="rm-d" style="padding:7px 14px;border-radius:7px;border:none;background:#3db87a;color:#fff;cursor:pointer;font-size:13px;font-weight:600">Descargar</button></div>';
+  var card=document.createElement('div');card.style.cssText='background:#fff;border-radius:12px;padding:28px;max-width:480px;width:90%;box-shadow:0 20px 40px rgba(0,0,0,.25)';
+  card.innerHTML='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px"><div><div style="font-size:16px;font-weight:700">'+n+'</div><div style="font-size:12px;color:#9ca3af;margin-top:2px">DNI: '+d+' | '+s+'</div><div style="font-size:12px;color:#9ca3af">'+a+'</div></div><button id="rm-x" style="background:#f3f4f6;border:none;border-radius:8px;width:30px;height:30px;font-size:18px;cursor:pointer">&times;</button></div><div style="background:#f8fafc;border-radius:8px;padding:10px 12px;margin-bottom:12px"><span style="background:'+ec+';color:'+et+';padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600">'+e+'</span></div><div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px;margin-bottom:16px"><div style="font-size:11px;font-weight:600;color:#166534;margin-bottom:6px">RESPUESTA VIA WHATSAPP</div><div style="font-size:13px;color:#374151;line-height:1.6">'+resp+'</div></div><div style="display:flex;gap:8px;justify-content:flex-end"><button id="rm-c" style="padding:7px 14px;border-radius:7px;border:1px solid #d1d5db;background:#fff;cursor:pointer;font-size:13px">Cerrar</button><button id="rm-d" style="padding:7px 14px;border-radius:7px;border:none;background:#3db87a;color:#fff;cursor:pointer;font-size:13px;font-weight:600">Descargar</button></div>';
   m.innerHTML='';m.appendChild(card);m.style.display='flex';
   document.getElementById('rm-x').onclick=document.getElementById('rm-c').onclick=function(){m.style.display='none';};
-  document.getElementById('rm-d').onclick=function(){var txt='ISL\nTrabajador: '+n+'\nDNI: '+d+'\nSiniestro: '+s+'\nEstado: '+e+'\nRespuesta: '+resp+'\nFecha: '+new Date().toLocaleDateString('es-AR');var a=document.createElement('a');a.href='data:text/plain;charset=utf-8,'+encodeURIComponent(txt);a.download='comunicacion_'+s+'.txt';a.click();};
+  document.getElementById('rm-d').onclick=function(){var txt='ISL\nTrabajador: '+n+'\nDNI: '+d+'\nSiniestro: '+s+'\nART: '+a+'\nEstado: '+e+'\nRespuesta: '+resp+'\nFecha: '+new Date().toLocaleDateString('es-AR');var lnk=document.createElement('a');lnk.href='data:text/plain;charset=utf-8,'+encodeURIComponent(txt);lnk.download='comunicacion_'+s+'.txt';lnk.click();};
 }
-function verFlujo(tipo){
-  var t=document.getElementById('flujo-titulo');if(t)t.textContent='Flujo: '+(tipo==='laboral'?'Siniestro Laboral':'Siniestro In Itinere');
-}
-function sendMsg(msg){
-  msg=msg.trim();if(!msg)return;
-  var msgs=document.getElementById('asist-msgs'),inp=document.getElementById('asist-in'),typ=document.getElementById('asist-typing');
-  msgs.innerHTML+='<div class="msg-u">'+msg+'</div>';
-  inp.value='';document.getElementById('asist-sugs').style.display='none';msgs.scrollTop=msgs.scrollHeight;typ.style.display='block';
-  setTimeout(function(){typ.style.display='none';msgs.innerHTML+='<div class="msg-bot">Consulta recibida. Conectate a la API para respuestas en tiempo real.</div>';msgs.scrollTop=msgs.scrollHeight;},1200);
-}
+document.querySelectorAll('.btn-ver').forEach(function(b){b.addEventListener('click',function(){verResp(this);});});
+var flujoActivo='laboral';
+document.getElementById('card-laboral').addEventListener('click',function(){verFlujo('laboral');});
+document.getElementById('card-itinere').addEventListener('click',function(){verFlujo('itinere');});
+document.getElementById('card-nuevo').addEventListener('click',function(){document.getElementById('modal-nf').style.display='flex';});
+document.getElementById('btn-nuevo-flujo').addEventListener('click',function(){document.getElementById('modal-nf').style.display='flex';});
+function verFlujo(tipo){flujoActivo=tipo;var t=document.getElementById('flujo-titulo');if(t)t.textContent='Flujo: '+(tipo==='laboral'?'Siniestro Laboral':'Siniestro In Itinere');document.getElementById('edit-panel').style.display='none';document.getElementById('btn-editar-flujo').style.display='';document.getElementById('btn-guardar-flujo').style.display='none';}
+document.getElementById('btn-editar-flujo').addEventListener('click',function(){
+  var steps=flujoActivo==='laboral'?['1. Bienvenida + titular','2. Confirmacion titular','3. Tipo accidente','4. Tarea','5. Antiguedad','6. Horario','7. Otro empleador','8. Modalidad','9. Patologias previas','10. Lesiones previas','11. Descripcion accidente','12. Lesiones','13. Atencion medica','14. Domicilio laboral','25. Foto DNI']:['1. Bienvenida + titular','2. Confirmacion titular','3. Tipo accidente','4. Tarea','5. Antiguedad','6. Horario','7. Otro empleador','8. Modalidad','9. Patologias previas','10. Lesiones previas','11. Descripcion accidente','12. Lesiones','13. Atencion medica','14. Domicilio laboral','15. Destino','16. Movilidad','17. Trayecto','18. Validacion domicilio','19. Desvio','20. Segundo empleo','21. Denuncia policial','22. Terceros','23. Vehiculos','24. Transporte publico','25. Foto DNI'];
+  var list=document.getElementById('edit-list');list.innerHTML='';
+  steps.forEach(function(step,i){var row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:8px';row.innerHTML='<span style="font-size:11px;color:#9ca3af;width:20px">'+(i+1)+'</span><input type="text" value="'+step.replace(/"/g,'&quot;')+'" style="flex:1;padding:6px 10px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;outline:none"/><button style="background:#fee2e2;border:none;border-radius:5px;padding:3px 8px;color:#991b1b;cursor:pointer;font-size:12px" onclick="this.closest('div').remove()">X</button>';list.appendChild(row);});
+  document.getElementById('edit-panel').style.display='block';this.style.display='none';document.getElementById('btn-guardar-flujo').style.display='';
+});
+document.getElementById('btn-guardar-flujo').addEventListener('click',function(){var n=document.querySelectorAll('#edit-list input').length;document.getElementById('edit-panel').style.display='none';this.style.display='none';document.getElementById('btn-editar-flujo').style.display='';alert('Flujo guardado. '+n+' pasos.');});
+document.getElementById('btn-add-step').addEventListener('click',function(){var list=document.getElementById('edit-list');var n=list.children.length+1;var row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:8px';row.innerHTML='<span style="font-size:11px;color:#9ca3af;width:20px">'+n+'</span><input type="text" placeholder="Nueva pregunta..." style="flex:1;padding:6px 10px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;outline:none"/><button style="background:#fee2e2;border:none;border-radius:5px;padding:3px 8px;color:#991b1b;cursor:pointer;font-size:12px" onclick="this.closest('div').remove()">X</button>';list.appendChild(row);row.querySelector('input').focus();});
+document.getElementById('btn-cancelar-nf').addEventListener('click',function(){document.getElementById('modal-nf').style.display='none';});
+document.getElementById('btn-crear-nf').addEventListener('click',function(){var nombre=document.getElementById('nf-nombre').value.trim();if(!nombre){alert('Ingresa un nombre');return;}document.getElementById('modal-nf').style.display='none';alert('Flujo "'+nombre+'" creado.');document.getElementById('nf-nombre').value='';document.getElementById('nf-art').value='';});
+document.getElementById('drop-zone').addEventListener('click',function(){document.getElementById('excel-input').click();});
+document.getElementById('btn-sel-file').addEventListener('click',function(ev){ev.stopPropagation();document.getElementById('excel-input').click();});
+document.getElementById('drop-zone').addEventListener('dragover',function(ev){ev.preventDefault();this.style.borderColor='#3db87a';});
+document.getElementById('drop-zone').addEventListener('dragleave',function(){this.style.borderColor='#d1d5db';});
+document.getElementById('drop-zone').addEventListener('drop',function(ev){ev.preventDefault();this.style.borderColor='#d1d5db';if(ev.dataTransfer.files[0])handleExcel(ev.dataTransfer.files[0]);});
+document.getElementById('excel-input').addEventListener('change',function(){if(this.files[0])handleExcel(this.files[0]);});
+function handleExcel(file){var res=document.getElementById('import-result');res.style.display='block';res.innerHTML='<div style="padding:14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;font-size:13px;color:#166534">Procesando <strong>'+file.name+'</strong>...</div>';setTimeout(function(){res.innerHTML='<div style="padding:14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px"><div style="font-size:14px;font-weight:700;color:#166534;margin-bottom:4px">Archivo recibido</div><div style="font-size:13px;color:#166534">Conecta la API ISL para importar los datos.</div></div>';document.getElementById('excel-input').value='';},1500);}
+function sendMsg(msg){msg=msg.trim();if(!msg)return;var msgs=document.getElementById('asist-msgs'),inp=document.getElementById('asist-in'),typ=document.getElementById('asist-typing');msgs.innerHTML+='<div class="msg-u">'+msg+'</div>';inp.value='';document.getElementById('asist-sugs').style.display='none';msgs.scrollTop=msgs.scrollHeight;typ.style.display='block';setTimeout(function(){typ.style.display='none';msgs.innerHTML+='<div class="msg-bot">Conecta el Asistente a la API para respuestas en tiempo real.</div>';msgs.scrollTop=msgs.scrollHeight;},1200);}
+document.getElementById('bot-send-btn').addEventListener('click',function(){sendMsg(document.getElementById('asist-in').value);});
+document.getElementById('asist-in').addEventListener('keydown',function(ev){if(ev.key==='Enter')sendMsg(this.value);});
+[['sug1','Quienes estan en Refuerzo?'],['sug2','Como funcionan los plazos?'],['sug3','Como configuro un formulario?'],['sug4','Como exporto el reporte?'],['sug5','Que pasa si no responde?']].forEach(function(x){var el=document.getElementById(x[0]);if(el)el.addEventListener('click',function(){sendMsg(x[1]);});});
+document.getElementById('btn-nuevo-fb').addEventListener('click',function(){var w=document.getElementById('fb-wrap');w.style.display=w.style.display==='none'?'block':'none';});
+document.getElementById('btn-fb-cancel').addEventListener('click',function(){document.getElementById('fb-wrap').style.display='none';});
+document.getElementById('btn-fb-send').addEventListener('click',function(){document.getElementById('fb-wrap').style.display='none';alert('Feedback enviado!');});
+document.getElementById('btn-nuevo-usr').addEventListener('click',function(){var w=document.getElementById('usr-wrap');w.style.display=w.style.display==='none'?'block':'none';});
+document.getElementById('btn-usr-cancel').addEventListener('click',function(){document.getElementById('usr-wrap').style.display='none';});
+document.getElementById('btn-usr-save').addEventListener('click',function(){document.getElementById('usr-wrap').style.display='none';alert('Usuario guardado.');});
 </script>
-<div style="position:fixed;bottom:0;left:0;width:230px;padding:10px 16px;background:#141824;border-top:1px solid rgba(255,255,255,.06);z-index:100"><button onclick="islLogout()" style="width:100%;padding:8px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#8892a4;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Cerrar sesion</button></div>
 </body>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </html>
+  </html>
