@@ -307,18 +307,28 @@ function islLogin(){
   err.style.display='none';
   try{sessionStorage.setItem('isl_u',e);}catch(x){}
   document.getElementById('isl-login').classList.add('hidden');
-  if(ISL_ADMIN.indexOf(e)<0){var nf=document.getElementById('btn-nuevo-flujo');if(nf)nf.style.display='none';var be=document.getElementById('btn-editar-flujo');if(be)be.style.display='none';}
+  if(ISL_ADMIN.indexOf(e)<0){
+    var nf=document.getElementById('btn-nuevo-flujo');if(nf)nf.style.display='none';
+    var be=document.getElementById('btn-editar-flujo');if(be)be.style.display='none';
+  }
 }
 function islLogout(){
   try{sessionStorage.removeItem('isl_u');}catch(x){}
-  document.getElementById('isl-email').value='';document.getElementById('isl-pass').value='';
+  document.getElementById('isl-email').value='';
+  document.getElementById('isl-pass').value='';
   document.getElementById('isl-login').classList.remove('hidden');
 }
 document.getElementById('isl-btn').addEventListener('click',islLogin);
 document.getElementById('isl-email').addEventListener('keydown',function(ev){if(ev.key==='Enter')islLogin();});
 document.getElementById('isl-pass').addEventListener('keydown',function(ev){if(ev.key==='Enter')islLogin();});
 document.getElementById('btn-logout').addEventListener('click',islLogout);
-try{var _su=sessionStorage.getItem('isl_u');if(_su&&ISL_U[_su]){document.getElementById('isl-login').classList.add('hidden');if(ISL_ADMIN.indexOf(_su)<0){var _nf=document.getElementById('btn-nuevo-flujo');if(_nf)_nf.style.display='none';}}}catch(x){}
+try{
+  var _su=sessionStorage.getItem('isl_u');
+  if(_su&&ISL_U[_su]){
+    document.getElementById('isl-login').classList.add('hidden');
+    if(ISL_ADMIN.indexOf(_su)<0){var _nf=document.getElementById('btn-nuevo-flujo');if(_nf)_nf.style.display='none';}
+  }
+}catch(x){}
 var VIEWS={inicio:'Hola, Florencia',import:'Importar Excel',trab:'Trabajadores',rep:'Reportes',form:'Formularios',asist:'Asistente ISL',fb:'Feedback',cfg:'Configuracion',usr:'Usuarios'};
 var _D=new Date(),_DAYS=['domingo','lunes','martes','miercoles','jueves','viernes','sabado'],_MONTHS=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 function navTo(n){
@@ -327,18 +337,25 @@ function navTo(n){
   var v=document.getElementById('view-'+n);if(v)v.classList.add('active');
   var nav=document.getElementById('nav-'+n);if(nav)nav.classList.add('active');
   var t=document.getElementById('h-title');if(t)t.textContent=VIEWS[n]||'ISL';
-  var s=document.getElementById('h-sub');if(s)s.textContent=n==='inicio'?_DAYS[_D.getDay()]+', '+_D.getDate()+' de '+_MONTHS[_D.getMonth()]+' de '+_D.getFullYear():'';
+  var s=document.getElementById('h-sub');
+  if(s)s.textContent=n==='inicio'?_DAYS[_D.getDay()]+', '+_D.getDate()+' de '+_MONTHS[_D.getMonth()]+' de '+_D.getFullYear():'';
   window.scrollTo(0,0);
 }
 navTo('inicio');
 document.getElementById('h-sub').textContent=_DAYS[_D.getDay()]+', '+_D.getDate()+' de '+_MONTHS[_D.getMonth()]+' de '+_D.getFullYear();
-['inicio','import','trab','rep','form','asist','fb','cfg','usr'].forEach(function(n){var el=document.getElementById('nav-'+n);if(el)el.addEventListener('click',function(){navTo(n);});});
+['inicio','import','trab','rep','form','asist','fb','cfg','usr'].forEach(function(n){
+  var el=document.getElementById('nav-'+n);
+  if(el)el.addEventListener('click',function(){navTo(n);});
+});
 document.getElementById('link-efectivos').addEventListener('click',function(){navTo('trab');});
 document.getElementById('btn-ir-import').addEventListener('click',function(){navTo('import');});
 function filtrarCasos(){
-  var desde=document.getElementById('f-desde').value,hasta=document.getElementById('f-hasta').value,estado=document.getElementById('f-estado').value,art=document.getElementById('f-art').value,count=0;
+  var desde=document.getElementById('f-desde').value,hasta=document.getElementById('f-hasta').value;
+  var estado=document.getElementById('f-estado').value,art=document.getElementById('f-art').value,count=0;
   document.querySelectorAll('#casos-tbody tr').forEach(function(r){
-    var fecha=r.getAttribute('data-fecha')||'',est=r.querySelector('.badge')?r.querySelector('.badge').textContent.trim():'',artTxt=r.querySelectorAll('td')[3]?r.querySelectorAll('td')[3].textContent.trim():'';
+    var fecha=r.getAttribute('data-fecha')||'';
+    var est=r.querySelector('.badge')?r.querySelector('.badge').textContent.trim():'';
+    var artTxt=r.querySelectorAll('td')[3]?r.querySelectorAll('td')[3].textContent.trim():'';
     var ok=(!desde||fecha>=desde)&&(!hasta||fecha<=hasta)&&(!estado||est===estado)&&(!art||artTxt===art);
     r.style.display=ok?'':'none';if(ok)count++;
   });
@@ -353,16 +370,26 @@ function exportCSV(tbodyId,fname){
   var tbody=document.getElementById(tbodyId),table=tbody.closest('table'),headers=[];
   table.querySelectorAll('thead th').forEach(function(th){var t=th.textContent.trim();if(t)headers.push('"'+t+'"');});
   var rows=[headers.join(',')];
-  tbody.querySelectorAll('tr').forEach(function(r){if(r.style.display==='none')return;var cells=[];r.querySelectorAll('td').forEach(function(td,i){if(i<headers.length)cells.push('"'+td.textContent.trim().replace(/"/g,"''")+'"');});if(cells.length)rows.push(cells.join(','));});
-  var a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(rows.join('\n'));a.download=(fname||'export')+'.csv';a.click();
+  tbody.querySelectorAll('tr').forEach(function(r){
+    if(r.style.display==='none')return;
+    var cells=[];
+    r.querySelectorAll('td').forEach(function(td,i){if(i<headers.length)cells.push('"'+td.textContent.trim().replace(/"/g,"''")+'"');});
+    if(cells.length)rows.push(cells.join(','));
+  });
+  var a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(rows.join('\n'));
+  a.download=(fname||'export')+'.csv';a.click();
 }
 document.getElementById('btn-filtrar').addEventListener('click',filtrarCasos);
 document.getElementById('btn-limpiar').addEventListener('click',limpiarFiltro);
 document.getElementById('btn-exportar').addEventListener('click',function(){exportCSV('casos-tbody','casos_isl');});
 function filtrarTrab(){
-  var q=(document.getElementById('t-buscar').value||'').toLowerCase(),estado=document.getElementById('t-estado').value,art=document.getElementById('t-art').value,count=0;
+  var q=(document.getElementById('t-buscar').value||'').toLowerCase();
+  var estado=document.getElementById('t-estado').value,art=document.getElementById('t-art').value,count=0;
   document.querySelectorAll('#trab-tbody tr').forEach(function(r){
-    var txt=r.textContent.toLowerCase(),est=r.querySelector('.badge')?r.querySelector('.badge').textContent.trim():'',artTxt=r.querySelectorAll('td')[4]?r.querySelectorAll('td')[4].textContent.trim():'';
+    var txt=r.textContent.toLowerCase();
+    var est=r.querySelector('.badge')?r.querySelector('.badge').textContent.trim():'';
+    var artTxt=r.querySelectorAll('td')[4]?r.querySelectorAll('td')[4].textContent.trim():'';
     var ok=(!q||txt.includes(q))&&(!estado||est===estado)&&(!art||artTxt===art);
     r.style.display=ok?'':'none';if(ok)count++;
   });
@@ -383,11 +410,27 @@ function verResp(btn){
   var et=e.includes('Completo')?'#166534':e.includes('Refuerzo')?'#92400e':e.includes('sin DNI')?'#c2410c':'#991b1b';
   var resp=e.includes('Completo')?'Confirma atencion medica. DNI adjunto.':e.includes('Refuerzo')?'Sin respuesta. Recordatorios enviados.':e.includes('sin DNI')?'Cuestionario completo. Pendiente DNI.':'No respondio. Caso cerrado.';
   var m=document.getElementById('isl-rm');
-  var card=document.createElement('div');card.style.cssText='background:#fff;border-radius:12px;padding:28px;max-width:480px;width:90%;box-shadow:0 20px 40px rgba(0,0,0,.25)';
-  card.innerHTML='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px"><div><div style="font-size:16px;font-weight:700">'+n+'</div><div style="font-size:12px;color:#9ca3af;margin-top:2px">DNI: '+d+' | '+s+'</div><div style="font-size:12px;color:#9ca3af">'+a+'</div></div><button id="rm-x" style="background:#f3f4f6;border:none;border-radius:8px;width:30px;height:30px;font-size:18px;cursor:pointer">&times;</button></div><div style="background:#f8fafc;border-radius:8px;padding:10px 12px;margin-bottom:12px"><span style="background:'+ec+';color:'+et+';padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600">'+e+'</span></div><div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px;margin-bottom:16px"><div style="font-size:11px;font-weight:600;color:#166534;margin-bottom:6px">RESPUESTA VIA WHATSAPP</div><div style="font-size:13px;color:#374151;line-height:1.6">'+resp+'</div></div><div style="display:flex;gap:8px;justify-content:flex-end"><button id="rm-c" style="padding:7px 14px;border-radius:7px;border:1px solid #d1d5db;background:#fff;cursor:pointer;font-size:13px">Cerrar</button><button id="rm-d" style="padding:7px 14px;border-radius:7px;border:none;background:#3db87a;color:#fff;cursor:pointer;font-size:13px;font-weight:600">Descargar</button></div>';
+  var card=document.createElement('div');
+  card.style.cssText='background:#fff;border-radius:12px;padding:28px;max-width:480px;width:90%;box-shadow:0 20px 40px rgba(0,0,0,.25)';
+  card.innerHTML='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">'
+    +'<div><div style="font-size:16px;font-weight:700">'+n+'</div>'
+    +'<div style="font-size:12px;color:#9ca3af;margin-top:2px">DNI: '+d+' | '+s+'</div>'
+    +'<div style="font-size:12px;color:#9ca3af">'+a+'</div></div>'
+    +'<button id="rm-x" style="background:#f3f4f6;border:none;border-radius:8px;width:30px;height:30px;font-size:18px;cursor:pointer">&times;</button></div>'
+    +'<div style="background:#f8fafc;border-radius:8px;padding:10px 12px;margin-bottom:12px">'
+    +'<span style="background:'+ec+';color:'+et+';padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600">'+e+'</span></div>'
+    +'<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px;margin-bottom:16px">'
+    +'<div style="font-size:11px;font-weight:600;color:#166534;margin-bottom:6px">RESPUESTA VIA WHATSAPP</div>'
+    +'<div style="font-size:13px;color:#374151;line-height:1.6">'+resp+'</div></div>'
+    +'<div style="display:flex;gap:8px;justify-content:flex-end">'
+    +'<button id="rm-c" style="padding:7px 14px;border-radius:7px;border:1px solid #d1d5db;background:#fff;cursor:pointer;font-size:13px">Cerrar</button>'
+    +'<button id="rm-d" style="padding:7px 14px;border-radius:7px;border:none;background:#3db87a;color:#fff;cursor:pointer;font-size:13px;font-weight:600">Descargar</button></div>';
   m.innerHTML='';m.appendChild(card);m.style.display='flex';
   document.getElementById('rm-x').onclick=document.getElementById('rm-c').onclick=function(){m.style.display='none';};
-  document.getElementById('rm-d').onclick=function(){var txt='ISL\nTrabajador: '+n+'\nDNI: '+d+'\nSiniestro: '+s+'\nART: '+a+'\nEstado: '+e+'\nRespuesta: '+resp+'\nFecha: '+new Date().toLocaleDateString('es-AR');var lnk=document.createElement('a');lnk.href='data:text/plain;charset=utf-8,'+encodeURIComponent(txt);lnk.download='comunicacion_'+s+'.txt';lnk.click();};
+  document.getElementById('rm-d').onclick=function(){
+    var txt='ISL\nTrabajador: '+n+'\nDNI: '+d+'\nSiniestro: '+s+'\nART: '+a+'\nEstado: '+e+'\nRespuesta: '+resp+'\nFecha: '+new Date().toLocaleDateString('es-AR');
+    var lnk=document.createElement('a');lnk.href='data:text/plain;charset=utf-8,'+encodeURIComponent(txt);lnk.download='comunicacion_'+s+'.txt';lnk.click();
+  };
 }
 document.querySelectorAll('.btn-ver').forEach(function(b){b.addEventListener('click',function(){verResp(this);});});
 var flujoActivo='laboral';
@@ -395,28 +438,104 @@ document.getElementById('card-laboral').addEventListener('click',function(){verF
 document.getElementById('card-itinere').addEventListener('click',function(){verFlujo('itinere');});
 document.getElementById('card-nuevo').addEventListener('click',function(){document.getElementById('modal-nf').style.display='flex';});
 document.getElementById('btn-nuevo-flujo').addEventListener('click',function(){document.getElementById('modal-nf').style.display='flex';});
-function verFlujo(tipo){flujoActivo=tipo;var t=document.getElementById('flujo-titulo');if(t)t.textContent='Flujo: '+(tipo==='laboral'?'Siniestro Laboral':'Siniestro In Itinere');document.getElementById('edit-panel').style.display='none';document.getElementById('btn-editar-flujo').style.display='';document.getElementById('btn-guardar-flujo').style.display='none';}
+function verFlujo(tipo){
+  flujoActivo=tipo;
+  var t=document.getElementById('flujo-titulo');
+  if(t)t.textContent='Flujo: '+(tipo==='laboral'?'Siniestro Laboral':'Siniestro In Itinere');
+  document.getElementById('edit-panel').style.display='none';
+  document.getElementById('btn-editar-flujo').style.display='';
+  document.getElementById('btn-guardar-flujo').style.display='none';
+}
 document.getElementById('btn-editar-flujo').addEventListener('click',function(){
-  var steps=flujoActivo==='laboral'?['1. Bienvenida + titular','2. Confirmacion titular','3. Tipo accidente','4. Tarea','5. Antiguedad','6. Horario','7. Otro empleador','8. Modalidad','9. Patologias previas','10. Lesiones previas','11. Descripcion accidente','12. Lesiones','13. Atencion medica','14. Domicilio laboral','25. Foto DNI']:['1. Bienvenida + titular','2. Confirmacion titular','3. Tipo accidente','4. Tarea','5. Antiguedad','6. Horario','7. Otro empleador','8. Modalidad','9. Patologias previas','10. Lesiones previas','11. Descripcion accidente','12. Lesiones','13. Atencion medica','14. Domicilio laboral','15. Destino','16. Movilidad','17. Trayecto','18. Validacion domicilio','19. Desvio','20. Segundo empleo','21. Denuncia policial','22. Terceros','23. Vehiculos','24. Transporte publico','25. Foto DNI'];
-  var list=document.getElementById('edit-list');list.innerHTML='';
-  steps.forEach(function(step,i){var row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:8px';row.innerHTML='<span style="font-size:11px;color:#9ca3af;width:20px">'+(i+1)+'</span><input type="text" value="'+step.replace(/"/g,'&quot;')+'" style="flex:1;padding:6px 10px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;outline:none"/><button style="background:#fee2e2;border:none;border-radius:5px;padding:3px 8px;color:#991b1b;cursor:pointer;font-size:12px" onclick="this.closest('div').remove()">X</button>';list.appendChild(row);});
-  document.getElementById('edit-panel').style.display='block';this.style.display='none';document.getElementById('btn-guardar-flujo').style.display='';
+  var laboral=['1. Bienvenida + titular','2. Confirmacion titular','3. Tipo accidente','4. Tarea','5. Antiguedad','6. Horario','7. Otro empleador','8. Modalidad','9. Patologias previas','10. Lesiones previas','11. Descripcion accidente','12. Lesiones','13. Atencion medica','14. Domicilio laboral','25. Foto DNI'];
+  var itinere=['1. Bienvenida + titular','2. Confirmacion titular','3. Tipo accidente','4. Tarea','5. Antiguedad','6. Horario','7. Otro empleador','8. Modalidad','9. Patologias previas','10. Lesiones previas','11. Descripcion accidente','12. Lesiones','13. Atencion medica','14. Domicilio laboral','15. Destino','16. Movilidad','17. Trayecto','18. Validacion domicilio','19. Desvio','20. Segundo empleo','21. Denuncia policial','22. Terceros','23. Vehiculos','24. Transporte publico','25. Foto DNI'];
+  var steps=flujoActivo==='laboral'?laboral:itinere;
+  var list=document.getElementById('edit-list');
+  list.innerHTML='';
+  steps.forEach(function(step,i){
+    var row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:8px';
+    var num=document.createElement('span');
+    num.style.cssText='font-size:11px;color:#9ca3af;width:20px';
+    num.textContent=i+1;
+    var inp=document.createElement('input');
+    inp.type='text';inp.value=step;
+    inp.style.cssText='flex:1;padding:6px 10px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;outline:none';
+    var del=document.createElement('button');
+    del.textContent='X';
+    del.style.cssText='background:#fee2e2;border:none;border-radius:5px;padding:3px 8px;color:#991b1b;cursor:pointer;font-size:12px';
+    del.addEventListener('click',function(){row.parentNode.removeChild(row);});
+    row.appendChild(num);row.appendChild(inp);row.appendChild(del);
+    list.appendChild(row);
+  });
+  document.getElementById('edit-panel').style.display='block';
+  this.style.display='none';
+  document.getElementById('btn-guardar-flujo').style.display='';
 });
-document.getElementById('btn-guardar-flujo').addEventListener('click',function(){var n=document.querySelectorAll('#edit-list input').length;document.getElementById('edit-panel').style.display='none';this.style.display='none';document.getElementById('btn-editar-flujo').style.display='';alert('Flujo guardado. '+n+' pasos.');});
-document.getElementById('btn-add-step').addEventListener('click',function(){var list=document.getElementById('edit-list');var n=list.children.length+1;var row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:8px';row.innerHTML='<span style="font-size:11px;color:#9ca3af;width:20px">'+n+'</span><input type="text" placeholder="Nueva pregunta..." style="flex:1;padding:6px 10px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;outline:none"/><button style="background:#fee2e2;border:none;border-radius:5px;padding:3px 8px;color:#991b1b;cursor:pointer;font-size:12px" onclick="this.closest('div').remove()">X</button>';list.appendChild(row);row.querySelector('input').focus();});
+document.getElementById('btn-guardar-flujo').addEventListener('click',function(){
+  var n=document.querySelectorAll('#edit-list input').length;
+  document.getElementById('edit-panel').style.display='none';
+  this.style.display='none';
+  document.getElementById('btn-editar-flujo').style.display='';
+  alert('Flujo guardado. '+n+' pasos.');
+});
+document.getElementById('btn-add-step').addEventListener('click',function(){
+  var list=document.getElementById('edit-list');
+  var row=document.createElement('div');
+  row.style.cssText='display:flex;align-items:center;gap:8px';
+  var num=document.createElement('span');
+  num.style.cssText='font-size:11px;color:#9ca3af;width:20px';
+  num.textContent=list.children.length+1;
+  var inp=document.createElement('input');
+  inp.type='text';inp.placeholder='Nueva pregunta...';
+  inp.style.cssText='flex:1;padding:6px 10px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;outline:none';
+  var del=document.createElement('button');
+  del.textContent='X';
+  del.style.cssText='background:#fee2e2;border:none;border-radius:5px;padding:3px 8px;color:#991b1b;cursor:pointer;font-size:12px';
+  del.addEventListener('click',function(){row.parentNode.removeChild(row);});
+  row.appendChild(num);row.appendChild(inp);row.appendChild(del);
+  list.appendChild(row);inp.focus();
+});
 document.getElementById('btn-cancelar-nf').addEventListener('click',function(){document.getElementById('modal-nf').style.display='none';});
-document.getElementById('btn-crear-nf').addEventListener('click',function(){var nombre=document.getElementById('nf-nombre').value.trim();if(!nombre){alert('Ingresa un nombre');return;}document.getElementById('modal-nf').style.display='none';alert('Flujo "'+nombre+'" creado.');document.getElementById('nf-nombre').value='';document.getElementById('nf-art').value='';});
+document.getElementById('btn-crear-nf').addEventListener('click',function(){
+  var nombre=document.getElementById('nf-nombre').value.trim();
+  if(!nombre){alert('Ingresa un nombre');return;}
+  document.getElementById('modal-nf').style.display='none';
+  alert('Flujo "'+nombre+'" creado.');
+  document.getElementById('nf-nombre').value='';document.getElementById('nf-art').value='';
+});
 document.getElementById('drop-zone').addEventListener('click',function(){document.getElementById('excel-input').click();});
 document.getElementById('btn-sel-file').addEventListener('click',function(ev){ev.stopPropagation();document.getElementById('excel-input').click();});
 document.getElementById('drop-zone').addEventListener('dragover',function(ev){ev.preventDefault();this.style.borderColor='#3db87a';});
 document.getElementById('drop-zone').addEventListener('dragleave',function(){this.style.borderColor='#d1d5db';});
 document.getElementById('drop-zone').addEventListener('drop',function(ev){ev.preventDefault();this.style.borderColor='#d1d5db';if(ev.dataTransfer.files[0])handleExcel(ev.dataTransfer.files[0]);});
 document.getElementById('excel-input').addEventListener('change',function(){if(this.files[0])handleExcel(this.files[0]);});
-function handleExcel(file){var res=document.getElementById('import-result');res.style.display='block';res.innerHTML='<div style="padding:14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;font-size:13px;color:#166534">Procesando <strong>'+file.name+'</strong>...</div>';setTimeout(function(){res.innerHTML='<div style="padding:14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px"><div style="font-size:14px;font-weight:700;color:#166534;margin-bottom:4px">Archivo recibido</div><div style="font-size:13px;color:#166534">Conecta la API ISL para importar los datos.</div></div>';document.getElementById('excel-input').value='';},1500);}
-function sendMsg(msg){msg=msg.trim();if(!msg)return;var msgs=document.getElementById('asist-msgs'),inp=document.getElementById('asist-in'),typ=document.getElementById('asist-typing');msgs.innerHTML+='<div class="msg-u">'+msg+'</div>';inp.value='';document.getElementById('asist-sugs').style.display='none';msgs.scrollTop=msgs.scrollHeight;typ.style.display='block';setTimeout(function(){typ.style.display='none';msgs.innerHTML+='<div class="msg-bot">Conecta el Asistente a la API para respuestas en tiempo real.</div>';msgs.scrollTop=msgs.scrollHeight;},1200);}
+function handleExcel(file){
+  var res=document.getElementById('import-result');
+  res.style.display='block';
+  res.innerHTML='<div style="padding:14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;font-size:13px;color:#166534">Procesando <strong>'+file.name+'</strong>...</div>';
+  setTimeout(function(){
+    res.innerHTML='<div style="padding:14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px"><div style="font-size:14px;font-weight:700;color:#166534;margin-bottom:4px">Archivo recibido</div><div style="font-size:13px;color:#166534">Conecta la API ISL para importar los datos.</div></div>';
+    document.getElementById('excel-input').value='';
+  },1500);
+}
+function sendMsg(msg){
+  msg=msg.trim();if(!msg)return;
+  var msgs=document.getElementById('asist-msgs'),inp=document.getElementById('asist-in'),typ=document.getElementById('asist-typing');
+  msgs.innerHTML+='<div class="msg-u">'+msg+'</div>';
+  inp.value='';document.getElementById('asist-sugs').style.display='none';
+  msgs.scrollTop=msgs.scrollHeight;typ.style.display='block';
+  setTimeout(function(){
+    typ.style.display='none';
+    msgs.innerHTML+='<div class="msg-bot">Conecta el Asistente a la API para respuestas en tiempo real.</div>';
+    msgs.scrollTop=msgs.scrollHeight;
+  },1200);
+}
 document.getElementById('bot-send-btn').addEventListener('click',function(){sendMsg(document.getElementById('asist-in').value);});
 document.getElementById('asist-in').addEventListener('keydown',function(ev){if(ev.key==='Enter')sendMsg(this.value);});
-[['sug1','Quienes estan en Refuerzo?'],['sug2','Como funcionan los plazos?'],['sug3','Como configuro un formulario?'],['sug4','Como exporto el reporte?'],['sug5','Que pasa si no responde?']].forEach(function(x){var el=document.getElementById(x[0]);if(el)el.addEventListener('click',function(){sendMsg(x[1]);});});
+[['sug1','Quienes estan en Refuerzo?'],['sug2','Como funcionan los plazos?'],['sug3','Como configuro un formulario?'],['sug4','Como exporto el reporte?'],['sug5','Que pasa si no responde?']].forEach(function(x){
+  var el=document.getElementById(x[0]);if(el)el.addEventListener('click',function(){sendMsg(x[1]);});
+});
 document.getElementById('btn-nuevo-fb').addEventListener('click',function(){var w=document.getElementById('fb-wrap');w.style.display=w.style.display==='none'?'block':'none';});
 document.getElementById('btn-fb-cancel').addEventListener('click',function(){document.getElementById('fb-wrap').style.display='none';});
 document.getElementById('btn-fb-send').addEventListener('click',function(){document.getElementById('fb-wrap').style.display='none';alert('Feedback enviado!');});
