@@ -131,25 +131,27 @@ tbody tr:hover td{background:#fafafa}
 </div>
 <script>
 var ISL_USERS={'admin@islarg.com.ar':'Admin2026','test@islarg.com.ar':'Test2026','operador@islarg.com.ar':'Oper2026'};
-var ISL_ADMIN=['admin@islarg.com.ar','test@islarg.com.ar'];
-
 function islLogin(){
   var e=(document.getElementById('isl-email').value||'').trim().toLowerCase();
   var p=document.getElementById('isl-pass').value||'';
   var err=document.getElementById('isl-err');
   if(!ISL_USERS[e]||ISL_USERS[e]!==p){err.textContent='Email o contrasena incorrectos.';err.style.display='block';return;}
   err.style.display='none';
-  try{sessionStorage.setItem('isl_ok',e);}catch(x){}
+  try{sessionStorage.setItem('isl_ok','1');}catch(x){}
   document.getElementById('isl-login').classList.add('hidden');
 }
-
 function islLogout(){
   try{sessionStorage.removeItem('isl_ok');}catch(x){}
   document.getElementById('isl-email').value='';
   document.getElementById('isl-pass').value='';
   document.getElementById('isl-login').classList.remove('hidden');
 }
-</script>>
+// Wire button immediately - script runs after DOM is built
+document.getElementById('isl-btn').addEventListener('click', islLogin);
+document.getElementById('isl-email').addEventListener('keydown', function(ev){if(ev.key==='Enter')islLogin();});
+document.getElementById('isl-pass').addEventListener('keydown', function(ev){if(ev.key==='Enter')islLogin();});
+try{if(sessionStorage.getItem('isl_ok'))document.getElementById('isl-login').classList.add('hidden');}catch(x){}
+</script>
 <div class="app">
 <div class="sb">
   <div class="sb-logo">
