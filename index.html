@@ -199,9 +199,9 @@ tbody tr:hover td{background:#fafafa}
         <input type="date" id="filtro-hasta" style="padding:5px 8px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;color:#374151"/>
         <select id="filtro-estado" style="padding:5px 8px;border-radius:6px;border:1px solid #d1d5db;font-size:12px;color:#374151;background:#fff">
           <option value="">Todos los estados</option>
-          <option value="Completo DNI">Completo con DNI</option>
-          <option value="Sin DNI">Finalizado sin DNI</option>
-          <option value="Refuerzo">En Refuerzo</option>
+          <option value="Completos con DNI">Completos con DNI</option>
+          <option value="Finalizados sin DNI">Finalizados sin DNI</option>
+          <option value="En Refuerzo">En Refuerzo</option>
           <option value="Sin Respuesta">Sin Respuesta</option>
         </select>
         <button class="btn-p btn-sm" id="btn-filtrar">Buscar</button>
@@ -213,15 +213,15 @@ tbody tr:hover td{background:#fafafa}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
         <div><div class="pt">Seguimiento de casos</div><div class="ps" id="tabla-sub">Todos los siniestros activos</div></div>
       </div>
-      <table id="casos-tabla"><thead><tr><th>Nombre y Apellido</th><th>DNI</th><th>Siniestro</th><th>Estado</th><th>Fecha</th><th></th></tr></thead>
+      <table id="casos-tabla"><thead><tr><th>Nombre y Apellido</th><th>DNI</th><th>Siniestro</th><th>ART</th><th>Estado</th><th>Fecha</th><th></th></tr></thead>
       <tbody id="casos-tbody">
-        <tr><td><span class="wa" style="background:#dbeafe;color:#1e40af">JG</span>Juan Garcia</td><td style="font-size:12px">35.421.876</td><td style="font-size:12px">SIN-2026-0042</td><td><span class="badge bg">Completo DNI</span></td><td style="font-size:12px;color:#9ca3af">06/04/2026</td><td><button data-n="Juan Garcia" data-d="35.421.876" data-s="SIN-2026-0042" data-e="Completo DNI" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:5px;color:#166534;cursor:pointer">Ver</button></td></tr>
-        <tr><td><span class="wa" style="background:#dcfce7;color:#166534">ML</span>Maria Lopez</td><td style="font-size:12px">28.765.432</td><td style="font-size:12px">SIN-2026-0043</td><td><span class="badge bg">Completo DNI</span></td><td style="font-size:12px;color:#9ca3af">07/04/2026</td><td><button data-n="Maria Lopez" data-d="28.765.432" data-s="SIN-2026-0043" data-e="Completo DNI" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:5px;color:#166534;cursor:pointer">Ver</button></td></tr>
-        <tr><td><span class="wa" style="background:#fef3c7;color:#92400e">CR</span>Carlos Rodriguez</td><td style="font-size:12px">41.234.567</td><td style="font-size:12px">SIN-2026-0044</td><td><span class="badge bb">Refuerzo 1</span></td><td style="font-size:12px;color:#9ca3af">07/04/2026</td><td><button data-n="Carlos Rodriguez" data-d="41.234.567" data-s="SIN-2026-0044" data-e="Refuerzo 1" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#fffbeb;border:1px solid #fde68a;border-radius:5px;color:#92400e;cursor:pointer">Ver</button></td></tr>
-        <tr><td><span class="wa" style="background:#fce7f3;color:#831843">AM</span>Ana Martinez</td><td style="font-size:12px">33.987.654</td><td style="font-size:12px">SIN-2026-0045</td><td><span class="badge bp">Refuerzo 2</span></td><td style="font-size:12px;color:#9ca3af">08/04/2026</td><td><button data-n="Ana Martinez" data-d="33.987.654" data-s="SIN-2026-0045" data-e="Refuerzo 2" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#fffbeb;border:1px solid #fde68a;border-radius:5px;color:#92400e;cursor:pointer">Ver</button></td></tr>
-        <tr><td><span class="wa" style="background:#fee2e2;color:#991b1b">DG</span>Diego Gomez</td><td style="font-size:12px">39.112.233</td><td style="font-size:12px">SIN-2026-0046</td><td><span class="badge ba">Sin Respuesta</span></td><td style="font-size:12px;color:#9ca3af">05/04/2026</td><td><button data-n="Diego Gomez" data-d="39.112.233" data-s="SIN-2026-0046" data-e="Sin Respuesta" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#fee2e2;border:1px solid #fecaca;border-radius:5px;color:#991b1b;cursor:pointer">Ver</button></td></tr>
-        <tr><td><span class="wa" style="background:#dbeafe;color:#1e40af">RS</span>Roberto Sanchez</td><td style="font-size:12px">26.543.210</td><td style="font-size:12px">SIN-2026-0047</td><td><span class="badge bg">Completo DNI</span></td><td style="font-size:12px;color:#9ca3af">08/04/2026</td><td><button data-n="Roberto Sanchez" data-d="26.543.210" data-s="SIN-2026-0047" data-e="Completo DNI" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:5px;color:#166534;cursor:pointer">Ver</button></td></tr>
-        <tr><td><span class="wa" style="background:#fff7ed;color:#c2410c">LF</span>Laura Fernandez</td><td style="font-size:12px">44.678.901</td><td style="font-size:12px">SIN-2026-0048</td><td><span class="badge ba2">Sin DNI</span></td><td style="font-size:12px;color:#9ca3af">09/04/2026</td><td><button data-n="Laura Fernandez" data-d="44.678.901" data-s="SIN-2026-0048" data-e="Sin DNI" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#fff7ed;border:1px solid #fed7aa;border-radius:5px;color:#c2410c;cursor:pointer">Ver</button></td></tr>
+        <tr><td><span class="wa" style="background:#dbeafe;color:#1e40af">JG</span>Juan Garcia</td><td style="font-size:12px">35.421.876</td><td style="font-size:12px">SIN-2026-0042</td><td style="font-size:11px;color:#374151">Provincia ART</td><td><span class="badge bg">Completos con DNI</span></td><td style="font-size:12px;color:#9ca3af">06/04/2026</td><td><button data-n="Juan Garcia" data-d="35.421.876" data-s="SIN-2026-0042" data-e="Completos con DNI" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:5px;color:#166534;cursor:pointer">Ver</button></td></tr>
+        <tr><td><span class="wa" style="background:#dcfce7;color:#166534">ML</span>Maria Lopez</td><td style="font-size:12px">28.765.432</td><td style="font-size:12px">SIN-2026-0043</td><td style="font-size:11px;color:#374151">Galeno ART</td><td><span class="badge bg">Completos con DNI</span></td><td style="font-size:12px;color:#9ca3af">07/04/2026</td><td><button data-n="Maria Lopez" data-d="28.765.432" data-s="SIN-2026-0043" data-e="Completos con DNI" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:5px;color:#166534;cursor:pointer">Ver</button></td></tr>
+        <tr><td><span class="wa" style="background:#fef3c7;color:#92400e">CR</span>Carlos Rodriguez</td><td style="font-size:12px">41.234.567</td><td style="font-size:12px">SIN-2026-0044</td><td style="font-size:11px;color:#374151">Provincia ART</td><td><span class="badge bb">En Refuerzo</span></td><td style="font-size:12px;color:#9ca3af">07/04/2026</td><td><button data-n="Carlos Rodriguez" data-d="41.234.567" data-s="SIN-2026-0044" data-e="En Refuerzo" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#fffbeb;border:1px solid #fde68a;border-radius:5px;color:#92400e;cursor:pointer">Ver</button></td></tr>
+        <tr><td><span class="wa" style="background:#fce7f3;color:#831843">AM</span>Ana Martinez</td><td style="font-size:12px">33.987.654</td><td style="font-size:12px">SIN-2026-0045</td><td style="font-size:11px;color:#374151">Swiss Medical ART</td><td><span class="badge bp">En Refuerzo</span></td><td style="font-size:12px;color:#9ca3af">08/04/2026</td><td><button data-n="Ana Martinez" data-d="33.987.654" data-s="SIN-2026-0045" data-e="En Refuerzo" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#fffbeb;border:1px solid #fde68a;border-radius:5px;color:#92400e;cursor:pointer">Ver</button></td></tr>
+        <tr><td><span class="wa" style="background:#fee2e2;color:#991b1b">DG</span>Diego Gomez</td><td style="font-size:12px">39.112.233</td><td style="font-size:12px">SIN-2026-0046</td><td style="font-size:11px;color:#374151">Galeno ART</td><td><span class="badge ba">Sin Respuesta</span></td><td style="font-size:12px;color:#9ca3af">05/04/2026</td><td><button data-n="Diego Gomez" data-d="39.112.233" data-s="SIN-2026-0046" data-e="Sin Respuesta" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#fee2e2;border:1px solid #fecaca;border-radius:5px;color:#991b1b;cursor:pointer">Ver</button></td></tr>
+        <tr><td><span class="wa" style="background:#dbeafe;color:#1e40af">RS</span>Roberto Sanchez</td><td style="font-size:12px">26.543.210</td><td style="font-size:12px">SIN-2026-0047</td><td style="font-size:11px;color:#374151">Provincia ART</td><td><span class="badge bg">Completos con DNI</span></td><td style="font-size:12px;color:#9ca3af">08/04/2026</td><td><button data-n="Roberto Sanchez" data-d="26.543.210" data-s="SIN-2026-0047" data-e="Completos con DNI" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:5px;color:#166534;cursor:pointer">Ver</button></td></tr>
+        <tr><td><span class="wa" style="background:#fff7ed;color:#c2410c">LF</span>Laura Fernandez</td><td style="font-size:12px">44.678.901</td><td style="font-size:12px">SIN-2026-0048</td><td style="font-size:11px;color:#374151">Swiss Medical ART</td><td><span class="badge ba2">Finalizados sin DNI</span></td><td style="font-size:12px;color:#9ca3af">09/04/2026</td><td><button data-n="Laura Fernandez" data-d="44.678.901" data-s="SIN-2026-0048" data-e="Finalizados sin DNI" class="btn-ver" style="font-size:11px;padding:2px 8px;background:#fff7ed;border:1px solid #fed7aa;border-radius:5px;color:#c2410c;cursor:pointer">Ver</button></td></tr>
       </tbody></table>
     </div>
   </div>
@@ -305,7 +305,7 @@ div>
           <span style="font-size:10px;color:#9ca3af">26 preguntas</span>
         </div>
         <div style="font-size:15px;font-weight:700;margin-bottom:4px">Siniestro In Itinere</div>
-        <div style="font-size:12px;color:#6b7280;margin-bottom:12px">art_siniestros_full + itinere</div>
+        <div style="font-size:12px;color:#6b7280;margin-bottom:12px">art_siniestros_full + bloque itinere</div>
         <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px">
           <span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">Titular</span>
           <span style="font-size:10px;background:#f3f4f6;color:#374151;padding:2px 7px;border-radius:4px">Laboral</span>
@@ -371,7 +371,8 @@ div>
       </div>
     </div>
   </div>
-<div class="view" id="view-asist">
+
+  <div class="view" id="view-asist">
     <div style="margin-bottom:18px"><div style="font-size:20px;font-weight:700">Asistente ISL</div><div style="font-size:13px;color:#6b7280;margin-top:2px">Consultas sobre el sistema y flujos de trabajo</div></div>
     <div class="bot-panel">
       <div class="bot-hdr"><div><div class="bot-hdr-t">Asistente ISL</div><div class="bot-online"><div class="bot-dot"></div>En linea</div></div></div>
@@ -505,6 +506,8 @@ window.onload=function(){
     var el=document.getElementById('nav-'+n);if(el)el.addEventListener('click',function(){navTo(n);});
   });
   var bvt=document.getElementById('btn-ver-todos');if(bvt)bvt.addEventListener('click',function(){navTo('trab');});
+  var cl=document.getElementById('card-laboral');if(cl)cl.addEventListener('click',function(){verFlujo('laboral');});
+  var ci=document.getElementById('card-itinere');if(ci)ci.addEventListener('click',function(){verFlujo('itinere');});
   var ble=document.getElementById('link-efectivos');if(ble)ble.addEventListener('click',function(){navTo('trab');});
   document.querySelectorAll('.toggle').forEach(function(t){t.addEventListener('click',function(){this.classList.toggle('on');});});
   // Filtros
@@ -521,13 +524,23 @@ window.onload=function(){
   var sb=document.getElementById('bot-send-btn');if(sb)sb.addEventListener('click',function(){sendMsg(document.getElementById('asist-in').value);});
   [['sug1','Quienes estan en Refuerzo hoy?'],['sug2','Como funcionan los plazos?'],['sug3','Como configuro un formulario?'],['sug4','Como exporto el reporte?'],['sug5','Que pasa si no responde?']].forEach(function(x){var el=document.getElementById(x[0]);if(el)el.addEventListener('click',function(){sendMsg(x[1]);});});
 };
+function parseFechaArg(s){if(!s)return null;var p=s.split('/');return p.length===3?new Date(p[2],p[1]-1,p[0]):null;}
+function parseDateInput(s){if(!s)return null;var p=s.split('-');return new Date(p[0],p[1]-1,p[2]);}
 function filtrarCasos(){
+  var desde=parseDateInput(document.getElementById('filtro-desde').value);
+  var hasta=parseDateInput(document.getElementById('filtro-hasta').value);
   var estado=document.getElementById('filtro-estado').value;
   var rows=document.querySelectorAll('#casos-tbody tr');
   var count=0;
   rows.forEach(function(r){
-    var est=r.querySelector('.badge')?r.querySelector('.badge').textContent:'';
-    var show=!estado||est.toLowerCase().includes(estado.toLowerCase());
+    var est=r.querySelector('.badge')?r.querySelector('.badge').textContent.trim():'';
+    var cells=r.querySelectorAll('td');
+    var fechaTxt=cells[5]?cells[5].textContent.trim():'';
+    var fecha=parseFechaArg(fechaTxt);
+    var showEst=!estado||est===estado;
+    var showDesde=!desde||!fecha||(fecha>=desde);
+    var showHasta=!hasta||!fecha||(fecha<=hasta);
+    var show=showEst&&showDesde&&showHasta;
     r.style.display=show?'':'none';
     if(show)count++;
   });
