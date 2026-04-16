@@ -34,9 +34,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .panel{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:16px 20px;margin-bottom:16px}
 .pt{font-size:14px;font-weight:700;color:#1a1f2e}
 .ps{font-size:12px;color:#6b7280;margin-top:2px}
-.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px}
 .kpi{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;padding:16px;display:flex;justify-content:space-between;align-items:flex-start;border-left:3px solid #e5e7eb}
-.kpi.kb{border-left-color:#4a90d9}.kpi.kg{border-left-color:#3db87a}.kpi.ka{border-left-color:#e67e22}.kpi.kr{border-left-color:#e24b4a}
+.kpi.kb{border-left-color:#4a90d9}.kpi.kg{border-left-color:#3db87a}.kpi.ka{border-left-color:#e67e22}.kpi.kr{border-left-color:#e24b4a}.kpi.kp{border-left-color:#8b5cf6}.kpi.kc{border-left-color:#6b7280}
 .kl{font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px;font-weight:600}
 .kv{font-size:30px;font-weight:800;color:#1a1f2e;line-height:1}
 .ks{font-size:12px;color:#6b7280;margin-top:5px}
@@ -112,97 +112,100 @@ tbody tr:hover td{background:#fafafa}
 .form-card:hover{border-color:#3db87a}
 .form-card.sel{border:2px solid #3db87a}
 </style>
-<script>
-var ISL_USERS={'admin@islarg.com.ar':'Admin2026','test@islarg.com.ar':'Test2026','operador@islarg.com.ar':'Oper2026'};
-function islLogin(){
-  var e=(document.getElementById('isl-email').value||'').trim().toLowerCase();
-  var p=document.getElementById('isl-pass').value||'';
-  var err=document.getElementById('isl-err');
-  if(!ISL_USERS[e]||ISL_USERS[e]!==p){err.textContent='Email o contrasena incorrectos.';err.style.display='block';return;}
-  err.style.display='none';
-  try{sessionStorage.setItem('isl_ok',e);}catch(x){}
-  document.getElementById('isl-login').classList.add('hidden');
-}
-function islLogout(){
-  try{sessionStorage.removeItem('isl_ok');}catch(x){}
-  document.getElementById('isl-email').value='';
-  document.getElementById('isl-pass').value='';
-  document.getElementById('isl-login').classList.remove('hidden');
-}
-function verResp(btn){
-  var row=btn.closest('tr');
-  var n=row.cells[0]?row.cells[0].textContent.trim():'';
-  var s=row.cells[1]?row.cells[1].textContent.trim():'';
-  var e=row.cells[2]?row.cells[2].textContent.trim():'';
-  var ec=e.includes('Efectivo')?'#dcfce7':e.includes('Refuerzo')?'#fef3c7':'#fee2e2';
-  var et=e.includes('Efectivo')?'#166534':e.includes('Refuerzo')?'#92400e':'#991b1b';
-  var resp=e.includes('Efectivo')?'Confirma que esta recibiendo atencion medica correctamente.':e.includes('Refuerzo')?'Sin respuesta aun. Recordatorios enviados.':'No respondio. Caso cerrado.';
-  var m=document.getElementById('isl-rm');
-  if(!m){m=document.createElement('div');m.id='isl-rm';m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;display:flex;align-items:center;justify-content:center';document.body.appendChild(m);}
-  var closeBtn='<button id="isl-rm-close" style="background:#f3f4f6;border:none;border-radius:8px;width:30px;height:30px;font-size:18px;cursor:pointer">&times;</button>';
-  var dlBtn='<button id="isl-rm-dl" style="padding:7px 14px;border-radius:7px;border:none;background:#3db87a;color:#fff;cursor:pointer;font-size:13px;font-weight:600">Descargar</button>';
-  var cerrarBtn='<button id="isl-rm-cerrar" style="padding:7px 14px;border-radius:7px;border:1px solid #d1d5db;background:#fff;cursor:pointer;font-size:13px">Cerrar</button>';
-  m.innerHTML='<div style="background:#fff;border-radius:12px;padding:28px;max-width:460px;width:90%;box-shadow:0 20px 40px rgba(0,0,0,.25)">'
-    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><div>'
-    +'<div style="font-size:16px;font-weight:700">'+n+'</div>'
-    +'<div style="font-size:12px;color:#9ca3af">'+s+'</div></div>'+closeBtn+'</div>'
-    +'<div style="background:#f8fafc;border-radius:8px;padding:12px;margin-bottom:12px">'
-    +'<span style="background:'+ec+';color:'+et+';padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600">'+e+'</span></div>'
-    +'<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px;margin-bottom:16px">'
-    +'<div style="font-size:11px;font-weight:600;color:#166534;margin-bottom:6px">RESPUESTA VIA WHATSAPP</div>'
-    +'<div style="font-size:13px;color:#374151;line-height:1.6">'+resp+'</div></div>'
-    +'<div style="display:flex;gap:8px;justify-content:flex-end">'+cerrarBtn+dlBtn+'</div></div>';
-  m.style.display='flex';
-  document.getElementById('isl-rm-close').onclick = function(){ m.style.display='none'; };
-  document.getElementById('isl-rm-cerrar').onclick = function(){ m.style.display='none'; };
-  document.getElementById('isl-rm-dl').onclick = function(){
-    var txt='ISL Medicina Empresarial\nTrabajador: '+n+'\nSiniestro: '+s+'\nEstado: '+e+'\nFecha: '+new Date().toLocaleDateString('es-AR');
-    var a=document.createElement('a');
-    a.href='data:text/plain;charset=utf-8,'+encodeURIComponent(txt);
-    a.download='resp_'+s+'.txt';
-    a.click();
-  };
-}
-document.addEventListener('DOMContentLoaded',function(){
-  try{var s=sessionStorage.getItem('isl_ok');if(s&&ISL_USERS[s])document.getElementById('isl-login').classList.add('hidden');}catch(x){}
-});
-
-// Attach login button via addEventListener (works cross-origin)
-document.addEventListener('DOMContentLoaded', function() {
-  var loginBtn = document.getElementById('isl-login-btn');
-  if(loginBtn) loginBtn.addEventListener('click', islLogin);
-  var emailField = document.getElementById('isl-email');
-  if(emailField) emailField.addEventListener('keydown', function(ev){ if(ev.key==='Enter') islLogin(); });
-  var passField = document.getElementById('isl-pass');
-  if(passField) passField.addEventListener('keydown', function(ev){ if(ev.key==='Enter') islLogin(); });
-});
-</script>
 </head>
 <body>
 <style>
 #isl-login{position:fixed;inset:0;background:#0f172a;z-index:9999;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
-#isl-login.hidden{display:none}
+#isl-login.hidden{display:none!important}
 </style>
 <div id="isl-login">
   <div style="background:#1e293b;border-radius:16px;padding:40px;width:100%;max-width:400px;box-shadow:0 25px 50px rgba(0,0,0,.5)">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:32px;justify-content:center">
       <div style="position:relative;width:36px;height:24px"><div style="width:22px;height:22px;border-radius:50%;background:#4a90d9;position:absolute;left:0;top:1px"></div><div style="width:22px;height:22px;border-radius:50%;background:#3db87a;position:absolute;left:12px;top:1px"></div></div>
-      <div><div style="font-size:17px;font-weight:700;color:#fff">ISL Medicina Empresarial</div><div style="font-size:11px;color:#3db87a;letter-spacing:.5px">SISTEMA DE CUESTIONARIOS · STAGING</div></div>
+      <div><div style="font-size:17px;font-weight:700;color:#fff">ISL Medicina Empresarial</div><div style="font-size:11px;color:#3db87a;letter-spacing:.5px">SISTEMA DE CUESTIONARIOS &middot; STAGING</div></div>
     </div>
     <div style="font-size:22px;font-weight:700;color:#fff;margin-bottom:6px">Iniciar sesion</div>
     <div style="font-size:13px;color:#94a3b8;margin-bottom:28px">Ingresa con tu cuenta ISL</div>
     <div id="isl-err" style="display:none;background:#fee2e2;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;font-size:13px;color:#ef4444;margin-bottom:16px"></div>
     <div style="margin-bottom:16px">
       <label style="display:block;font-size:12px;font-weight:600;color:#94a3b8;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Email</label>
-      <input id="isl-email" type="email" placeholder="usuario@islarg.com.ar" style="width:100%;padding:11px 14px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:14px;outline:none;box-sizing:border-box" onkeydown="if(event.key==='Enter')islLogin()"/>
+      <input id="isl-email" type="email" placeholder="usuario@islarg.com.ar" style="width:100%;padding:11px 14px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:14px;outline:none;box-sizing:border-box"/>
     </div>
     <div style="margin-bottom:24px">
       <label style="display:block;font-size:12px;font-weight:600;color:#94a3b8;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Contrasena</label>
-      <input id="isl-pass" type="password" placeholder="••••••••" style="width:100%;padding:11px 14px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:14px;outline:none;box-sizing:border-box" id="isl-enter-field"/ onkeydown="if(event.key==='Enter')islLogin()">
+      <input id="isl-pass" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" style="width:100%;padding:11px 14px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;font-size:14px;outline:none;box-sizing:border-box"/>
     </div>
-    <button id="isl-login-btn" style="width:100%;padding:12px;border-radius:8px;border:none;background:#3db87a;color:#fff;font-size:15px;font-weight:600;cursor:pointer" onmouseover="this.style.background='#2ea065'" onmouseout="this.style.background='#3db87a'" onclick="islLogin()">Ingresar</button>
+    <button id="isl-btn" style="width:100%;padding:12px;border-radius:8px;border:none;background:#3db87a;color:#fff;font-size:15px;font-weight:600;cursor:pointer">Ingresar</button>
   </div>
 </div>
+<script>
+(function(){
+  var U={'admin@islarg.com.ar':'Admin2026','test@islarg.com.ar':'Test2026','operador@islarg.com.ar':'Oper2026'};
+  
+  function doLogin(){
+    var e=(document.getElementById('isl-email').value||'').trim().toLowerCase();
+    var p=document.getElementById('isl-pass').value||'';
+    var err=document.getElementById('isl-err');
+    if(!U[e]||U[e]!==p){err.textContent='Email o contrasena incorrectos.';err.style.display='block';return;}
+    err.style.display='none';
+    try{sessionStorage.setItem('isl_ok','1');}catch(x){}
+    document.getElementById('isl-login').classList.add('hidden');
+  }
+  
+  // Expose globally
+  window.islLogout=function(){
+    try{sessionStorage.removeItem('isl_ok');}catch(x){}
+    document.getElementById('isl-email').value='';
+    document.getElementById('isl-pass').value='';
+    document.getElementById('isl-login').classList.remove('hidden');
+  };
+  
+  window.verResp=function(btn){
+    var row=btn.closest('tr');
+    var n=row.cells[0]?row.cells[0].textContent.trim():'';
+    var s=row.cells[1]?row.cells[1].textContent.trim():'';
+    var e=row.cells[2]?row.cells[2].textContent.trim():'';
+    var ec=e.includes('Efectivo')?'#dcfce7':e.includes('Refuerzo')?'#fef3c7':'#fee2e2';
+    var et=e.includes('Efectivo')?'#166534':e.includes('Refuerzo')?'#92400e':'#991b1b';
+    var resp=e.includes('Efectivo')?'Confirma que esta recibiendo atencion medica correctamente.':e.includes('Refuerzo')?'Sin respuesta aun. Recordatorios enviados.':'No respondio. Caso cerrado.';
+    var m=document.getElementById('isl-rm');
+    if(!m){m=document.createElement('div');m.id='isl-rm';m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;display:flex;align-items:center;justify-content:center';document.body.appendChild(m);}
+    var card=document.createElement('div');
+    card.style.cssText='background:#fff;border-radius:12px;padding:28px;max-width:460px;width:90%;box-shadow:0 20px 40px rgba(0,0,0,.25)';
+    card.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">'
+      +'<div><div style="font-size:16px;font-weight:700">'+n+'</div><div style="font-size:12px;color:#9ca3af">'+s+'</div></div>'
+      +'<button id="rm-x" style="background:#f3f4f6;border:none;border-radius:8px;width:30px;height:30px;font-size:18px;cursor:pointer">&times;</button></div>'
+      +'<div style="background:#f8fafc;border-radius:8px;padding:12px;margin-bottom:12px">'
+      +'<span style="background:'+ec+';color:'+et+';padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600">'+e+'</span></div>'
+      +'<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px;margin-bottom:16px">'
+      +'<div style="font-size:11px;font-weight:600;color:#166534;margin-bottom:6px">RESPUESTA VIA WHATSAPP</div>'
+      +'<div style="font-size:13px;color:#374151;line-height:1.6">'+resp+'</div></div>'
+      +'<div style="display:flex;gap:8px;justify-content:flex-end">'
+      +'<button id="rm-c" style="padding:7px 14px;border-radius:7px;border:1px solid #d1d5db;background:#fff;cursor:pointer;font-size:13px">Cerrar</button>'
+      +'<button id="rm-d" style="padding:7px 14px;border-radius:7px;border:none;background:#3db87a;color:#fff;cursor:pointer;font-size:13px;font-weight:600">Descargar</button></div>';
+    m.innerHTML='';
+    m.appendChild(card);
+    m.style.display='flex';
+    document.getElementById('rm-x').onclick=document.getElementById('rm-c').onclick=function(){m.style.display='none';};
+    document.getElementById('rm-d').onclick=function(){
+      var txt='ISL Medicina Empresarial\nTrabajador: '+n+'\nSiniestro: '+s+'\nEstado: '+e+'\nFecha: '+new Date().toLocaleDateString('es-AR');
+      var a=document.createElement('a');a.href='data:text/plain;charset=utf-8,'+encodeURIComponent(txt);a.download='resp_'+s+'.txt';a.click();
+    };
+  };
+  
+  // Attach button after DOM loads
+  document.addEventListener('DOMContentLoaded',function(){
+    var btn=document.getElementById('isl-btn');
+    if(btn) btn.addEventListener('click', doLogin);
+    var ep=document.getElementById('isl-email');
+    if(ep) ep.addEventListener('keydown',function(ev){if(ev.key==='Enter')doLogin();});
+    var pp=document.getElementById('isl-pass');
+    if(pp) pp.addEventListener('keydown',function(ev){if(ev.key==='Enter')doLogin();});
+    // Check session
+    try{if(sessionStorage.getItem('isl_ok'))document.getElementById('isl-login').classList.add('hidden');}catch(x){}
+  });
+})();
+</script>
 <div class="app">
 <div class="sb">
   <div class="sb-logo">
@@ -237,7 +240,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
   <div class="view active" id="view-inicio">
     <div class="kpi-grid">
-      <div class="kpi kb"><div><div class="kl">Cuestionarios enviados</div><div class="kv">12</div><div class="ks">3 esta semana</div></div><div class="ki" style="background:#dbeafe"><svg viewBox="0 0 24 24" fill="none" stroke="#1e40af" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg></div></div>
+      <div class="kpi kb"><div><div class="kl">Contactados</div><div class="kv">12</div><div class="ks">siniestros activos</div></div><div class="ki" style="background:#dbeafe"><svg viewBox="0 0 24 24" fill="none" stroke="#1e40af" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg></div></div>
+      <div class="kpi kg"><div><div class="kl">Completos con DNI</div><div class="kv" style="color:#3db87a">7</div><div class="ks g" id="link-efectivos">ver detalle</div></div><div class="ki" style="background:#dcfce7"><svg viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg></div></div>
+      <div class="kpi ka"><div><div class="kl">Finalizados sin DNI</div><div class="kv" style="color:#e67e22">2</div><div class="ks">pendiente documento</div></div><div class="ki" style="background:#fef3c7"><svg viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg></div></div>
+      <div class="kpi kp"><div><div class="kl">En refuerzo</div><div class="kv" style="color:#8b5cf6">3</div><div class="ks">esperando respuesta</div></div><div class="ki" style="background:#f5f3ff"><svg viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div></div>
+      <div class="kpi kr"><div><div class="kl">Sin respuesta</div><div class="kv" style="color:#e24b4a">2</div><div class="ks">casos cerrados</div></div><div class="ki" style="background:#fee2e2"><svg viewBox="0 0 24 24" fill="none" stroke="#991b1b" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div></div>
+    </div><div class="kv">12</div><div class="ks">3 esta semana</div></div><div class="ki" style="background:#dbeafe"><svg viewBox="0 0 24 24" fill="none" stroke="#1e40af" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg></div></div>
       <div class="kpi kg"><div><div class="kl">Respondieron</div><div class="kv" style="color:#3db87a">7</div><div class="ks g" id="link-efectivos">ver efectivos</div></div><div class="ki" style="background:#dcfce7"><svg viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg></div></div>
       <div class="kpi ka"><div><div class="kl">En refuerzo</div><div class="kv" style="color:#e67e22">3</div><div class="ks">esperando respuesta</div></div><div class="ki" style="background:#fef3c7"><svg viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div></div>
       <div class="kpi kr"><div><div class="kl">No respondieron</div><div class="kv" style="color:#e24b4a">2</div><div class="ks">casos cerrados hoy</div></div><div class="ki" style="background:#fee2e2"><svg viewBox="0 0 24 24" fill="none" stroke="#991b1b" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div></div>
@@ -248,12 +256,12 @@ document.addEventListener('DOMContentLoaded', function() {
           <div><div class="pt">Ultimas respuestas</div><div class="ps">Seguimiento de cuestionarios enviados hoy</div></div>
           <button class="btn-p btn-sm" id="btn-ver-todos">Ver todos</button>
         </div>
-        <table><thead><tr><th>Trabajador</th><th>Siniestro</th><th>Estado</th><th>Respuesta</th><th>Respuesta</th></tr></thead><tbody>
-          <tr><td><span class="wa" style="background:#dbeafe;color:#1e40af">JG</span>Juan Garcia</td><td>SIN-2026-0042</td><td><span class="badge bg">Efectivo</span></td><td><button onclick="verResp(this)" style="font-size:11px;padding:3px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;color:#166534;cursor:pointer">Ver</button></td></tr>
-          <tr><td><span class="wa" style="background:#dcfce7;color:#166534">ML</span>Maria Lopez</td><td>SIN-2026-0043</td><td><span class="badge bg">Efectivo</span></td><td><button onclick="verResp(this)" style="font-size:11px;padding:3px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;color:#166534;cursor:pointer">Ver</button></td></tr>
-          <tr><td><span class="wa" style="background:#fef3c7;color:#92400e">CR</span>Carlos Rodriguez</td><td>SIN-2026-0044</td><td><span class="badge bb">Refuerzo 1</span></td><td><button onclick="verResp(this)" style="font-size:11px;padding:3px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;color:#166534;cursor:pointer">Ver</button></td></tr>
-          <tr><td><span class="wa" style="background:#fce7f3;color:#831843">AM</span>Ana Martinez</td><td>SIN-2026-0045</td><td><span class="badge bp">Refuerzo 2</span></td><td><button onclick="verResp(this)" style="font-size:11px;padding:3px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;color:#166534;cursor:pointer">Ver</button></td></tr>
-          <tr><td><span class="wa" style="background:#fee2e2;color:#991b1b">DG</span>Diego Gomez</td><td>SIN-2026-0046</td><td><span class="badge br">No respondio</span></td><td><button onclick="verResp(this)" style="font-size:11px;padding:3px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:6px;color:#166534;cursor:pointer">Ver</button></td></tr>
+        <table><thead><tr><th>Trabajador</th><th>Siniestro</th><th>Estado</th><th></th></tr></thead><tbody>
+          <tr><td><span class="wa" style="background:#dbeafe;color:#1e40af">JG</span>Juan Garcia</td><td>SIN-2026-0042</td><td><span class="badge bg">Efectivo</span></td><td><button onclick="verResp(this)" style="font-size:11px;padding:2px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:5px;color:#166534;cursor:pointer">Ver</button></td></tr>
+          <tr><td><span class="wa" style="background:#dcfce7;color:#166534">ML</span>Maria Lopez</td><td>SIN-2026-0043</td><td><span class="badge bg">Efectivo</span></td><td><button onclick="verResp(this)" style="font-size:11px;padding:2px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:5px;color:#166534;cursor:pointer">Ver</button></td></tr>
+          <tr><td><span class="wa" style="background:#fef3c7;color:#92400e">CR</span>Carlos Rodriguez</td><td>SIN-2026-0044</td><td><span class="badge bb">Refuerzo 1</span></td><td><button onclick="verResp(this)" style="font-size:11px;padding:2px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:5px;color:#166534;cursor:pointer">Ver</button></td></tr>
+          <tr><td><span class="wa" style="background:#fce7f3;color:#831843">AM</span>Ana Martinez</td><td>SIN-2026-0045</td><td><span class="badge bp">Refuerzo 2</span></td><td><button onclick="verResp(this)" style="font-size:11px;padding:2px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:5px;color:#166534;cursor:pointer">Ver</button></td></tr>
+          <tr><td><span class="wa" style="background:#fee2e2;color:#991b1b">DG</span>Diego Gomez</td><td>SIN-2026-0046</td><td><span class="badge br">No respondio</span></td><td><button onclick="verResp(this)" style="font-size:11px;padding:2px 8px;background:#f0f9f4;border:1px solid #bbf7d0;border-radius:5px;color:#166534;cursor:pointer">Ver</button></td></tr>
         </tbody></table>
       </div>
       
@@ -282,14 +290,14 @@ document.addEventListener('DOMContentLoaded', function() {
       <div><div style="font-size:20px;font-weight:700">Trabajadores</div><div style="font-size:13px;color:#6b7280;margin-top:2px">Seguimiento de cuestionarios</div></div>
       <div style="display:flex;gap:8px"><button class="btn-s btn-sm" id="btn-ir-import">Importar Excel</button><button class="btn-p btn-sm">+ Agregar</button></div>
     </div>
-    <div class="panel"><table><thead><tr><th>Trabajador</th><th>Siniestro</th><th>Cliente (ART)</th><th>Enviado</th><th>Estado</th></tr></thead><tbody>
-      <tr><td><span class="wa" style="background:#dbeafe;color:#1e40af">JG</span>Juan Garcia</td><td>SIN-2026-0042</td><td>Provincia ART</td><td>06/04/2026</td><td><span class="badge bg">Efectivo</span></td></tr>
-      <tr><td><span class="wa" style="background:#dcfce7;color:#166534">ML</span>Maria Lopez</td><td>SIN-2026-0043</td><td>Provincia ART</td><td>06/04/2026</td><td><span class="badge bg">Efectivo</span></td></tr>
-      <tr><td><span class="wa" style="background:#fef3c7;color:#92400e">CR</span>Carlos Rodriguez</td><td>SIN-2026-0044</td><td>Galeno ART</td><td>05/04/2026</td><td><span class="badge bb">Refuerzo 1</span></td></tr>
-      <tr><td><span class="wa" style="background:#fce7f3;color:#831843">AM</span>Ana Martinez</td><td>SIN-2026-0045</td><td>Galeno ART</td><td>04/04/2026</td><td><span class="badge bp">Refuerzo 2</span></td></tr>
-      <tr><td><span class="wa" style="background:#fee2e2;color:#991b1b">DG</span>Diego Gomez</td><td>SIN-2026-0046</td><td>Provincia ART</td><td>03/04/2026</td><td><span class="badge br">No respondio</span></td></tr>
-      <tr><td><span class="wa" style="background:#dbeafe;color:#1e40af">RS</span>Roberto Sanchez</td><td>SIN-2026-0047</td><td>Swiss Medical</td><td>06/04/2026</td><td><span class="badge bg">Efectivo</span></td></tr>
-      <tr><td><span class="wa" style="background:#dcfce7;color:#166534">LF</span>Laura Fernandez</td><td>SIN-2026-0048</td><td>Swiss Medical</td><td>06/04/2026</td><td><span class="badge bg">Efectivo</span></td></tr>
+    <div class="panel"><table><thead><tr><th>Trabajador</th><th>Siniestro</th><th>Cliente (ART)</th><th>Enviado</th><th>Estado</th><th>Via</th></tr></thead><tbody>
+      <tr><td><span class="wa" style="background:#dbeafe;color:#1e40af">JG</span>Juan Garcia</td><td>SIN-2026-0042</td><td>Provincia ART</td><td>06/04/2026</td><td><span class="badge bg">Efectivo</span></td><td>WhatsApp</td></tr>
+      <tr><td><span class="wa" style="background:#dcfce7;color:#166534">ML</span>Maria Lopez</td><td>SIN-2026-0043</td><td>Provincia ART</td><td>06/04/2026</td><td><span class="badge bg">Efectivo</span></td><td>WhatsApp</td></tr>
+      <tr><td><span class="wa" style="background:#fef3c7;color:#92400e">CR</span>Carlos Rodriguez</td><td>SIN-2026-0044</td><td>Galeno ART</td><td>05/04/2026</td><td><span class="badge bb">Refuerzo 1</span></td><td>WhatsApp</td></tr>
+      <tr><td><span class="wa" style="background:#fce7f3;color:#831843">AM</span>Ana Martinez</td><td>SIN-2026-0045</td><td>Galeno ART</td><td>04/04/2026</td><td><span class="badge bp">Refuerzo 2</span></td><td>WhatsApp</td></tr>
+      <tr><td><span class="wa" style="background:#fee2e2;color:#991b1b">DG</span>Diego Gomez</td><td>SIN-2026-0046</td><td>Provincia ART</td><td>03/04/2026</td><td><span class="badge br">No respondio</span></td><td>-</td></tr>
+      <tr><td><span class="wa" style="background:#dbeafe;color:#1e40af">RS</span>Roberto Sanchez</td><td>SIN-2026-0047</td><td>Swiss Medical</td><td>06/04/2026</td><td><span class="badge bg">Efectivo</span></td><td>WhatsApp</td></tr>
+      <tr><td><span class="wa" style="background:#dcfce7;color:#166534">LF</span>Laura Fernandez</td><td>SIN-2026-0048</td><td>Swiss Medical</td><td>06/04/2026</td><td><span class="badge bg">Efectivo</span></td><td>WhatsApp</td></tr>
     </tbody></table></div>
   </div>
 
@@ -532,6 +540,12 @@ function sendMsg(msg){
   });
 }
 </script></script>
-<div style="position:fixed;bottom:0;left:0;width:230px;padding:10px 16px;background:#141824;border-top:1px solid rgba(255,255,255,.06);z-index:100"><button onclick="islLogout()" style="width:100%;padding:8px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#8892a4;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" onmouseover="this.style.color='#ef4444';this.style.borderColor='rgba(239,68,68,.3)'" onmouseout="this.style.color='#8892a4';this.style.borderColor='rgba(255,255,255,.1)'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Cerrar sesion</button></div>
+
+<div style="position:fixed;bottom:0;left:0;width:230px;padding:10px 16px;background:#141824;border-top:1px solid rgba(255,255,255,.06);z-index:100">
+  <button onclick="islLogout()" style="width:100%;padding:8px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#8892a4;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#8892a4'">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    Cerrar sesion
+  </button>
+</div>
 </body>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </html>
